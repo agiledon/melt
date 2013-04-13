@@ -1,0 +1,8 @@
+.DS_Store
+.gradle/
+out
+melt.i*
+build
+*.iml
+.idea/
+melt-core/target/
