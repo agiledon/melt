@@ -2,6 +2,6 @@ package com.melt.core;
 
 public class ContainerBuilder {
     public Container build() {
-        return new Container();
+        return new Container(null);
     }
 }
