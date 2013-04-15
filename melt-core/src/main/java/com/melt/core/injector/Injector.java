@@ -1,4 +1,4 @@
-package com.melt.injector;
+package com.melt.core.injector;
 
 import com.melt.config.BeanConfig;
 
