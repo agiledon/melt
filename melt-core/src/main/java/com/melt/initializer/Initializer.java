@@ -1,10 +1,7 @@
 package com.melt.initializer;
 
-import com.melt.config.BeanConfig;
-import com.melt.config.Configs;
-
-import java.util.Map;
+import com.melt.config.BeanInfo;
 
 public interface Initializer {
-    Object initialize(BeanConfig beanConfig);
+    Object initialize(BeanInfo beanConfig);
 }

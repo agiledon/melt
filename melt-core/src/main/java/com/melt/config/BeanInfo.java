@@ -20,13 +20,13 @@ public class BeanInfo {
         this(name, className, Scope.SINGLETON);
     }
 
-    public BeanConfig(String name, ConstructorConfig constructorConfig) {
+    public BeanInfo(String name, ConstructorFields constructorFields) {
         this.name = name;
-        this.constructorConfig = constructorConfig;
+        this.constructorFields = constructorFields;
     }
 
     public boolean isDefaultConstructorBean() {
-        return constructorConfig == null ? true : false;
+        return constructorFields == null ? true : false;
     }
 
     public void addProperty(BeanProperty beanProperty) {

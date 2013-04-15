@@ -1,11 +1,11 @@
 package com.melt.initializer;
 
-import com.melt.config.BeanConfig;
+import com.melt.config.BeanInfo;
 import com.melt.exceptions.InitBeanException;
 
 public class DefaultConstructorInitializer implements Initializer {
     @Override
-    public Object initialize(BeanConfig beanConfig) {
+    public Object initialize(BeanInfo beanConfig) {
         if (beanConfig.isDefaultConstructorBean()) {
             return createBean(beanConfig.getClassName());
         }
