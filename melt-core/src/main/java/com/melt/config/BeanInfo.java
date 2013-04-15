@@ -20,6 +20,15 @@ public class BeanInfo {
         this(name, className, Scope.SINGLETON);
     }
 
+    public BeanConfig(String name, ConstructorConfig constructorConfig) {
+        this.name = name;
+        this.constructorConfig = constructorConfig;
+    }
+
+    public boolean isDefaultConstructorBean() {
+        return constructorConfig == null ? true : false;
+    }
+
     public void addProperty(BeanProperty beanProperty) {
         this.properties.add(beanProperty);
     }

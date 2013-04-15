@@ -6,4 +6,12 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class ConstructorFields {
     private List<ConstructorField> fields = newArrayList();
+
+    public ConstructorConfig(List<ConstructorField> fields) {
+        this.fields = fields;
+    }
+
+    public List<ConstructorField> getFields() {
+        return fields;
+    }
 }
