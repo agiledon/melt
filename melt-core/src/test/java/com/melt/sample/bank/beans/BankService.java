@@ -1,6 +1,7 @@
-package com.melt.beans;
+package com.melt.sample.bank.beans;
 
-public interface BankDao {
+public interface BankService {
     void deposit(String account, double money);
+
     double query(String account);
 }

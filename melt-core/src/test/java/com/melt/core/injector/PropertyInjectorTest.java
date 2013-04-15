@@ -1,12 +1,11 @@
 package com.melt.core.injector;
 
 import com.google.common.collect.ImmutableMap;
-import com.melt.beans.BankDao;
-import com.melt.beans.DefaultBankDao;
-import com.melt.beans.DefaultBankService;
+import com.melt.sample.bank.beans.BankDao;
+import com.melt.sample.bank.beans.DefaultBankDao;
+import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.config.BeanInfo;
 import com.melt.config.BeanProperty;
-import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 

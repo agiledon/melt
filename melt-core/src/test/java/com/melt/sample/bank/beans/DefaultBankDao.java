@@ -1,4 +1,4 @@
-package com.melt.beans;
+package com.melt.sample.bank.beans;
 
 import java.util.Map;
 

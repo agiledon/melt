@@ -1,4 +1,4 @@
-package com.melt.beans;
+package com.melt.sample.bank.beans;
 
 public class DefaultBankService implements BankService {
     private BankDao bankDao;

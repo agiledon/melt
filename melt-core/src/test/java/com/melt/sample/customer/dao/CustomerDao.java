@@ -1,6 +1,6 @@
-package com.melt.sample.dao;
+package com.melt.sample.customer.dao;
 
-import com.melt.sample.domain.Customer;
+import com.melt.sample.customer.domain.Customer;
 
 import java.util.List;
 

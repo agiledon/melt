@@ -1,7 +1,7 @@
 package com.melt.core.initializer;
 
-import com.melt.beans.BankDao;
-import com.melt.beans.DefaultBankDao;
+import com.melt.sample.bank.beans.BankDao;
+import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.config.BeanInfo;
 import com.melt.config.ConstructorFields;
 import com.melt.exceptions.InitBeanException;

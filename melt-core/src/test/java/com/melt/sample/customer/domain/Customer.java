@@ -1,4 +1,4 @@
-package com.melt.sample.domain;
+package com.melt.sample.customer.domain;
 
 public class Customer {
     private int id;

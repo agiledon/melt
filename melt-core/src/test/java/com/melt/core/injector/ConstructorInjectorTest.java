@@ -1,11 +1,10 @@
 package com.melt.core.injector;
 
-import com.melt.config.ConstructorFields;
-import com.melt.sample.dao.CustomerDao;
-import com.melt.sample.domain.Customer;
-import com.melt.sample.service.CustomerFiller;
-import com.melt.sample.service.CustomerService;
-import com.melt.sample.service.DefaultCustomerService;
+import com.melt.sample.customer.dao.CustomerDao;
+import com.melt.sample.customer.domain.Customer;
+import com.melt.sample.customer.service.CustomerFiller;
+import com.melt.sample.customer.service.CustomerService;
+import com.melt.sample.customer.service.DefaultCustomerService;
 import org.junit.Test;
 
 import java.util.List;
