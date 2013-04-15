@@ -1,4 +1,4 @@
-package com.melt.initializer;
+package com.melt.core.initializer;
 
 import com.melt.beans.BankDao;
 import com.melt.beans.DefaultBankDao;

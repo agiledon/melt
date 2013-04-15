@@ -13,6 +13,10 @@ public class DefaultBankService implements BankService {
         return bankDao.query(account);
     }
 
+    public BankDao getBankDao() {
+        return bankDao;
+    }
+
     public void setBankDao(BankDao bankDao) {
         this.bankDao = bankDao;
     }

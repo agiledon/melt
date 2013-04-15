@@ -25,7 +25,7 @@ public class BeanInfo {
         this.constructorFields = constructorFields;
     }
 
-    public boolean isDefaultConstructorBean() {
+    public boolean isNotDefaultConstructorBean() {
         return constructorFields == null ? true : false;
     }
 

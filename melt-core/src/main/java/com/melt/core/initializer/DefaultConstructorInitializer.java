@@ -1,4 +1,4 @@
-package com.melt.initializer;
+package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
 import com.melt.exceptions.InitBeanException;
@@ -6,7 +6,7 @@ import com.melt.exceptions.InitBeanException;
 public class DefaultConstructorInitializer implements Initializer {
     @Override
     public Object initialize(BeanInfo beanConfig) {
-        if (beanConfig.isDefaultConstructorBean()) {
+        if (beanConfig.isNotDefaultConstructorBean()) {
             return createBean(beanConfig.getClassName());
         }
         throw new InitBeanException("Can't initialize a bean with constructor configuration");

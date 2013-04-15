@@ -7,7 +7,7 @@ public class InitBeanException extends RuntimeException {
         this.message = message;
     }
 
-    public InitBeanException(String message, Exception e) {
+    public InitBeanException(String message, Throwable e) {
         super(e);
         this.message = message;
     }
