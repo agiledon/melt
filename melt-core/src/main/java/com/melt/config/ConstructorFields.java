@@ -4,6 +4,6 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class ConstructorConfig {
+public class ConstructorFields {
     private List<ConstructorField> fields = newArrayList();
 }

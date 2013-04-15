@@ -3,20 +3,20 @@ package com.melt.config;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeanConfig {
+public class BeanInfo {
     private String name;
     private String className;
     private Scope scope;
-    private ConstructorConfig constructorConfig;
+    private ConstructorFields constructorFields;
     private List<BeanProperty> properties = new ArrayList<BeanProperty>();
 
-    public BeanConfig(String name, String className, Scope scope) {
+    public BeanInfo(String name, String className, Scope scope) {
         this.name = name;
         this.className = className;
         this.scope = scope;
     }
 
-    public BeanConfig(String name, String className) {
+    public BeanInfo(String name, String className) {
         this(name, className, Scope.SINGLETON);
     }
 
@@ -40,11 +40,11 @@ public class BeanConfig {
         return scope;
     }
 
-    public ConstructorConfig getConstructorConfig() {
-        return constructorConfig;
+    public ConstructorFields getConstructorFields() {
+        return constructorFields;
     }
 
-    public void setConstructorConfig(ConstructorConfig constructorConfig) {
-        this.constructorConfig = constructorConfig;
+    public void setConstructorFields(ConstructorFields constructorFields) {
+        this.constructorFields = constructorFields;
     }
 }
