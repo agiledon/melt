@@ -1,4 +1,4 @@
-roup = 'com.github.melt'
+group = 'com.github.melt'
 version = '0.1'
 
 allprojects {
