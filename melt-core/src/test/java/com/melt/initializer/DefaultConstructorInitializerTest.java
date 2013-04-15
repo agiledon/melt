@@ -1,0 +1,35 @@
+package com.melt.initializer;
+
+import com.melt.beans.BankDao;
+import com.melt.beans.DefaultBankDao;
+import com.melt.config.BeanConfig;
+import com.melt.config.ConstructorConfig;
+import com.melt.exceptions.InitBeanException;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThat;
+
+public class DefaultConstructorInitializerTest {
+
+    @Test
+    public void should_return_default_bankDao_bean() {
+        DefaultConstructorInitializer initializer = new DefaultConstructorInitializer();
+        Object bean = initializer.initialize(new BeanConfig("bankDao", DefaultBankDao.class.getName()));
+        assertThat(bean, instanceOf(BankDao.class));
+    }
+
+    @Test(expected = InitBeanException.class)
+    public void should_throw_exception_when_bean_config_has_constructor_config() {
+        DefaultConstructorInitializer initializer = new DefaultConstructorInitializer();
+        Object bean = initializer.initialize(new BeanConfig("bankDao", new ConstructorConfig(null)));
+    }
+
+    @Test(expected = InitBeanException.class)
+    public void should_throw_exception_when_class_not_exist() {
+        DefaultConstructorInitializer initializer = new DefaultConstructorInitializer();
+        Object bean = initializer.initialize(new BeanConfig("bankDao", "notExistClass"));
+    }
+
+
+}
