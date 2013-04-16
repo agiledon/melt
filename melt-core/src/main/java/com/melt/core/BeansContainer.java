@@ -27,11 +27,11 @@ public class BeansContainer {
         beans.put(beanName, bean);
     }
 
-    public Object get(String name) {
+    public Object resolve(String name) {
         return beansWithBeanName.get(name);
     }
 
-    public Object get(Class clazz) {
+    public Object resolve(Class clazz) {
         Map<String, Object> beans = beansWithClass.get(clazz);
         Collection<Object> values = beans.values();
         if (values.size() > 1) {

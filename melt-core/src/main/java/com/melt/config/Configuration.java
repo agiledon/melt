@@ -2,6 +2,6 @@ package com.melt.config;
 
 import java.util.List;
 
-public interface Configs {
+public interface Configuration {
     List<BeanInfo> getBeans();
 }

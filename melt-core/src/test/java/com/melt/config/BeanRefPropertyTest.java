@@ -1,6 +1,5 @@
 package com.melt.config;
 
-import com.google.common.collect.ImmutableMap;
 import com.melt.config.property.BeanProperty;
 import com.melt.config.property.BeanRefProperty;
 import com.melt.core.BeansContainer;
@@ -9,8 +8,6 @@ import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -34,9 +31,9 @@ public class BeanRefPropertyTest {
     @Test
     public void should_set_reference_value_to_bank_service() throws NoSuchMethodException {
         for (BeanProperty beanProperty : bankServiceBeanInfo.getProperties()) {
-            beanProperty.injectPropertyValue(beansContainer);
+            beanProperty.setPropertyValue(beansContainer);
         }
-        DefaultBankService bankService = (DefaultBankService) beansContainer.get("bankService");
+        DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
 }

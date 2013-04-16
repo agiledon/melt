@@ -35,7 +35,7 @@ public class PropertyInjectorTest {
     @Test
     public void the_bank_service_should_be_set_the_bank_dao_as_value(){
 //        injector.inject(beans, null);
-//        DefaultBankService bankService = (DefaultBankService) beans.get("bankService");
+//        DefaultBankService bankService = (DefaultBankService) beans.resolve("bankService");
 //        assertThat(bankService.getBankDao(), is(bankDao));
     }
 }

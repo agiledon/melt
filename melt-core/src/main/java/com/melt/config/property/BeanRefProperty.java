@@ -7,12 +7,12 @@ public class BeanRefProperty extends BeanProperty{
     private String ref;
 
     public BeanRefProperty(BeanInfo beanInfo, String name, String ref) {
-        super(beanInfo, name);
+        super(name, beanInfo);
         this.ref = ref;
     }
 
     @Override
     protected Object getValue(BeansContainer beansContainer) {
-        return beansContainer.get(ref);
+        return beansContainer.resolve(ref);
     }
 }

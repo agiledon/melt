@@ -22,7 +22,7 @@ public class BeansContainerTest {
         Object bean = new Object();
         String beanName = "test";
         container.addBean(beanName, bean);
-        assertThat(container.get(beanName), is(bean));
+        assertThat(container.resolve(beanName), is(bean));
     }
 
     @Test
@@ -30,7 +30,7 @@ public class BeansContainerTest {
         DefaultBankDao bankDao = new DefaultBankDao();
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
         container.addBean(clazz, "bankDao", bankDao);
-        assertThat((DefaultBankDao)container.get(clazz), is(bankDao));
+        assertThat((DefaultBankDao)container.resolve(clazz), is(bankDao));
     }
 
     @Test(expected = MoreThanOneBeanWithSameClass.class)
@@ -40,7 +40,7 @@ public class BeansContainerTest {
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
         container.addBean(clazz, "bankDao1", bankDao1);
         container.addBean(clazz, "bankDao2", bankDao2);
-        container.get(clazz);
+        container.resolve(clazz);
     }
 
     @Test

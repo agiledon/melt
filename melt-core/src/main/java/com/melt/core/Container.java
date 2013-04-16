@@ -1,12 +1,12 @@
 package com.melt.core;
 
-import com.melt.config.Configs;
+import com.melt.config.Configuration;
 
 public class Container {
-    private Configs configs;
+    private Configuration configuration;
 
-    public Container(Configs configs) {
-        this.configs = configs;
+    public Container(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public <T> T resolve() {

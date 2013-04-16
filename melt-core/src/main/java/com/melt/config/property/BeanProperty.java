@@ -6,22 +6,21 @@ import com.melt.exceptions.InitBeanException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 public abstract class BeanProperty {
     private String name;
     private BeanInfo beanInfo;
 
-    public BeanProperty(BeanInfo beanInfo, String name) {
+    public BeanProperty(String name, BeanInfo beanInfo) {
         this.name = name;
         this.beanInfo = beanInfo;
     }
 
-    public void injectPropertyValue(BeansContainer beansContainer) {
+    public void setPropertyValue(BeansContainer beansContainer) {
         String beanName = beanInfo.getName();
-        Object bean = beansContainer.get(beanName);
+        Object targetBean = beansContainer.resolve(beanName);
         try {
-                getMethod(beansContainer).invoke(bean, new Object[]{getValue(beansContainer)});
+                getMethod(beansContainer).invoke(targetBean, new Object[]{getValue(beansContainer)});
         } catch (IllegalAccessException e) {
             throw new InitBeanException(String.format("Can't initialize bean: %s", beanName), e);
         } catch (InvocationTargetException e) {

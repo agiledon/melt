@@ -1,14 +1,11 @@
 package com.melt.core.initializer;
 
-import com.melt.sample.bank.beans.BankDao;
-import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.config.BeanInfo;
-import com.melt.config.ConstructorFields;
+import com.melt.config.constructor.ConstructorParameters;
 import com.melt.exceptions.InitBeanException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
 public class DefaultConstructorInitializerTest {
@@ -28,7 +25,7 @@ public class DefaultConstructorInitializerTest {
 
     @Test(expected = InitBeanException.class)
     public void should_throw_exception_when_bean_config_has_constructor_config() {
-        initializer.initialize(new BeanInfo("bankDao", new ConstructorFields(null)));
+        initializer.initialize(new BeanInfo("bankDao", new ConstructorParameters(null)));
     }
 
     @Test(expected = InitBeanException.class)

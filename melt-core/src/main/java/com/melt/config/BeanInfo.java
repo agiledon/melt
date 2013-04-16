@@ -1,5 +1,6 @@
 package com.melt.config;
 
+import com.melt.config.constructor.ConstructorParameters;
 import com.melt.config.property.BeanProperty;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ public class BeanInfo {
     private String name;
     private String className;
     private Scope scope;
-    private ConstructorFields constructorFields;
+    private ConstructorParameters constructorParameters;
     private List<BeanProperty> properties = new ArrayList<BeanProperty>();
 
     public BeanInfo(String name, String className, Scope scope) {
@@ -22,13 +23,13 @@ public class BeanInfo {
         this(name, className, Scope.SINGLETON);
     }
 
-    public BeanInfo(String name, ConstructorFields constructorFields) {
+    public BeanInfo(String name, ConstructorParameters constructorParameters) {
         this.name = name;
-        this.constructorFields = constructorFields;
+        this.constructorParameters = constructorParameters;
     }
 
     public boolean isNotDefaultConstructorBean() {
-        return constructorFields == null ? true : false;
+        return constructorParameters == null;
     }
 
     public void addProperty(BeanProperty beanProperty) {
@@ -51,11 +52,11 @@ public class BeanInfo {
         return scope;
     }
 
-    public ConstructorFields getConstructorFields() {
-        return constructorFields;
+    public ConstructorParameters getConstructorParameters() {
+        return constructorParameters;
     }
 
-    public void setConstructorFields(ConstructorFields constructorFields) {
-        this.constructorFields = constructorFields;
+    public void setConstructorParameters(ConstructorParameters constructorParameters) {
+        this.constructorParameters = constructorParameters;
     }
 }
