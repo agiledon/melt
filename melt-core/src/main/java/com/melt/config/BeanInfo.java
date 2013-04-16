@@ -1,5 +1,7 @@
 package com.melt.config;
 
+import com.melt.config.property.BeanProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
