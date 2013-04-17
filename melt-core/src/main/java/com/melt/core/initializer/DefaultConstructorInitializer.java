@@ -11,7 +11,7 @@ public class DefaultConstructorInitializer implements Initializer {
         if (beanInfo.isNotDefaultConstructorBean()) {
             Class clazz = beanInfo.getClazz();
             Object bean = createBean(clazz);
-            return new InitializedBean(bean, clazz, newArrayList(clazz.getInterfaces()));
+            return new InitializedBean(bean, newArrayList(clazz.getInterfaces()));
         }
         throw new InitBeanException("Can't initialize a bean with constructor configuration");
     }
