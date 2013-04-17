@@ -19,13 +19,12 @@ public class BeanRefPropertyTest {
 
     @Before
     public void setUp() throws Exception {
-        bankServiceBeanInfo = new BeanInfo("bankService", DefaultBankService.class.getName());
+        bankServiceBeanInfo = new BeanInfo("bankService", DefaultBankService.class);
         bankServiceBeanInfo.addProperty(new BeanRefProperty(bankServiceBeanInfo, "bankDao", "bankDao"));
         bankDao = new DefaultBankDao();
         beansContainer = new BeansContainer();
         beansContainer.addBean("bankDao", bankDao);
         beansContainer.addBean("bankService", new DefaultBankService());
-        beansContainer.addClass("bankService", DefaultBankService.class);
     }
 
     @Test

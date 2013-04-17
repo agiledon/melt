@@ -10,7 +10,6 @@ import static com.google.common.collect.Maps.newHashMap;
 
 public class BeansContainer {
     private final Map<String, Object> beansWithBeanName = newHashMap();
-    private final Map<String, Class> classesWithBeanName = newHashMap();
     private final Map<Class, Map<String, Object>> beansWithClass = newHashMap();
 
     public void addBean(String beanName, Object bean) {
@@ -31,21 +30,12 @@ public class BeansContainer {
         return beansWithBeanName.get(name);
     }
 
-    public Object resolve(Class clazz) {
-        Map<String, Object> beans = beansWithClass.get(clazz);
+    public <T> T resolve(Class T) {
+        Map<String, Object> beans = beansWithClass.get(T);
         Collection<Object> values = beans.values();
         if (values.size() > 1) {
-            throw new MoreThanOneBeanWithSameClass(clazz.getName());
+            throw new MoreThanOneBeanWithSameClass("");
         }
-        return Iterators.get(values.iterator(), 0);
-    }
-
-
-    public void addClass(String beanName, Class clazz) {
-        classesWithBeanName.put(beanName, clazz);
-    }
-
-    public Class getClazz(String beanName) {
-        return classesWithBeanName.get(beanName);
+        return (T)Iterators.get(values.iterator(), 0);
     }
 }

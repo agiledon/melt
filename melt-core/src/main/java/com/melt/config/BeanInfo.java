@@ -8,19 +8,19 @@ import java.util.List;
 
 public class BeanInfo {
     private String name;
-    private String className;
+    private Class clazz;
     private Scope scope;
     private ConstructorParameters constructorParameters;
     private List<BeanProperty> properties = new ArrayList<BeanProperty>();
 
-    public BeanInfo(String name, String className, Scope scope) {
+    public BeanInfo(String name, Class clazz, Scope scope) {
         this.name = name;
-        this.className = className;
+        this.clazz = clazz;
         this.scope = scope;
     }
 
-    public BeanInfo(String name, String className) {
-        this(name, className, Scope.SINGLETON);
+    public BeanInfo(String name, Class clazz) {
+        this(name, clazz, Scope.SINGLETON);
     }
 
     public BeanInfo(String name, ConstructorParameters constructorParameters) {
@@ -44,8 +44,8 @@ public class BeanInfo {
         return name;
     }
 
-    public String getClassName() {
-        return className;
+    public Class getClazz() {
+        return clazz;
     }
 
     public Scope getScope() {

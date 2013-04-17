@@ -27,9 +27,4 @@ public class DefaultConstructorInitializerTest {
     public void should_throw_exception_when_bean_config_has_constructor_config() {
         initializer.initialize(new BeanInfo("bankDao", new ConstructorParameters(null)));
     }
-
-    @Test(expected = InitBeanException.class)
-    public void should_throw_exception_when_class_not_exist() {
-        initializer.initialize(new BeanInfo("bankDao", "notExistClass"));
-    }
 }

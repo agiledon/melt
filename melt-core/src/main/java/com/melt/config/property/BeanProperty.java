@@ -20,7 +20,7 @@ public abstract class BeanProperty {
         String beanName = beanInfo.getName();
         Object targetBean = beansContainer.resolve(beanName);
         try {
-                getMethod(beansContainer).invoke(targetBean, new Object[]{getValue(beansContainer)});
+                getMethod().invoke(targetBean, new Object[]{getValue(beansContainer)});
         } catch (IllegalAccessException e) {
             throw new InitBeanException(String.format("Can't initialize bean: %s", beanName), e);
         } catch (InvocationTargetException e) {
@@ -30,8 +30,8 @@ public abstract class BeanProperty {
         }
     }
 
-    protected  Method getMethod(BeansContainer beansContainer) {
-        Class clazz = beansContainer.getClazz(beanInfo.getName());
+    protected  Method getMethod() {
+        Class clazz = beanInfo.getClazz();
         Method[] declaredMethods = clazz.getDeclaredMethods();
         for (Method method : declaredMethods) {
             String methodName = method.getName();

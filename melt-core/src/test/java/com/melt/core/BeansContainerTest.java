@@ -30,7 +30,7 @@ public class BeansContainerTest {
         DefaultBankDao bankDao = new DefaultBankDao();
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
         container.addBean(clazz, "bankDao", bankDao);
-        assertThat((DefaultBankDao)container.resolve(clazz), is(bankDao));
+        assertThat((DefaultBankDao)container.resolve(DefaultBankDao.class), is(bankDao));
     }
 
     @Test(expected = MoreThanOneBeanWithSameClass.class)
@@ -40,13 +40,6 @@ public class BeansContainerTest {
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
         container.addBean(clazz, "bankDao1", bankDao1);
         container.addBean(clazz, "bankDao2", bankDao2);
-        container.resolve(clazz);
-    }
-
-    @Test
-    public void should_get_class_when_get_class_by_bean_name(){
-        Class clazz = DefaultBankDao.class;
-        container.addClass("bankDao", clazz);
-        assertThat(container.getClazz("bankDao").equals(clazz), is(true));
+        DefaultBankDao dao = container.resolve(DefaultBankDao.class);
     }
 }

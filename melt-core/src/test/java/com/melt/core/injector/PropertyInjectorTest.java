@@ -26,7 +26,7 @@ public class PropertyInjectorTest {
     @Before
     public void setUp() throws Exception {
         injector = new PropertyInjector();
-        bankServiceBeanInfo = new BeanInfo("bankService", DefaultBankService.class.getName());
+        bankServiceBeanInfo = new BeanInfo("bankService", DefaultBankService.class);
         bankServiceBeanInfo.addProperty(new BeanRefProperty(bankServiceBeanInfo, "bankDao", "bankDao"));
         bankDao = new DefaultBankDao();
         beans = ImmutableMap.of("bankDao", bankDao, "bankService", new DefaultBankService());
