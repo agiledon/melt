@@ -28,6 +28,11 @@ public class BeanInfo {
         this.constructorParameters = constructorParameters;
     }
 
+    public BeanInfo(Class clazz, ConstructorParameters constructorParameters) {
+        this.clazz = clazz;
+        this.constructorParameters = constructorParameters;
+    }
+
     public boolean isNotDefaultConstructorBean() {
         return constructorParameters == null;
     }

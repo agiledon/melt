@@ -8,6 +8,6 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class CustomerDao {
     public List<Customer> findAll() {
-        return newArrayList(new Customer(1, "ZhangYi"));
+        return newArrayList(new Customer());
     }
 }

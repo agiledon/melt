@@ -1,27 +1,55 @@
 package com.melt.core.injector;
 
+import com.melt.config.BeanInfo;
+import com.melt.config.constructor.ConstructorParameter;
+import com.melt.config.constructor.ConstructorParameters;
+import com.melt.core.BeansContainer;
+import com.melt.exceptions.InitBeanException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class ConstructorInjector {
-    public <T> T inject(Class<T> targetClass, Object... dependencies) {
+    public void inject(BeansContainer container, BeanInfo targetBean) {
+        Class targetClass = targetBean.getClazz();
+        ConstructorParameters constructorParameters = targetBean.getConstructorParameters();
+
+        Object[] parameterBeans = getParameterBeans(container, constructorParameters);
+        Object target = inject(targetClass, parameterBeans);
+        container.addBean(targetClass, targetClass.getSimpleName(), target);
+    }
+
+    private Object[] getParameterBeans(BeansContainer container, ConstructorParameters constructorParameters) {
+        Map<Integer, Object> parameterMap = newHashMap();
+        for (ConstructorParameter parameter : constructorParameters.getParameters()) {
+            int index = parameter.getIndex();
+            Object parameterValue = container.resolve(parameter.getRef());
+            parameterMap.put(index, parameterValue);
+        }
+
+        return parameterMap.values().toArray();
+    }
+
+    private <T> T inject(Class<T> targetClass, Object... dependencies) {
         try {
             Class[] classes = getClassesFrom(dependencies);
             Constructor<T> constructor = targetClass.getConstructor(classes);
             return constructor.newInstance(dependencies);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
         }
-        return null;
     }
 
     private Class[] getClassesFrom(Object[] dependencies) {
@@ -31,5 +59,4 @@ public class ConstructorInjector {
         }
         return classes.toArray(new Class[classes.size()]);
     }
-
 }

@@ -11,4 +11,11 @@ public class ConstructorParameter {
     }
 
 
+    public int getIndex() {
+        return index;
+    }
+
+    public String getRef() {
+        return ref;
+    }
 }

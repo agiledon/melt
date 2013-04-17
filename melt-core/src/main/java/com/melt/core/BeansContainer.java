@@ -14,6 +14,7 @@ public class BeansContainer {
 
     public void addBean(String beanName, Object bean) {
         beansWithBeanName.put(beanName, bean);
+        addBean(bean.getClass(), beanName, bean);
     }
 
     public void addBean(Class clazz, String beanName, Object bean) {
