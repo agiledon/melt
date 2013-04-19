@@ -6,12 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ContainerTest {
+public class ContextTest {
     @Test
     public void should_resolve_specific_object() {
-        ContainerBuilder builder = new ContainerBuilder();
-        Container container = builder.build();
-        String target = container.resolve();
+        ContextBuilder builder = new ContextBuilder();
+        Context context = builder.build();
+        String target = context.resolve();
         assertThat(target, is(nullValue()));
     }
 }

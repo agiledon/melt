@@ -2,10 +2,10 @@ package com.melt.core;
 
 import com.melt.config.Configuration;
 
-public class Container {
+public class Context {
     private Configuration configuration;
 
-    public Container(Configuration configuration) {
+    public Context(Configuration configuration) {
         this.configuration = configuration;
     }
 

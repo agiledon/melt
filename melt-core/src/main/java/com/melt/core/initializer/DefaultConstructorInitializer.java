@@ -7,11 +7,10 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class DefaultConstructorInitializer implements Initializer {
     @Override
-    public InitializedBean initialize(BeanInfo beanInfo) {
+    public Object initialize(BeanInfo beanInfo) {
         if (beanInfo.isNotDefaultConstructorBean()) {
             Class clazz = beanInfo.getClazz();
-            Object bean = createBean(clazz);
-            return new InitializedBean(bean, newArrayList(clazz.getInterfaces()));
+            return createBean(clazz);
         }
         throw new InitBeanException("Can't initialize a bean with constructor configuration");
     }

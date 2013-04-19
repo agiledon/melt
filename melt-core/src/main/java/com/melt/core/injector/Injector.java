@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface Injector {
-    void inject(BeansContainer beansContainer, List<BeanInfo> beanInfos);
+    void inject(BeansContainer beansContainer, BeanInfo beanInfo);
 }

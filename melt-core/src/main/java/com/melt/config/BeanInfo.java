@@ -2,6 +2,7 @@ package com.melt.config;
 
 import com.melt.config.constructor.ConstructorParameters;
 import com.melt.config.property.BeanProperty;
+import com.melt.core.BeansContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ public class BeanInfo {
     private String name;
     private Class clazz;
     private Scope scope;
+    private AutoWired autoWired;
     private ConstructorParameters constructorParameters;
     private List<BeanProperty> properties = new ArrayList<BeanProperty>();
 
@@ -21,6 +23,12 @@ public class BeanInfo {
 
     public BeanInfo(String name, Class clazz) {
         this(name, clazz, Scope.SINGLETON);
+    }
+
+    public void injectProperty(BeansContainer beansContainer) {
+        for (BeanProperty beanProperty : getProperties()) {
+            beanProperty.setPropertyValue(beansContainer);
+        }
     }
 
     public BeanInfo(String name, ConstructorParameters constructorParameters) {

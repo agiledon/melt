@@ -1,6 +1,5 @@
-package com.melt.core.injector;
+package com.melt.config;
 
-import com.google.common.collect.ImmutableMap;
 import com.melt.config.property.BeanRefProperty;
 import com.melt.core.BeansContainer;
 import com.melt.sample.bank.beans.BankDao;
@@ -15,16 +14,14 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 
-public class PropertyInjectorTest {
+public class BeanInfoTest {
 
-    private PropertyInjector injector;
     private BeanInfo bankServiceBeanInfo;
     private BankDao bankDao;
     private BeansContainer beansContainer;
 
     @Before
     public void setUp() throws Exception {
-        injector = new PropertyInjector();
         bankServiceBeanInfo = new BeanInfo("bankService", DefaultBankService.class);
         bankServiceBeanInfo.addProperty(new BeanRefProperty(bankServiceBeanInfo, "bankDao", "bankDao"));
         bankDao = new DefaultBankDao();
@@ -35,7 +32,7 @@ public class PropertyInjectorTest {
 
     @Test
     public void the_bank_service_should_be_set_the_bank_dao_as_value(){
-        injector.inject(beansContainer, of(bankServiceBeanInfo));
+        bankServiceBeanInfo.injectProperty(beansContainer);
         DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
