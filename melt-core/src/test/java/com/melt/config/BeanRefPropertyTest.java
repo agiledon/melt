@@ -8,6 +8,10 @@ import com.melt.sample.bank.beans.DefaultBankService;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -61,6 +65,21 @@ public class BeanRefPropertyTest {
         bankServiceBeanInfo.addProperty(new BeanLongProperty("maxMoney", bankServiceBeanInfo, 12345l));
         injectProperty();
         assertThat(bankService.getMaxMoney(), is(12345l));
+    }
+
+    @Test
+    public void should_set_account_as_string_property() {
+        bankServiceBeanInfo.addProperty(new BeanStringProperty("account", bankServiceBeanInfo, "haha"));
+        injectProperty();
+        assertThat(bankService.getAccount(), is("haha"));
+    }
+
+    @Test
+    public void should_set_accounts_as_list_property() {
+        List<String> accounts = newArrayList("haha");
+        bankServiceBeanInfo.addProperty(new BeanObjectProperty("accounts", bankServiceBeanInfo, accounts));
+        injectProperty();
+        assertThat(bankService.getAccounts(), is(accounts));
     }
 
     private void injectProperty() {

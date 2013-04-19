@@ -1,11 +1,15 @@
 package com.melt.sample.bank.beans;
 
+import java.util.List;
+
 public class DefaultBankService implements BankService {
     private BankDao bankDao;
     private int max;
     private double tax;
     private float interest;
     private long maxMoney;
+    private String account;
+    private List<String> accounts;
 
     @Override
     public void deposit(String account, double money) {
@@ -56,5 +60,21 @@ public class DefaultBankService implements BankService {
 
     public void setMaxMoney(long maxMoney) {
         this.maxMoney = maxMoney;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public List<String> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<String> accounts) {
+        this.accounts = accounts;
     }
 }
