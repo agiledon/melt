@@ -4,6 +4,7 @@ import com.google.common.collect.Iterators;
 import com.melt.exceptions.MoreThanOneBeanWithSameClass;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
@@ -15,6 +16,12 @@ public class BeansContainer {
     public void addBean(String beanName, Object bean) {
         beansWithBeanName.put(beanName, bean);
         addBean(bean.getClass(), beanName, bean);
+    }
+
+    public void addBean(List<Class> classes, String beanName, Object bean) {
+        for (Class clazz : classes) {
+            addBean(clazz, beanName, bean);
+        }
     }
 
     public void addBean(Class clazz, String beanName, Object bean) {
