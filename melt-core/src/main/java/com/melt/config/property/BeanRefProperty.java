@@ -3,7 +3,7 @@ package com.melt.config.property;
 import com.melt.config.BeanInfo;
 import com.melt.core.BeansContainer;
 
-public class BeanRefProperty extends BeanProperty{
+public class BeanRefProperty extends BeanProperty {
     private String ref;
 
     public BeanRefProperty(BeanInfo beanInfo, String name, String ref) {

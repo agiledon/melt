@@ -16,7 +16,7 @@ public abstract class BeanProperty {
         this.beanInfo = beanInfo;
     }
 
-    public void setPropertyValue(BeansContainer beansContainer) {
+    public void injectPropertyValue(BeansContainer beansContainer) {
         String beanName = beanInfo.getName();
         Object targetBean = beansContainer.resolve(beanName);
         try {

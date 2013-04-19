@@ -30,7 +30,7 @@ public class BeanRefPropertyTest {
     @Test
     public void should_set_reference_value_to_bank_service() throws NoSuchMethodException {
         for (BeanProperty beanProperty : bankServiceBeanInfo.getProperties()) {
-            beanProperty.setPropertyValue(beansContainer);
+            beanProperty.injectPropertyValue(beansContainer);
         }
         DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));

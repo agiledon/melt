@@ -25,9 +25,9 @@ public class BeanInfo {
         this(name, clazz, Scope.SINGLETON);
     }
 
-    public void injectProperty(BeansContainer beansContainer) {
+    public void injectProperties(BeansContainer beansContainer) {
         for (BeanProperty beanProperty : getProperties()) {
-            beanProperty.setPropertyValue(beansContainer);
+            beanProperty.injectPropertyValue(beansContainer);
         }
     }
 
@@ -71,5 +71,13 @@ public class BeanInfo {
 
     public void setConstructorParameters(ConstructorParameters constructorParameters) {
         this.constructorParameters = constructorParameters;
+    }
+
+    public AutoWired getAutoWired() {
+        return autoWired;
+    }
+
+    public void setAutoWired(AutoWired autoWired) {
+        this.autoWired = autoWired;
     }
 }
