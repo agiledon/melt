@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import static com.sun.tools.javac.util.List.of;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 
@@ -26,6 +27,8 @@ public class BeanInfoTest {
         bankDao = new DefaultBankDao();
         beansContainer = new BeansContainer();
         beansContainer.addBean("bankDao", bankDao);
+        beansContainer.addBean("bankDao", DefaultBankDao.class, bankDao);
+        beansContainer.addBean("bankDao", BankDao.class, bankDao);
         beansContainer.addBean("bankService", new DefaultBankService());
     }
 
@@ -41,6 +44,22 @@ public class BeanInfoTest {
         bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.NAME);
         bankServiceBeanInfo.autoWiredProperties(beansContainer);
         DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
-//        assertThat(bankService.getBankDao(), is(bankDao));
+        assertThat(bankService.getBankDao(), is(bankDao));
+    }
+
+    @Test
+    public void should_auto_wire_bank_dao_to_bank_service_by_type(){
+        bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.TYPE);
+        bankServiceBeanInfo.autoWiredProperties(beansContainer);
+        DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
+        assertThat(bankService.getBankDao(), is(bankDao));
+    }
+
+    @Test
+    public void should_not_auto_wire_bank_dao_to_bank_service_by_null(){
+        bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.NULL);
+        bankServiceBeanInfo.autoWiredProperties(beansContainer);
+        DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
+        assertThat(bankService.getBankDao(), nullValue());
     }
 }

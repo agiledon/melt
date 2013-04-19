@@ -1,59 +1,28 @@
 package com.melt.config;
 
 import com.melt.config.autowired.AutoWired;
+import com.melt.config.autowired.AutoWiredByName;
+import com.melt.config.autowired.AutoWiredByNull;
+import com.melt.config.autowired.AutoWiredByType;
 
 public enum AutoWiredBy {
     NAME {
         @Override
-        public AutoWired injector() {
-            return null;
-        }
-
-        @Override
-        public boolean isNotNull() {
-            return true;
-        }
-
-        @Override
-        public boolean isByName() {
-            return true;
+        public AutoWired autoWired() {
+            return new AutoWiredByName();
         }
     }, TYPE {
         @Override
-        public AutoWired injector() {
-            return null;
-        }
-
-        @Override
-        public boolean isNotNull() {
-            return true;
-        }
-
-        @Override
-        public boolean isByName() {
-            return false;
+        public AutoWired autoWired() {
+            return new AutoWiredByType();
         }
     },
     NULL {
         @Override
-        public AutoWired injector() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean isNotNull() {
-            return false;
-        }
-
-        @Override
-        public boolean isByName() {
-            return false;
+        public AutoWired autoWired() {
+            return new AutoWiredByNull();
         }
     };
 
-    public abstract AutoWired injector();
-
-    public abstract boolean isNotNull();
-
-    public abstract boolean isByName();
+    public abstract AutoWired autoWired();
 }

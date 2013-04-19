@@ -24,6 +24,7 @@ public class BeanInfo {
             isInterfaceType = true;
         }
         this.scope = scope;
+        this.autoWiredBy = AutoWiredBy.NULL;
     }
 
     public BeanInfo(String name, Class clazz) {
@@ -81,6 +82,6 @@ public class BeanInfo {
     }
 
     public void autoWiredProperties(BeansContainer beansContainer) {
-
+        autoWiredBy.autoWired().autoWired(beansContainer, this);
     }
 }
