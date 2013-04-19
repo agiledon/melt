@@ -1,5 +1,6 @@
 package com.melt.config;
 
+import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.constructor.ConstructorParameters;
 import com.melt.config.property.BeanProperty;
 import com.melt.core.BeansContainer;
@@ -7,13 +8,15 @@ import com.melt.core.BeansContainer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 public class BeanInfo {
     private String name;
     private Class clazz;
     private Scope scope;
     private AutoWiredBy autoWiredBy;
-    private ConstructorParameters constructorParameters;
-    private List<BeanProperty> properties = new ArrayList<BeanProperty>();
+    private List<ConstructorParameter> constructorParameters = newArrayList();
+    private List<BeanProperty> properties = newArrayList();
 
     public BeanInfo(String name, Class clazz, Scope scope) {
         this.name = name;
@@ -31,22 +34,16 @@ public class BeanInfo {
         }
     }
 
-    public BeanInfo(String name, ConstructorParameters constructorParameters) {
-        this.name = name;
-        this.constructorParameters = constructorParameters;
-    }
-
-    public BeanInfo(Class clazz, ConstructorParameters constructorParameters) {
-        this.clazz = clazz;
-        this.constructorParameters = constructorParameters;
-    }
-
-    public boolean isNotDefaultConstructorBean() {
-        return constructorParameters == null;
+    public boolean isDefaultConstructorBean() {
+        return constructorParameters.size() == 0;
     }
 
     public void addProperty(BeanProperty beanProperty) {
         this.properties.add(beanProperty);
+    }
+
+    public void addConstructorParameter(ConstructorParameter constructorParameter) {
+        this.constructorParameters.add(constructorParameter);
     }
 
     public List<BeanProperty> getProperties() {
@@ -65,12 +62,8 @@ public class BeanInfo {
         return scope;
     }
 
-    public ConstructorParameters getConstructorParameters() {
+    public List<ConstructorParameter> getConstructorParameters() {
         return constructorParameters;
-    }
-
-    public void setConstructorParameters(ConstructorParameters constructorParameters) {
-        this.constructorParameters = constructorParameters;
     }
 
     public AutoWiredBy getAutoWiredBy() {

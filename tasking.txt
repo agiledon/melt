@@ -1,0 +1,16 @@
+1. finished ContainerInitializer
+    * Initialized with default constructor;
+    * set property for all beans;
+    * Initialized with parameter constructor;
+
+2. Initialized Process
+    * Initialized List<BeanInfo> to InitializedContainer which contains all initialized bean objects;
+
+3. ContextBuilder
+    * provide build method to generate List<BeanInfo>;
+    * Invoke ContainerInitializer.initialize() method to get InitializedContainer;
+    * Hold InitializedContainer object in Context;
+    * build Context object;
+
+4. Context
+    * provide resolve() method which can retrieve bean object from InitializedContainer;

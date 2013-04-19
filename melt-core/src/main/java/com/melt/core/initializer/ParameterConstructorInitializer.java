@@ -17,16 +17,16 @@ import static com.google.common.collect.Maps.newHashMap;
 public class ParameterConstructorInitializer {
     public void initialize(BeansContainer container, BeanInfo targetBean) {
         Class targetClass = targetBean.getClazz();
-        ConstructorParameters constructorParameters = targetBean.getConstructorParameters();
+        List<ConstructorParameter> constructorParameters = targetBean.getConstructorParameters();
 
         Object[] parameterBeans = getParameterBeans(container, constructorParameters);
         Object target = createInstance(targetClass, parameterBeans);
         container.addBean(targetClass, targetClass.getSimpleName(), target);
     }
 
-    private Object[] getParameterBeans(BeansContainer container, ConstructorParameters constructorParameters) {
+    private Object[] getParameterBeans(BeansContainer container, List<ConstructorParameter> constructorParameters) {
         Map<Integer, Object> parameterMap = newHashMap();
-        for (ConstructorParameter parameter : constructorParameters.getParameters()) {
+        for (ConstructorParameter parameter : constructorParameters) {
             int index = parameter.getIndex();
             Object parameterValue = container.resolve(parameter.getRef());
             parameterMap.put(index, parameterValue);

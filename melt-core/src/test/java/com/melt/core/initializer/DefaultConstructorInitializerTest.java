@@ -1,6 +1,7 @@
 package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
+import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.constructor.ConstructorParameters;
 import com.melt.exceptions.InitBeanException;
 import com.melt.sample.bank.beans.BankDao;
@@ -28,6 +29,8 @@ public class DefaultConstructorInitializerTest {
 
     @Test(expected = InitBeanException.class)
     public void should_throw_exception_when_bean_config_has_constructor_config() {
-        initializer.initialize(new BeanInfo("bankDao", new ConstructorParameters(null)));
+        BeanInfo bankDao = new BeanInfo("bankDao", DefaultBankDao.class);
+        bankDao.addConstructorParameter(new ConstructorParameter(0, "ref"));
+        initializer.initialize(bankDao);
     }
 }

@@ -8,7 +8,7 @@ import static com.google.common.collect.Lists.newArrayList;
 public class DefaultConstructorInitializer implements Initializer {
     @Override
     public Object initialize(BeanInfo beanInfo) {
-        if (beanInfo.isNotDefaultConstructorBean()) {
+        if (beanInfo.isDefaultConstructorBean()) {
             Class clazz = beanInfo.getClazz();
             return createBean(clazz);
         }

@@ -33,11 +33,8 @@ public class ParameterConstructorInitializerTest {
 
     @Test
     public void should_inject_CustomerDao_with_constructor_of_CustomerService() {
-        List<ConstructorParameter> parameters = newArrayList();
-        parameters.add(new ConstructorParameter(0, "CustomerDao"));
-        ConstructorParameters constructorParameters = new ConstructorParameters(parameters);
-
-        customerServiceBean = new BeanInfo(DefaultCustomerService.class, constructorParameters);
+        customerServiceBean = new BeanInfo("customerService", DefaultCustomerService.class);
+        customerServiceBean.addConstructorParameter(new ConstructorParameter(0, "CustomerDao"));
         container.addBean("CustomerDao", new CustomerDao());
 
         parameterConstructorInitializer.initialize(container, customerServiceBean);
@@ -52,12 +49,10 @@ public class ParameterConstructorInitializerTest {
 
     @Test
     public void should_inject_CustomerDao_And_CustomerFiller_with_constructor_of_CustomerService() {
-        List<ConstructorParameter> parameters = newArrayList();
-        parameters.add(new ConstructorParameter(0, "CustomerDao"));
-        parameters.add(new ConstructorParameter(1, "CustomerFiller"));
-        ConstructorParameters constructorParameters = new ConstructorParameters(parameters);
+        customerServiceBean = new BeanInfo("customerService", DefaultCustomerService.class);
+        customerServiceBean.addConstructorParameter(new ConstructorParameter(0, "CustomerDao"));
+        customerServiceBean.addConstructorParameter(new ConstructorParameter(1, "CustomerFiller"));
 
-        customerServiceBean = new BeanInfo(DefaultCustomerService.class, constructorParameters);
         container.addBean("CustomerDao", new CustomerDao());
         container.addBean("CustomerFiller", new CustomerFiller());
 
