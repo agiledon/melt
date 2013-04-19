@@ -32,9 +32,14 @@ public class BeanInfo {
     }
 
     public void injectProperties(BeansContainer beansContainer) {
+        autoWiredProperties(beansContainer);
         for (BeanProperty beanProperty : getProperties()) {
             beanProperty.injectPropertyValue(beansContainer);
         }
+    }
+
+    public void autoWiredProperties(BeansContainer beansContainer) {
+        autoWiredBy.autoWired().autoWired(beansContainer, this);
     }
 
     public boolean isInterface() {
@@ -79,9 +84,5 @@ public class BeanInfo {
 
     public void setAutoWiredBy(AutoWiredBy autoWiredBy) {
         this.autoWiredBy = autoWiredBy;
-    }
-
-    public void autoWiredProperties(BeansContainer beansContainer) {
-        autoWiredBy.autoWired().autoWired(beansContainer, this);
     }
 }
