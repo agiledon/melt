@@ -1,13 +1,13 @@
-package com.melt.core.injector;
+package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.constructor.ConstructorParameters;
 import com.melt.core.BeansContainer;
+import com.melt.core.initializer.ParameterConstructorInitializer;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.domain.Customer;
 import com.melt.sample.customer.service.CustomerFiller;
-import com.melt.sample.customer.service.CustomerService;
 import com.melt.sample.customer.service.DefaultCustomerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +19,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ConstructorInjectorTest {
+public class ParameterConstructorInitializerTest {
 
-    private ConstructorInjector constructorInjector;
+    private ParameterConstructorInitializer parameterConstructorInitializer;
     private BeanInfo customerServiceBean;
     private BeansContainer container;
 
     @Before
     public void setUp() throws Exception {
-        constructorInjector = new ConstructorInjector();
+        parameterConstructorInitializer = new ParameterConstructorInitializer();
         container = new BeansContainer();
     }
 
@@ -40,7 +40,7 @@ public class ConstructorInjectorTest {
         customerServiceBean = new BeanInfo(DefaultCustomerService.class, constructorParameters);
         container.addBean("CustomerDao", new CustomerDao());
 
-        constructorInjector.inject(container, customerServiceBean);
+        parameterConstructorInitializer.initialize(container, customerServiceBean);
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
 
@@ -61,7 +61,7 @@ public class ConstructorInjectorTest {
         container.addBean("CustomerDao", new CustomerDao());
         container.addBean("CustomerFiller", new CustomerFiller());
 
-        constructorInjector.inject(container, customerServiceBean);
+        parameterConstructorInitializer.initialize(container, customerServiceBean);
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
 

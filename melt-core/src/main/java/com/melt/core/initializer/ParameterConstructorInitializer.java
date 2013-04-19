@@ -1,4 +1,4 @@
-package com.melt.core.injector;
+package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.ConstructorParameter;
@@ -8,20 +8,19 @@ import com.melt.exceptions.InitBeanException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
-public class ConstructorInjector {
-    public void inject(BeansContainer container, BeanInfo targetBean) {
+public class ParameterConstructorInitializer {
+    public void initialize(BeansContainer container, BeanInfo targetBean) {
         Class targetClass = targetBean.getClazz();
         ConstructorParameters constructorParameters = targetBean.getConstructorParameters();
 
         Object[] parameterBeans = getParameterBeans(container, constructorParameters);
-        Object target = inject(targetClass, parameterBeans);
+        Object target = createInstance(targetClass, parameterBeans);
         container.addBean(targetClass, targetClass.getSimpleName(), target);
     }
 
@@ -36,7 +35,7 @@ public class ConstructorInjector {
         return parameterMap.values().toArray();
     }
 
-    private <T> T inject(Class<T> targetClass, Object... dependencies) {
+    private <T> T createInstance(Class<T> targetClass, Object... dependencies) {
         try {
             Class[] classes = getClassesFrom(dependencies);
             Constructor<T> constructor = targetClass.getConstructor(classes);
