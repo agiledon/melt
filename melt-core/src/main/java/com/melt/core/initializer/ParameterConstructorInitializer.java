@@ -2,7 +2,6 @@ package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.ConstructorParameter;
-import com.melt.config.constructor.ConstructorParameters;
 import com.melt.core.BeansContainer;
 import com.melt.exceptions.InitBeanException;
 
@@ -16,12 +15,20 @@ import static com.google.common.collect.Maps.newHashMap;
 
 public class ParameterConstructorInitializer {
     public void initialize(BeansContainer container, BeanInfo targetBean) {
+        if (targetBean.isDefaultConstructorBean()) {
+            return;
+        }
+
         Class targetClass = targetBean.getClazz();
         List<ConstructorParameter> constructorParameters = targetBean.getConstructorParameters();
 
         Object[] parameterBeans = getParameterBeans(container, constructorParameters);
         Object target = createInstance(targetClass, parameterBeans);
-        container.addBean(targetClass, targetClass.getSimpleName(), target);
+        if (targetBean.isInterface()) {
+            container.addBean(targetBean.getName(), targetBean.getClazz(), target);
+        } else {
+            container.addBean(targetBean.getName(), target);
+        }
     }
 
     private Object[] getParameterBeans(BeansContainer container, List<ConstructorParameter> constructorParameters) {

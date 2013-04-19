@@ -1,11 +1,9 @@
 package com.melt.config;
 
 import com.melt.config.constructor.ConstructorParameter;
-import com.melt.config.constructor.ConstructorParameters;
 import com.melt.config.property.BeanProperty;
 import com.melt.core.BeansContainer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -17,10 +15,14 @@ public class BeanInfo {
     private AutoWiredBy autoWiredBy;
     private List<ConstructorParameter> constructorParameters = newArrayList();
     private List<BeanProperty> properties = newArrayList();
+    private boolean isInterfaceType = false;
 
     public BeanInfo(String name, Class clazz, Scope scope) {
         this.name = name;
         this.clazz = clazz;
+        if (clazz.isInterface()) {
+            isInterfaceType = true;
+        }
         this.scope = scope;
     }
 
@@ -32,6 +34,10 @@ public class BeanInfo {
         for (BeanProperty beanProperty : getProperties()) {
             beanProperty.injectPropertyValue(beansContainer);
         }
+    }
+
+    public boolean isInterface() {
+        return isInterfaceType;
     }
 
     public boolean isDefaultConstructorBean() {

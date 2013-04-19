@@ -15,16 +15,15 @@ public class BeansContainer {
 
     public void addBean(String beanName, Object bean) {
         beansWithBeanName.put(beanName, bean);
-        addBean(bean.getClass(), beanName, bean);
     }
 
     public void addBean(List<Class> classes, String beanName, Object bean) {
         for (Class clazz : classes) {
-            addBean(clazz, beanName, bean);
+            addBean(beanName, clazz, bean);
         }
     }
 
-    public void addBean(Class clazz, String beanName, Object bean) {
+    public void addBean(String beanName, Class clazz, Object bean) {
         Map<String, Object> beans = null;
         beans = beansWithClass.get(clazz);
         if (beans == null) {

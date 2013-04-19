@@ -2,7 +2,6 @@ package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.ConstructorParameter;
-import com.melt.config.constructor.ConstructorParameters;
 import com.melt.exceptions.InitBeanException;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.DefaultBankDao;
@@ -10,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class DefaultConstructorInitializerTest {
@@ -27,10 +28,11 @@ public class DefaultConstructorInitializerTest {
         assertThat(bean, instanceOf(BankDao.class));
     }
 
-    @Test(expected = InitBeanException.class)
+    @Test
     public void should_throw_exception_when_bean_config_has_constructor_config() {
         BeanInfo bankDao = new BeanInfo("bankDao", DefaultBankDao.class);
         bankDao.addConstructorParameter(new ConstructorParameter(0, "ref"));
-        initializer.initialize(bankDao);
+        Object initialize = initializer.initialize(bankDao);
+        assertThat(initialize, is(nullValue()));
     }
 }

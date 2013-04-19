@@ -12,7 +12,7 @@ public class DefaultConstructorInitializer implements Initializer {
             Class clazz = beanInfo.getClazz();
             return createBean(clazz);
         }
-        throw new InitBeanException("Can't initialize a bean with constructor configuration");
+        return null;
     }
 
     private Object createBean(Class clazz) {

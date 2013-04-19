@@ -6,7 +6,6 @@ import com.melt.sample.bank.beans.DefaultBankDao;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -34,7 +33,7 @@ public class BeansContainerTest {
     public void should_return_bean_when_get_bean_with_class(){
         DefaultBankDao bankDao = new DefaultBankDao();
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
-        container.addBean(clazz, "bankDao", bankDao);
+        container.addBean("bankDao", clazz, bankDao);
         assertThat((DefaultBankDao)container.resolve(DefaultBankDao.class), is(bankDao));
     }
 
@@ -44,7 +43,7 @@ public class BeansContainerTest {
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
         List<Class> classes = newArrayList(new Class[]{DefaultBankDao.class, BankDao.class});
         container.addBean(classes, "bankDao", bankDao);
-        assertThat((DefaultBankDao)container.resolve(DefaultBankDao.class), is(bankDao));
+        assertThat((DefaultBankDao) container.resolve(DefaultBankDao.class), is(bankDao));
     }
 
     @Test(expected = MoreThanOneBeanWithSameClass.class)
@@ -52,8 +51,8 @@ public class BeansContainerTest {
         DefaultBankDao bankDao1 = new DefaultBankDao();
         DefaultBankDao bankDao2 = new DefaultBankDao();
         Class<DefaultBankDao> clazz = DefaultBankDao.class;
-        container.addBean(clazz, "bankDao1", bankDao1);
-        container.addBean(clazz, "bankDao2", bankDao2);
+        container.addBean("bankDao1", clazz, bankDao1);
+        container.addBean("bankDao2", clazz, bankDao2);
         DefaultBankDao dao = container.resolve(DefaultBankDao.class);
     }
 

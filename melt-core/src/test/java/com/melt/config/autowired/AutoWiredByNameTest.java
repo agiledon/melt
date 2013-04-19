@@ -25,8 +25,8 @@ public class AutoWiredByNameTest {
         bankDao = new DefaultBankDao();
         beansContainer = new BeansContainer();
         beansContainer.addBean("bankDao", bankDao);
-        beansContainer.addBean(DefaultBankDao.class, "bankDao", bankDao);
-        beansContainer.addBean(BankDao.class, "bankDao", bankDao);
+        beansContainer.addBean("bankDao", DefaultBankDao.class, bankDao);
+        beansContainer.addBean("bankDao", BankDao.class, bankDao);
         beansContainer.addBean("bankService", new DefaultBankService());
     }
 
