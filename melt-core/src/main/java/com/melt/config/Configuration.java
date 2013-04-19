@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface Configuration {
     List<BeanInfo> getBeans();
-    AutoWired getGlobalAutoWired();
+    AutoWiredBy getGlobalAutoWired();
 }

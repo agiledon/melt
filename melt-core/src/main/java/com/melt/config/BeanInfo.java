@@ -11,7 +11,7 @@ public class BeanInfo {
     private String name;
     private Class clazz;
     private Scope scope;
-    private AutoWired autoWired;
+    private AutoWiredBy autoWiredBy;
     private ConstructorParameters constructorParameters;
     private List<BeanProperty> properties = new ArrayList<BeanProperty>();
 
@@ -73,11 +73,15 @@ public class BeanInfo {
         this.constructorParameters = constructorParameters;
     }
 
-    public AutoWired getAutoWired() {
-        return autoWired;
+    public AutoWiredBy getAutoWiredBy() {
+        return autoWiredBy;
     }
 
-    public void setAutoWired(AutoWired autoWired) {
-        this.autoWired = autoWired;
+    public void setAutoWiredBy(AutoWiredBy autoWiredBy) {
+        this.autoWiredBy = autoWiredBy;
+    }
+
+    public void autoWiredProperties(BeansContainer beansContainer) {
+
     }
 }
