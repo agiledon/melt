@@ -3,6 +3,7 @@ package com.melt.config.autowired;
 import com.melt.config.AutoWiredBy;
 import com.melt.config.BeanInfo;
 import com.melt.core.BeansContainer;
+import com.melt.exceptions.AutoWiredException;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
@@ -32,9 +33,17 @@ public class AutoWiredByNameTest {
 
     @Test
     public void should_auto_wire_bank_dao_by_name(){
+        beansContainer.addBean("bankDao", bankDao);
         AutoWiredByName autoWired = new AutoWiredByName();
         autoWired.autoWired(beansContainer, bankServiceBeanInfo);
         DefaultBankService bankService = (DefaultBankService) beansContainer.resolve("bankService");
-//        assertThat(bankService.getBankDao(), is(bankDao));
+        assertThat(bankService.getBankDao(), is(bankDao));
+    }
+
+    @Test(expected = AutoWiredException.class)
+    public void should_throw_exception_when_bank_dao_is_not_right_type(){
+        beansContainer.addBean("bankDao", new DefaultBankService());
+        AutoWiredByName autoWired = new AutoWiredByName();
+        autoWired.autoWired(beansContainer, bankServiceBeanInfo);
     }
 }
