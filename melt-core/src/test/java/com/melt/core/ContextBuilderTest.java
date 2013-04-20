@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -54,6 +55,34 @@ public class ContextBuilderTest {
         assertThat(customers.size(), is(1));
         assertThat(customers.get(0).getId(), is(1));
         assertThat(customers.get(0).getName(), is("zhangyi"));
+    }
+
+    @Test
+    public void should_register_CustomerService_bean_with_different_constructor_parameters() {
+        ArrayList<Customer> newCustomers = newArrayList(new Customer(1, "zhangyi"));
+        context = builder.register(DefaultCustomerService.class)
+                .construct(CustomerDao.class)
+                .construct(5)
+                .construct("hello melt")
+                .construct(50.0)
+                .construct(5000L)
+                .construct(40.0f)
+                .construct(newCustomers)
+                .build();
+
+        DefaultCustomerService customerService = context.resolve(DefaultCustomerService.class);
+        assertThat(customerService, not(nullValue()));
+        List<Customer> customers = customerService.allCustomers();
+        assertThat(customers.size(), is(1));
+        assertThat(customerService.getCount(), is(5));
+        assertThat(customerService.getMessage(), is("hello melt"));
+        assertThat(customerService.getMoney(), is(50.0));
+        assertThat(customerService.getId(), is(5000L));
+        assertThat(customerService.getSalary(), is(40.0f));
+        List<Customer> resultCustomers = customerService.getCustomers();
+        assertThat(resultCustomers.size(), is(1));
+        assertThat(resultCustomers.get(0).getId(), is(1));
+        assertThat(resultCustomers.get(0).getName(), is("zhangyi"));
     }
 
     @Test
@@ -105,14 +134,14 @@ public class ContextBuilderTest {
         context = builder.register(DefaultCustomerService.class)
                 .withClass(CustomerDao.class)
                 .withClass(CustomerFiller.class)
-                .withValue("message", "hello world")
+                .withValue("message", "hello melt")
                 .build();
 
         DefaultCustomerService customerService = context.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));
         assertThat(customerService.getCustomerFiller(), instanceOf(CustomerFiller.class));
         assertThat(customerService.getCustomerDao(), instanceOf(CustomerDao.class));
-        assertThat(customerService.getMessage(), is("hello world"));
+        assertThat(customerService.getMessage(), is("hello melt"));
     }
 
     @Test
@@ -142,8 +171,8 @@ public class ContextBuilderTest {
     public void should_have_container_scope() {
         context = builder.register(DefaultBankService.class)
                 .build();
-        ContextBuilder builder1 = new ContextBuilder();
-        Context subContext = builder1.parent(context)
+        ContextBuilder childBuilder = new ContextBuilder();
+        Context subContext = childBuilder.parent(context)
                 .register(DefaultBankDao.class)
                 .build();
         assertThat(subContext.resolve(BankDao.class), instanceOf(BankDao.class));

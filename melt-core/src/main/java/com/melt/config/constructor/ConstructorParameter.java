@@ -1,20 +1,22 @@
 package com.melt.config.constructor;
 
 public class ConstructorParameter {
-    private int index;
-    private String ref;
-    private String value;
+    protected int index;
+    private Object value;
 
-    public ConstructorParameter(int index, String ref) {
+    public ConstructorParameter(int index) {
         this.index = index;
-        this.ref = ref;
     }
 
     public int getIndex() {
         return index;
     }
 
-    public String getRef() {
-        return ref;
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 }

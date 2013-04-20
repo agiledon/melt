@@ -1,7 +1,6 @@
 package com.melt.config.constructor;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.constructor.ConstructorParameter;
 import com.melt.core.BeansContainer;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.domain.Customer;
@@ -28,7 +27,7 @@ public class ConstructorParametersTest {
     @Test
     public void should_inject_CustomerDao_with_constructor_of_CustomerService() {
         customerServiceBean = new BeanInfo("customerService", DefaultCustomerService.class);
-        customerServiceBean.addConstructorParameter(new ConstructorParameter(0, "customerDao"));
+        customerServiceBean.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
         container.addBean("customerDao", new CustomerDao());
 
         customerServiceBean.getConstructorParameters().initialize(container);
@@ -44,8 +43,8 @@ public class ConstructorParametersTest {
     @Test
     public void should_inject_CustomerDao_And_CustomerFiller_with_constructor_of_CustomerService() {
         customerServiceBean = new BeanInfo("customerService", DefaultCustomerService.class);
-        customerServiceBean.addConstructorParameter(new ConstructorParameter(0, "customerDao"));
-        customerServiceBean.addConstructorParameter(new ConstructorParameter(1, "customerFiller"));
+        customerServiceBean.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
+        customerServiceBean.addConstructorParameter(new RefConstructorParameter(1, "customerFiller"));
 
         container.addBean("customerDao", new CustomerDao());
         container.addBean("customerFiller", new CustomerFiller());

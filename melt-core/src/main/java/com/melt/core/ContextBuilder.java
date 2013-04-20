@@ -1,7 +1,7 @@
 package com.melt.core;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.constructor.ConstructorParameter;
+import com.melt.config.constructor.*;
 import com.melt.config.property.*;
 import com.melt.core.initializer.ContainerInitializer;
 import com.melt.exceptions.BeanConfigurationException;
@@ -33,7 +33,7 @@ public class ContextBuilder {
     }
 
     public <T> ContextBuilder construct(Class<T> constructorParameterClass) {
-        ConstructorParameter constructorParameter = new ConstructorParameter(
+        ConstructorParameter constructorParameter = new RefConstructorParameter(
                 ConstructorIndexer.index(), constructorParameterClass.getSimpleName());
         if (currentBean != null) {
             currentBean.addConstructorParameter(constructorParameter);
@@ -42,6 +42,50 @@ public class ContextBuilder {
             throw new BeanConfigurationException("Didn't register main bean");
         }
         return this;
+    }
+
+    public ContextBuilder construct(int paraValue) {
+        addConstructorParameter(new IntConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContextBuilder construct(long paraValue) {
+        addConstructorParameter(new LongConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContextBuilder construct(float paraValue) {
+        addConstructorParameter(new FloatConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContextBuilder construct(double paraValue) {
+        addConstructorParameter(new DoubleConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContextBuilder construct(String paraValue) {
+        addConstructorParameter(new StringConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContextBuilder construct(Object paraValue) {
+        addConstructorParameter(new ObjectConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    private void addConstructorParameter(ConstructorParameter constructorParameter) {
+        if (currentBean != null) {
+            currentBean.addConstructorParameter(constructorParameter);
+        } else {
+            throw new BeanConfigurationException("Didn't register main bean");
+        }
     }
 
     public <T> ContextBuilder parent(Context context) {
@@ -76,11 +120,6 @@ public class ContextBuilder {
         return this;
     }
 
-    private void addPropertyAndResetConstructorIndexer(BeanProperty property) {
-        currentBean.addProperty(property);
-        ConstructorIndexer.reset();
-    }
-
     public ContextBuilder withValue(String propertyName, String propertyValue) {
         addPropertyAndResetConstructorIndexer(new BeanStringProperty(currentBean, propertyName, propertyValue));
         return this;
@@ -89,6 +128,11 @@ public class ContextBuilder {
     public ContextBuilder withValue(String propertyName, Object propertyValue) {
         addPropertyAndResetConstructorIndexer(new BeanObjectProperty(currentBean, propertyName, propertyValue));
         return this;
+    }
+
+    private void addPropertyAndResetConstructorIndexer(BeanProperty property) {
+        currentBean.addProperty(property);
+        ConstructorIndexer.reset();
     }
 
     private <T> String getBeanName(Class<T> registeredClass) {
@@ -131,5 +175,4 @@ public class ContextBuilder {
             index = 0;
         }
     }
-
 }

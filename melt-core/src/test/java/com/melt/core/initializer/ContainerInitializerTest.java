@@ -1,11 +1,9 @@
 package com.melt.core.initializer;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.constructor.ConstructorParameter;
-import com.melt.config.property.BeanProperty;
+import com.melt.config.constructor.RefConstructorParameter;
 import com.melt.config.property.BeanRefProperty;
 import com.melt.core.BeansContainer;
-import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.domain.Customer;
@@ -45,7 +43,7 @@ public class ContainerInitializerTest {
     @Test
     public void should_initialize_DefaultCustomerService_object_with_one_constructor_parameter() {
         BeanInfo customerService = new BeanInfo("customerService", DefaultCustomerService.class);
-        customerService.addConstructorParameter(new ConstructorParameter(0, "customerDao"));
+        customerService.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
         BeanInfo customerDao = new BeanInfo("customerDao", CustomerDao.class);
 
         BeansContainer beansContainer = initializer.initialize(newArrayList(customerService, customerDao));
@@ -58,8 +56,8 @@ public class ContainerInitializerTest {
     @Test
     public void should_initialize_DefaultCustomerService_object_with_two_constructor_parameters() {
         BeanInfo customerService = new BeanInfo("customerService", DefaultCustomerService.class);
-        customerService.addConstructorParameter(new ConstructorParameter(0, "customerDao"));
-        customerService.addConstructorParameter(new ConstructorParameter(1, "customerFiller"));
+        customerService.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
+        customerService.addConstructorParameter(new RefConstructorParameter(1, "customerFiller"));
         BeanInfo customerDao = new BeanInfo("customerDao", CustomerDao.class);
         BeanInfo customerFiller = new BeanInfo("customerFiller", CustomerFiller.class);
 

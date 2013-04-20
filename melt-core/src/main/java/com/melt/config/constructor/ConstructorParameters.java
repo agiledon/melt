@@ -1,5 +1,6 @@
 package com.melt.config.constructor;
 
+import com.google.common.primitives.Primitives;
 import com.melt.config.BeanInfo;
 import com.melt.core.BeansContainer;
 import com.melt.exceptions.InitBeanException;
@@ -33,13 +34,12 @@ public class ConstructorParameters {
     }
 
     public void initialize(BeansContainer container) {
-        BeanInfo targetBeanInfo = getBeanInfo();
-        if (targetBeanInfo.isDefaultConstructorBean()) {
+        if (beanInfo.isDefaultConstructorBean()) {
             return;
         }
 
-        Object targetBean = initializeTargetBean(container, targetBeanInfo);
-        container.addBeanToContainer(targetBeanInfo, targetBean);
+        Object targetBean = initializeTargetBean(container, beanInfo);
+        container.addBeanToContainer(beanInfo, targetBean);
     }
 
     private Object initializeTargetBean(BeansContainer container, BeanInfo targetBean) {
@@ -53,8 +53,11 @@ public class ConstructorParameters {
         Map<Integer, Object> parameterMap = newHashMap();
         for (ConstructorParameter parameter : getConstructorParameters()) {
             int index = parameter.getIndex();
-            Object parameterValue = container.resolve(parameter.getRef());
-            parameterMap.put(index, parameterValue);
+            if (parameter instanceof RefConstructorParameter) {
+                RefConstructorParameter refParameter = (RefConstructorParameter) parameter;
+                parameter.setValue(container.resolve(refParameter.getRef()));
+            }
+            parameterMap.put(index, parameter.getValue());
         }
 
         return parameterMap.values().toArray();
@@ -79,7 +82,11 @@ public class ConstructorParameters {
     private Class[] getClassesFrom(Object[] dependencies) {
         List<Class> classes = newArrayList();
         for (Object dependency : dependencies) {
-            classes.add(dependency.getClass());
+            if (Primitives.isWrapperType(dependency.getClass())) {
+                classes.add(Primitives.unwrap(dependency.getClass()));
+            } else {
+                classes.add(dependency.getClass());
+            }
         }
         return classes.toArray(new Class[classes.size()]);
     }
