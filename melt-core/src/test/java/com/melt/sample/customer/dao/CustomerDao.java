@@ -7,7 +7,18 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 public class CustomerDao {
+    private JdbcTemplate jdbcTemplate;
+
+
     public List<Customer> findAll() {
         return newArrayList(new Customer());
+    }
+
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 }

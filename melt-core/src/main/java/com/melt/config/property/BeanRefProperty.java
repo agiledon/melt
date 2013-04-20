@@ -7,7 +7,12 @@ public class BeanRefProperty extends BeanProperty {
     private String ref;
 
     public BeanRefProperty(BeanInfo beanInfo, String name, String ref) {
-        super(name, beanInfo);
+        super(beanInfo, name);
+        this.ref = ref;
+    }
+
+    public BeanRefProperty(BeanInfo beanInfo, String name, String ref, PropertyValue value) {
+        super(beanInfo, name, value);
         this.ref = ref;
     }
 

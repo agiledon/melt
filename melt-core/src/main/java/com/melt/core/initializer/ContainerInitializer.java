@@ -29,13 +29,14 @@ public class ContainerInitializer {
         for (BeanInfo beanInfo : beanInfos) {
             Object bean = defaultConstructorInitializer.initialize(beanInfo);
             if (bean != null) {
-                if (beanInfo.isInterface()) {
-                    container.addBean(beanInfo.getName(), beanInfo.getClazz(), bean);
-                } else {
-                    container.addBean(beanInfo.getName(), bean);
-                }
+//                if (beanInfo.isInterface()) {
+                container.addBean(beanInfo.getName(), beanInfo.getClazz(), bean);
+//                } else {
+                container.addBean(beanInfo.getName(), bean);
+//            }
             }
         }
+
     }
 
     private void propertyInitializing(List<BeanInfo> beanInfos, BeansContainer container) {

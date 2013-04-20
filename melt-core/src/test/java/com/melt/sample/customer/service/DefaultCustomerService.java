@@ -9,6 +9,27 @@ public class DefaultCustomerService implements CustomerService {
 
     private CustomerDao customerDao;
     private CustomerFiller customerFiller;
+    private int count;
+    private String message;
+
+    public DefaultCustomerService() {
+    }
+
+    public CustomerDao getCustomerDao() {
+        return customerDao;
+    }
+
+    public CustomerFiller getCustomerFiller() {
+        return customerFiller;
+    }
+
+    public void setCustomerDao(CustomerDao customerDao) {
+        this.customerDao = customerDao;
+    }
+
+    public void setCustomerFiller(CustomerFiller customerFiller) {
+        this.customerFiller = customerFiller;
+    }
 
     public DefaultCustomerService(CustomerDao customerDao) {
         this.customerDao = customerDao;
@@ -17,6 +38,11 @@ public class DefaultCustomerService implements CustomerService {
     public DefaultCustomerService(CustomerDao customerDao, CustomerFiller customerFiller) {
         this.customerDao = customerDao;
         this.customerFiller = customerFiller;
+    }
+
+    public void setCount(int count) {
+
+        this.count = count;
     }
 
     @Override
@@ -30,5 +56,17 @@ public class DefaultCustomerService implements CustomerService {
             }
         }
         return customers;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

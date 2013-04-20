@@ -1,15 +1,23 @@
 package com.melt.core;
 
+import com.melt.config.BeanInfo;
 import com.melt.config.Configuration;
 
-public class Context {
-    private Configuration configuration;
+import java.util.List;
 
-    public Context(Configuration configuration) {
-        this.configuration = configuration;
+public class Context {
+
+    private BeansContainer container;
+
+    public <T> T resolve(Class targetClass) {
+        return container.resolve(targetClass);
     }
 
-    public <T> T resolve() {
-        return null;
+    public Object resolve(String beanName) {
+        return container.resolve(beanName);
+    }
+
+    public void setContainer(BeansContainer container) {
+        this.container = container;
     }
 }

@@ -24,11 +24,11 @@ public class ParameterConstructorInitializer {
 
         Object[] parameterBeans = getParameterBeans(container, constructorParameters);
         Object target = createInstance(targetClass, parameterBeans);
-        if (targetBean.isInterface()) {
-            container.addBean(targetBean.getName(), targetBean.getClazz(), target);
-        } else {
-            container.addBean(targetBean.getName(), target);
-        }
+//        if (targetBean.isInterface()) {
+        container.addBean(targetBean.getName(), targetBean.getClazz(), target);
+//        } else {
+        container.addBean(targetBean.getName(), target);
+//        }
     }
 
     private Object[] getParameterBeans(BeansContainer container, List<ConstructorParameter> constructorParameters) {
