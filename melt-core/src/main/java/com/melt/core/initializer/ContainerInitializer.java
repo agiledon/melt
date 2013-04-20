@@ -19,8 +19,8 @@ public class ContainerInitializer {
         BeansContainer container = new BeansContainer();
 
         defaultConstructorInitializing(beanInfos, container);
-        propertyInitializing(beanInfos, container);
         parameterConstructorInitializing(beanInfos, container);
+        propertyInitializing(beanInfos, container);
 
         return container;
     }
@@ -29,11 +29,8 @@ public class ContainerInitializer {
         for (BeanInfo beanInfo : beanInfos) {
             Object bean = defaultConstructorInitializer.initialize(beanInfo);
             if (bean != null) {
-//                if (beanInfo.isInterface()) {
                 container.addBean(beanInfo.getName(), beanInfo.getClazz(), bean);
-//                } else {
                 container.addBean(beanInfo.getName(), bean);
-//            }
             }
         }
 

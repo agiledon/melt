@@ -11,11 +11,6 @@ public class BeanRefProperty extends BeanProperty {
         this.ref = ref;
     }
 
-    public BeanRefProperty(BeanInfo beanInfo, String name, String ref, PropertyValue value) {
-        super(beanInfo, name, value);
-        this.ref = ref;
-    }
-
     @Override
     protected Object getValue(BeansContainer beansContainer) {
         return beansContainer.resolve(ref);

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
 public class BeansContainer {
@@ -31,6 +32,7 @@ public class BeansContainer {
             beansWithClass.put(clazz, beans);
         }
         beans.put(beanName, bean);
+        addBean(newArrayList(clazz.getInterfaces()), beanName, bean);
     }
 
     public Object resolve(String name) {

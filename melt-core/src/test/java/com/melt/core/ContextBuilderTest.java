@@ -1,5 +1,7 @@
 package com.melt.core;
 
+import com.melt.sample.bank.beans.BankDao;
+import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.sample.customer.dao.CustomerDao;
@@ -8,6 +10,7 @@ import com.melt.sample.customer.domain.Customer;
 import com.melt.sample.customer.service.CustomerFiller;
 import com.melt.sample.customer.service.DefaultCustomerService;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -110,6 +113,28 @@ public class ContextBuilderTest {
         assertThat(customerService.getCustomerFiller(), instanceOf(CustomerFiller.class));
         assertThat(customerService.getCustomerDao(), instanceOf(CustomerDao.class));
         assertThat(customerService.getMessage(), is("hello world"));
+    }
 
+    @Test
+    public void should_register_BankService_bean_with_different_properties() {
+        List<String> accounts = newArrayList("haha");
+        context = builder.register(DefaultBankService.class)
+                .withClass(DefaultBankDao.class)
+                .withValue("max", 1)
+                .withValue("tax", 2.3)
+                .withValue("interest", 2.3f)
+                .withValue("maxMoney", 12345l)
+                .withValue("account", "haha")
+                .withValue("accounts", accounts)
+                .build();
+
+        DefaultBankService bankService = context.resolve(BankService.class);
+        assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
+        assertThat(bankService.getMax(), is(1));
+        assertThat(bankService.getTax(), is(2.3));
+        assertThat(bankService.getInterest(), is(2.3f));
+        assertThat(bankService.getMaxMoney(), is(12345l));
+        assertThat(bankService.getAccount(), is("haha"));
+        assertThat(bankService.getAccounts(), is(accounts));
     }
 }

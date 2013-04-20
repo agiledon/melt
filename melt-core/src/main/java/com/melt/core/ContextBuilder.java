@@ -2,9 +2,7 @@ package com.melt.core;
 
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.ConstructorParameter;
-import com.melt.config.property.BeanProperty;
-import com.melt.config.property.BeanRefProperty;
-import com.melt.config.property.PropertyValue;
+import com.melt.config.property.*;
 import com.melt.core.initializer.ContainerInitializer;
 import com.melt.exceptions.BeanConfigurationException;
 
@@ -51,6 +49,41 @@ public class ContextBuilder {
         return this;
     }
 
+    public ContextBuilder withValue(String propertyName, int propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanIntProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContextBuilder withValue(String propertyName, double propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanDoubleProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContextBuilder withValue(String propertyName, float propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanFloatProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContextBuilder withValue(String propertyName, long propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanLongProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    private void addPropertyAndResetConstructorIndexer(BeanProperty property) {
+        currentBean.addProperty(property);
+        ConstructorIndexer.reset();
+    }
+
+    public ContextBuilder withValue(String propertyName, String propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanStringProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContextBuilder withValue(String propertyName, Object propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanObjectProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
     private <T> String getBeanName(Class<T> registeredClass) {
         Class<?>[] interfaces = registeredClass.getInterfaces();
         if (interfaces != null && interfaces.length > 0) {
@@ -72,29 +105,12 @@ public class ContextBuilder {
 
     }
 
-    public ContextBuilder withValue(String propertyName, int propertyValue) {
-        addProperty(propertyName, Integer.class, new PropertyValue(propertyValue));
-        ConstructorIndexer.reset();
-        return this;
-    }
-
-    public ContextBuilder withValue(String propertyName, String propertyValue) {
-        addProperty(propertyName, String.class, new PropertyValue(propertyValue));
-        ConstructorIndexer.reset();
-        return this;
-    }
-
     private <T> boolean matchInterfaceClassName(Class<T> registeredClass, Class<?> anInterface) {
         return registeredClass.getSimpleName().toLowerCase().contains(anInterface.getSimpleName().toLowerCase());
     }
 
     private <T> boolean registerBeanInfoWithClass(Class<T> propertyClass) {
         return beans.add(new BeanInfo(getBeanName(propertyClass), propertyClass));
-    }
-
-    private void addProperty(String propertyName, Class propertyClass, PropertyValue propertyValue) {
-        BeanProperty property = new BeanRefProperty(currentBean, propertyName, propertyName, propertyValue);
-        currentBean.addProperty(property);
     }
 
     private static class ConstructorIndexer {
