@@ -11,24 +11,18 @@ import static com.google.common.collect.Lists.newArrayList;
 public class BeanInfo {
     private String name;
     private Class clazz;
-    private Scope scope;
     private AutoWiredBy autoWiredBy;
     private List<ConstructorParameter> constructorParameters = newArrayList();
     private List<BeanProperty> properties = newArrayList();
     private boolean isInterfaceType = false;
 
-    public BeanInfo(String name, Class clazz, Scope scope) {
+    public BeanInfo(String name, Class clazz) {
         this.name = name;
         this.clazz = clazz;
         if (clazz.isInterface()) {
             isInterfaceType = true;
         }
-        this.scope = scope;
         this.autoWiredBy = AutoWiredBy.NULL;
-    }
-
-    public BeanInfo(String name, Class clazz) {
-        this(name, clazz, Scope.SINGLETON);
     }
 
     public void injectProperties(BeansContainer beansContainer) {
@@ -70,16 +64,8 @@ public class BeanInfo {
         return clazz;
     }
 
-    public Scope getScope() {
-        return scope;
-    }
-
     public List<ConstructorParameter> getConstructorParameters() {
         return constructorParameters;
-    }
-
-    public AutoWiredBy getAutoWiredBy() {
-        return autoWiredBy;
     }
 
     public void setAutoWiredBy(AutoWiredBy autoWiredBy) {

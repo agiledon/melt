@@ -32,18 +32,6 @@ public class ContextBuilder {
         return this;
     }
 
-    private <T> String getBeanName(Class<T> registeredClass) {
-        Class<?>[] interfaces = registeredClass.getInterfaces();
-        if (interfaces != null && interfaces.length > 0) {
-            for (Class<?> anInterface : interfaces) {
-                if (matchInterfaceClassName(registeredClass, anInterface)) {
-                    return anInterface.getSimpleName();
-                }
-            }
-        }
-        return registeredClass.getSimpleName();
-    }
-
     public <T> ContextBuilder construct(Class<T> constructorParameterClass) {
         ConstructorParameter constructorParameter = new ConstructorParameter(
                 ConstructorIndexer.index(), constructorParameterClass.getSimpleName());
@@ -61,6 +49,18 @@ public class ContextBuilder {
         registerBeanInfoWithClass(propertyClass);
         ConstructorIndexer.reset();
         return this;
+    }
+
+    private <T> String getBeanName(Class<T> registeredClass) {
+        Class<?>[] interfaces = registeredClass.getInterfaces();
+        if (interfaces != null && interfaces.length > 0) {
+            for (Class<?> anInterface : interfaces) {
+                if (matchInterfaceClassName(registeredClass, anInterface)) {
+                    return anInterface.getSimpleName();
+                }
+            }
+        }
+        return registeredClass.getSimpleName();
     }
 
     private <T> void addProperty(Class<T> propertyClass) {
