@@ -137,4 +137,17 @@ public class ContextBuilderTest {
         assertThat(bankService.getAccount(), is("haha"));
         assertThat(bankService.getAccounts(), is(accounts));
     }
+
+    @Test
+    public void should_have_container_scope() {
+        context = builder.register(DefaultBankService.class)
+                .build();
+        ContextBuilder builder1 = new ContextBuilder();
+        Context subContext = builder1.parent(context)
+                .register(DefaultBankDao.class)
+                .build();
+        assertThat(subContext.resolve(BankDao.class), instanceOf(BankDao.class));
+        assertThat(subContext.resolve(BankService.class), instanceOf(BankService.class));
+        assertThat(context.resolve(BankDao.class), nullValue());
+    }
 }

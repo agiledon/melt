@@ -15,10 +15,12 @@ public class ContextBuilder {
     private List<BeanInfo> beans = newArrayList();
     private final Context context = new Context();
     private BeanInfo currentBean = null;
+    private Context parentContext;
 
     public Context build() {
         BeansContainer beansContainer = containerInitializer.initialize(beans);
         context.setContainer(beansContainer);
+        context.setParentContext(parentContext);
         return context;
     }
 
@@ -39,6 +41,11 @@ public class ContextBuilder {
         } else {
             throw new BeanConfigurationException("Didn't register main bean");
         }
+        return this;
+    }
+
+    public <T> ContextBuilder parent(Context context) {
+        this.parentContext = context;
         return this;
     }
 

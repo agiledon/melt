@@ -41,9 +41,12 @@ public class BeansContainer {
 
     public <T> T resolve(Class T) {
         Map<String, Object> beans = beansWithClass.get(T);
+        if (beans == null) {
+            return null;
+        }
         Collection<Object> values = beans.values();
         if (values.size() > 1) {
-            throw new MoreThanOneBeanWithSameClass("");
+            throw new MoreThanOneBeanWithSameClass(String.format("The %s more than one instance", T.getName()));
         }
         return (T)Iterators.get(values.iterator(), 0);
     }
