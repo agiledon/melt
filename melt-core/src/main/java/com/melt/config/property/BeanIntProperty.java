@@ -6,8 +6,8 @@ import com.melt.core.BeansContainer;
 public class BeanIntProperty extends BeanProperty {
     private int value;
 
-    public BeanIntProperty(String name, BeanInfo beanInfo, int value) {
-        super(name, beanInfo);
+    public BeanIntProperty(BeanInfo beanInfo, String name, int value) {
+        super(beanInfo, name);
         this.value = value;
     }
 

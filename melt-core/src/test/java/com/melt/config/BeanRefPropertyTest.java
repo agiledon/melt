@@ -8,7 +8,6 @@ import com.melt.sample.bank.beans.DefaultBankService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -41,35 +40,35 @@ public class BeanRefPropertyTest {
 
     @Test
     public void should_set_max_as_int_property() {
-        bankServiceBeanInfo.addProperty(new BeanIntProperty("max", bankServiceBeanInfo, 1));
+        bankServiceBeanInfo.addProperty(new BeanIntProperty(bankServiceBeanInfo, "max", 1));
         injectProperty();
         assertThat(bankService.getMax(), is(1));
     }
 
     @Test
     public void should_set_tax_as_double_property() {
-        bankServiceBeanInfo.addProperty(new BeanDoubleProperty("tax", bankServiceBeanInfo, 2.3));
+        bankServiceBeanInfo.addProperty(new BeanDoubleProperty(bankServiceBeanInfo, "tax", 2.3));
         injectProperty();
         assertThat(bankService.getTax(), is(2.3));
     }
 
     @Test
     public void should_set_interest_as_float_property() {
-        bankServiceBeanInfo.addProperty(new BeanFloatProperty("interest", bankServiceBeanInfo, 2.3f));
+        bankServiceBeanInfo.addProperty(new BeanFloatProperty(bankServiceBeanInfo, "interest", 2.3f));
         injectProperty();
         assertThat(bankService.getInterest(), is(2.3f));
     }
 
     @Test
     public void should_set_max_money_as_long_property() {
-        bankServiceBeanInfo.addProperty(new BeanLongProperty("maxMoney", bankServiceBeanInfo, 12345l));
+        bankServiceBeanInfo.addProperty(new BeanLongProperty(bankServiceBeanInfo, "maxMoney", 12345l));
         injectProperty();
         assertThat(bankService.getMaxMoney(), is(12345l));
     }
 
     @Test
     public void should_set_account_as_string_property() {
-        bankServiceBeanInfo.addProperty(new BeanStringProperty("account", bankServiceBeanInfo, "haha"));
+        bankServiceBeanInfo.addProperty(new BeanStringProperty(bankServiceBeanInfo, "account", "haha"));
         injectProperty();
         assertThat(bankService.getAccount(), is("haha"));
     }
@@ -77,7 +76,7 @@ public class BeanRefPropertyTest {
     @Test
     public void should_set_accounts_as_list_property() {
         List<String> accounts = newArrayList("haha");
-        bankServiceBeanInfo.addProperty(new BeanObjectProperty("accounts", bankServiceBeanInfo, accounts));
+        bankServiceBeanInfo.addProperty(new BeanObjectProperty(bankServiceBeanInfo, "accounts", accounts));
         injectProperty();
         assertThat(bankService.getAccounts(), is(accounts));
     }

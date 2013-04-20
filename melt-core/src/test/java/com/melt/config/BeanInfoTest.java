@@ -6,6 +6,7 @@ import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.sun.tools.javac.util.List.of;
@@ -48,6 +49,7 @@ public class BeanInfoTest {
     }
 
     @Test
+    @Ignore
     public void should_auto_wire_bank_dao_to_bank_service_by_type(){
         bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.TYPE);
         bankServiceBeanInfo.autoWiredProperties(beansContainer);
