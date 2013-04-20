@@ -1,4 +1,4 @@
-package com.melt.core.initializer;
+package com.melt.config.constructor;
 
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.ConstructorParameter;
@@ -16,15 +16,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ParameterConstructorInitializerTest {
-
-    private ParameterConstructorInitializer initializer;
+public class ConstructorParametersTest {
     private BeanInfo customerServiceBean;
     private BeansContainer container;
 
     @Before
     public void setUp() throws Exception {
-        initializer = new ParameterConstructorInitializer();
         container = new BeansContainer();
     }
 
@@ -34,7 +31,7 @@ public class ParameterConstructorInitializerTest {
         customerServiceBean.addConstructorParameter(new ConstructorParameter(0, "customerDao"));
         container.addBean("customerDao", new CustomerDao());
 
-        initializer.initialize(container, customerServiceBean);
+        customerServiceBean.getConstructorParameters().initialize(container);
 
         DefaultCustomerService customerService = (DefaultCustomerService) container.resolve("customerService");
 
@@ -53,7 +50,7 @@ public class ParameterConstructorInitializerTest {
         container.addBean("customerDao", new CustomerDao());
         container.addBean("customerFiller", new CustomerFiller());
 
-        initializer.initialize(container, customerServiceBean);
+        customerServiceBean.getConstructorParameters().initialize(container);
 
         DefaultCustomerService customerService = (DefaultCustomerService) container.resolve("customerService");
 

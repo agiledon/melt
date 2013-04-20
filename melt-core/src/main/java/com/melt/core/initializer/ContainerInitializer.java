@@ -8,11 +8,9 @@ import java.util.List;
 public class ContainerInitializer {
 
     private final DefaultConstructorInitializer defaultConstructorInitializer;
-    private final ParameterConstructorInitializer parameterConstructorInitializer;
 
     public ContainerInitializer() {
         defaultConstructorInitializer = new DefaultConstructorInitializer();
-        parameterConstructorInitializer = new ParameterConstructorInitializer();
     }
 
     public BeansContainer initialize(List<BeanInfo> beanInfos) {
@@ -29,8 +27,7 @@ public class ContainerInitializer {
         for (BeanInfo beanInfo : beanInfos) {
             Object bean = defaultConstructorInitializer.initialize(beanInfo);
             if (bean != null) {
-                container.addBean(beanInfo.getName(), beanInfo.getClazz(), bean);
-                container.addBean(beanInfo.getName(), bean);
+                container.addBeanToContainer(beanInfo, bean);
             }
         }
 
@@ -44,7 +41,7 @@ public class ContainerInitializer {
 
     private void parameterConstructorInitializing(List<BeanInfo> beanInfos, BeansContainer container) {
         for (BeanInfo beanInfo : beanInfos) {
-            parameterConstructorInitializer.initialize(container, beanInfo);
+            beanInfo.getConstructorParameters().initialize(container);
         }
     }
 }

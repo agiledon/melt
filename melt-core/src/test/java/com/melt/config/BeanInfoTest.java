@@ -49,7 +49,6 @@ public class BeanInfoTest {
     }
 
     @Test
-    @Ignore
     public void should_auto_wire_bank_dao_to_bank_service_by_type(){
         bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.TYPE);
         bankServiceBeanInfo.autoWiredProperties(beansContainer);

@@ -10,7 +10,6 @@ public class ConstructorParameter {
         this.ref = ref;
     }
 
-
     public int getIndex() {
         return index;
     }

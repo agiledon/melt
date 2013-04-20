@@ -1,7 +1,6 @@
-package com.melt.core.initializer;
+package com.melt.config.constructor;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.constructor.ConstructorParameter;
 import com.melt.core.BeansContainer;
 import com.melt.exceptions.InitBeanException;
 
@@ -13,27 +12,46 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
-public class ParameterConstructorInitializer {
-    public void initialize(BeansContainer container, BeanInfo targetBean) {
-        if (targetBean.isDefaultConstructorBean()) {
+public class ConstructorParameters {
+    private List<ConstructorParameter> parameters = newArrayList();
+    private BeanInfo beanInfo;
+
+    public ConstructorParameters(BeanInfo beanInfo) {
+        this.beanInfo = beanInfo;
+    }
+
+    public void addConstructorParameter(ConstructorParameter parameter) {
+        parameters.add(parameter);
+    }
+
+    public List<ConstructorParameter> getConstructorParameters() {
+        return parameters;
+    }
+
+    public BeanInfo getBeanInfo() {
+        return beanInfo;
+    }
+
+    public void initialize(BeansContainer container) {
+        BeanInfo targetBeanInfo = getBeanInfo();
+        if (targetBeanInfo.isDefaultConstructorBean()) {
             return;
         }
 
-        Class targetClass = targetBean.getClazz();
-        List<ConstructorParameter> constructorParameters = targetBean.getConstructorParameters();
-
-        Object[] parameterBeans = getParameterBeans(container, constructorParameters);
-        Object target = createInstance(targetClass, parameterBeans);
-//        if (targetBean.isInterface()) {
-        container.addBean(targetBean.getName(), targetBean.getClazz(), target);
-//        } else {
-        container.addBean(targetBean.getName(), target);
-//        }
+        Object targetBean = initializeTargetBean(container, targetBeanInfo);
+        container.addBeanToContainer(targetBeanInfo, targetBean);
     }
 
-    private Object[] getParameterBeans(BeansContainer container, List<ConstructorParameter> constructorParameters) {
+    private Object initializeTargetBean(BeansContainer container, BeanInfo targetBean) {
+        Class targetClass = targetBean.getClazz();
+
+        Object[] parameterBeans = getParameterBeans(container);
+        return createInstance(targetClass, parameterBeans);
+    }
+
+    private Object[] getParameterBeans(BeansContainer container) {
         Map<Integer, Object> parameterMap = newHashMap();
-        for (ConstructorParameter parameter : constructorParameters) {
+        for (ConstructorParameter parameter : getConstructorParameters()) {
             int index = parameter.getIndex();
             Object parameterValue = container.resolve(parameter.getRef());
             parameterMap.put(index, parameterValue);

@@ -35,7 +35,6 @@ public class AutoWiredByTypeTest {
     }
 
     @Test
-    @Ignore
     public void should_auto_wire_bank_dao_by_type(){
         beansContainer.addBean("bankDao", bankDao);
         autoWired.autoWired(beansContainer, bankServiceBeanInfo);

@@ -1,6 +1,7 @@
 package com.melt.core;
 
 import com.google.common.collect.Iterators;
+import com.melt.config.BeanInfo;
 import com.melt.exceptions.MoreThanOneBeanWithSameClass;
 
 import java.util.Collection;
@@ -49,5 +50,10 @@ public class BeansContainer {
             throw new MoreThanOneBeanWithSameClass(String.format("The %s more than one instance", T.getName()));
         }
         return (T)Iterators.get(values.iterator(), 0);
+    }
+
+    public void addBeanToContainer(BeanInfo beanInfo, Object bean) {
+        addBean(beanInfo.getName(), beanInfo.getClazz(), bean);
+        addBean(beanInfo.getName(), bean);
     }
 }
