@@ -1,0 +1,177 @@
+package com.melt.core;
+
+import com.melt.bean.BeanInfo;
+import com.melt.bean.constructor.*;
+import com.melt.bean.property.*;
+import com.melt.exceptions.BeanConfigurationException;
+
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+public class ContainerBuilder {
+    private final BeansInitializer beansInitializer = new BeansInitializer();
+    private List<BeanInfo> beans = newArrayList();
+    private final Container container = new Container();
+    private BeanInfo currentBean = null;
+    private Container parentContainer;
+
+    public Container build() {
+        InitializedBeans initializedBeans = beansInitializer.initialize(beans);
+        container.setInitializedBeans(initializedBeans);
+        container.setParentContainer(parentContainer);
+        return container;
+    }
+
+    public <T> ContainerBuilder register(Class<T> registeredClass) {
+        BeanInfo registeredBean = new BeanInfo(getBeanName(registeredClass), registeredClass);
+        beans.add(registeredBean);
+        currentBean = registeredBean;
+        ConstructorIndexer.reset();
+        return this;
+    }
+
+    public <T> ContainerBuilder construct(Class<T> constructorParameterClass) {
+        ConstructorParameter constructorParameter = new RefConstructorParameter(
+                ConstructorIndexer.index(), constructorParameterClass.getSimpleName());
+        if (currentBean != null) {
+            currentBean.addConstructorParameter(constructorParameter);
+            registerBeanInfoWithClass(constructorParameterClass);
+        } else {
+            throw new BeanConfigurationException("Didn't register main bean");
+        }
+        return this;
+    }
+
+    public ContainerBuilder construct(int paraValue) {
+        addConstructorParameter(new IntConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContainerBuilder construct(long paraValue) {
+        addConstructorParameter(new LongConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContainerBuilder construct(float paraValue) {
+        addConstructorParameter(new FloatConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContainerBuilder construct(double paraValue) {
+        addConstructorParameter(new DoubleConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContainerBuilder construct(String paraValue) {
+        addConstructorParameter(new StringConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    public ContainerBuilder construct(Object paraValue) {
+        addConstructorParameter(new ObjectConstructorParameter(
+                ConstructorIndexer.index(), paraValue));
+        return this;
+    }
+
+    private void addConstructorParameter(ConstructorParameter constructorParameter) {
+        if (currentBean != null) {
+            currentBean.addConstructorParameter(constructorParameter);
+        } else {
+            throw new BeanConfigurationException("Didn't register main bean");
+        }
+    }
+
+    public <T> ContainerBuilder parent(Container container) {
+        this.parentContainer = container;
+        return this;
+    }
+
+    public <T> ContainerBuilder withClass(Class<T> propertyClass) {
+        addProperty(propertyClass);
+        registerBeanInfoWithClass(propertyClass);
+        ConstructorIndexer.reset();
+        return this;
+    }
+
+    public ContainerBuilder withValue(String propertyName, int propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanIntProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContainerBuilder withValue(String propertyName, double propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanDoubleProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContainerBuilder withValue(String propertyName, float propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanFloatProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContainerBuilder withValue(String propertyName, long propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanLongProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContainerBuilder withValue(String propertyName, String propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanStringProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContainerBuilder withValue(String propertyName, Object propertyValue) {
+        addPropertyAndResetConstructorIndexer(new BeanObjectProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    private void addPropertyAndResetConstructorIndexer(BeanProperty property) {
+        currentBean.addProperty(property);
+        ConstructorIndexer.reset();
+    }
+
+    private <T> String getBeanName(Class<T> registeredClass) {
+        Class<?>[] interfaces = registeredClass.getInterfaces();
+        if (interfaces != null && interfaces.length > 0) {
+            for (Class<?> anInterface : interfaces) {
+                if (matchInterfaceClassName(registeredClass, anInterface)) {
+                    return anInterface.getSimpleName();
+                }
+            }
+        }
+        return registeredClass.getSimpleName();
+    }
+
+    private <T> void addProperty(Class<T> propertyClass) {
+        BeanProperty property = new BeanRefProperty(
+                currentBean,
+                getBeanName(propertyClass),
+                getBeanName(propertyClass));
+        currentBean.addProperty(property);
+
+    }
+
+    private <T> boolean matchInterfaceClassName(Class<T> registeredClass, Class<?> anInterface) {
+        return registeredClass.getSimpleName().toLowerCase().contains(anInterface.getSimpleName().toLowerCase());
+    }
+
+    private <T> boolean registerBeanInfoWithClass(Class<T> propertyClass) {
+        return beans.add(new BeanInfo(getBeanName(propertyClass), propertyClass));
+    }
+
+    private static class ConstructorIndexer {
+        private static int index = 0;
+
+        public static int index() {
+            return index++;
+        }
+
+        public static void reset() {
+            index = 0;
+        }
+    }
+}
