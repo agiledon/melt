@@ -61,7 +61,7 @@ public class DefaultCustomerService implements CustomerService {
         this.customerFiller = customerFiller;
     }
 
-    public DefaultCustomerService(CustomerDao customerDao, int count, String message, double money, long id, float salary, ArrayList<Customer> customers) {
+    public DefaultCustomerService(CustomerDao customerDao, int count, String message, double money, long id, float salary, List<Customer> customers) {
         this.customerDao = customerDao;
         this.count = count;
         this.message = message;

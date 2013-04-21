@@ -216,4 +216,13 @@ public class ContainerBuilderTest {
         assertThat(bankService, instanceOf(BankService.class));
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
     }
+
+    @Test
+    public void should_can_resolve_with_interface_type() {
+        container = builder.register(DefaultBankDao.class)
+                .build();
+
+        assertThat(container.resolve(BankDao.class), instanceOf(BankDao.class));
+        assertThat(container.resolve(BankDao.class), instanceOf(DefaultBankDao.class));
+    }
 }

@@ -17,14 +17,10 @@ public class BeanInfo {
     private AutoWiredBy autoWiredBy;
     private ConstructorParameters constructorParameters = new ConstructorParameters(this);
     private List<BeanProperty> properties = newArrayList();
-    private boolean isInterfaceType = false;
 
     public BeanInfo(String name, Class clazz) {
         this.name = name;
         this.clazz = clazz;
-        if (clazz.isInterface()) {
-            isInterfaceType = true;
-        }
         this.autoWiredBy = AutoWiredBy.NULL;
     }
 
@@ -37,10 +33,6 @@ public class BeanInfo {
 
     public void autoWiredProperties(Container parentContainer, InitializedBeans initializedBeans) {
         autoWiredBy.autoWired().autoWired(parentContainer, initializedBeans, this);
-    }
-
-    public boolean isInterface() {
-        return isInterfaceType;
     }
 
     public boolean isDefaultConstructorBean() {
