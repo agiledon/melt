@@ -55,37 +55,37 @@ public class ContainerBuilder {
     }
 
     public ContainerBuilder construct(int paraValue) {
-        addConstructorParameter(new IntConstructorParameter(
+        addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
     public ContainerBuilder construct(long paraValue) {
-        addConstructorParameter(new LongConstructorParameter(
+        addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
     public ContainerBuilder construct(float paraValue) {
-        addConstructorParameter(new FloatConstructorParameter(
+        addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
     public ContainerBuilder construct(double paraValue) {
-        addConstructorParameter(new DoubleConstructorParameter(
+        addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
     public ContainerBuilder construct(String paraValue) {
-        addConstructorParameter(new StringConstructorParameter(
+        addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
     public ContainerBuilder construct(Object paraValue) {
-        addConstructorParameter(new ObjectConstructorParameter(
+        addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
@@ -116,32 +116,32 @@ public class ContainerBuilder {
     }
 
     public ContainerBuilder withValue(String propertyName, int propertyValue) {
-        addPropertyAndResetConstructorIndexer(new BeanIntProperty(currentBean, propertyName, propertyValue));
+        addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
     public ContainerBuilder withValue(String propertyName, double propertyValue) {
-        addPropertyAndResetConstructorIndexer(new BeanDoubleProperty(currentBean, propertyName, propertyValue));
+        addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
     public ContainerBuilder withValue(String propertyName, float propertyValue) {
-        addPropertyAndResetConstructorIndexer(new BeanFloatProperty(currentBean, propertyName, propertyValue));
+        addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
     public ContainerBuilder withValue(String propertyName, long propertyValue) {
-        addPropertyAndResetConstructorIndexer(new BeanLongProperty(currentBean, propertyName, propertyValue));
+        addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
     public ContainerBuilder withValue(String propertyName, String propertyValue) {
-        addPropertyAndResetConstructorIndexer(new BeanStringProperty(currentBean, propertyName, propertyValue));
+        addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
     public ContainerBuilder withValue(String propertyName, Object propertyValue) {
-        addPropertyAndResetConstructorIndexer(new BeanObjectProperty(currentBean, propertyName, propertyValue));
+        addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 

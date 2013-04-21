@@ -3,10 +3,10 @@ package com.melt.bean.property;
 import com.melt.bean.BeanInfo;
 import com.melt.core.InitializedBeans;
 
-public class BeanStringProperty extends BeanProperty {
-    private String value;
+public class GenericBeanProperty<T> extends BeanProperty {
+    private T value;
 
-    public BeanStringProperty(BeanInfo beanInfo, String name, String value) {
+    public GenericBeanProperty(BeanInfo beanInfo, String name, T value) {
         super(beanInfo, name);
         this.value = value;
     }
