@@ -3,6 +3,7 @@ package com.melt.bean;
 import com.melt.bean.constructor.ConstructorParameter;
 import com.melt.bean.constructor.ConstructorParameters;
 import com.melt.bean.property.BeanProperty;
+import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
 
@@ -27,15 +28,15 @@ public class BeanInfo {
         this.autoWiredBy = AutoWiredBy.NULL;
     }
 
-    public void injectProperties(InitializedBeans initializedBeans) {
-        autoWiredProperties(initializedBeans);
+    public void injectProperties(Container parentContainer, InitializedBeans initializedBeans) {
+        autoWiredProperties(parentContainer, initializedBeans);
         for (BeanProperty beanProperty : getProperties()) {
             beanProperty.injectPropertyValue(initializedBeans);
         }
     }
 
-    public void autoWiredProperties(InitializedBeans initializedBeans) {
-        autoWiredBy.autoWired().autoWired(initializedBeans, this);
+    public void autoWiredProperties(Container parentContainer, InitializedBeans initializedBeans) {
+        autoWiredBy.autoWired().autoWired(parentContainer, initializedBeans, this);
     }
 
     public boolean isInterface() {

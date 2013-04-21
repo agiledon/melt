@@ -8,12 +8,12 @@ public class BeansInitializer {
 
     private InitializedBeans initializedBeans;
 
-    public InitializedBeans initialize(List<BeanInfo> beanInfos) {
+    public InitializedBeans initialize(List<BeanInfo> beanInfos, Container parentContainer) {
         initializedBeans = new InitializedBeans();
 
         defaultConstructorInitializing(beanInfos);
         parameterConstructorInitializing(beanInfos);
-        propertyInitializing(beanInfos);
+        propertyInitializing(parentContainer, beanInfos);
 
         return initializedBeans;
     }
@@ -27,9 +27,9 @@ public class BeansInitializer {
         }
     }
 
-    private void propertyInitializing(List<BeanInfo> beanInfos) {
+    private void propertyInitializing(Container parentContainer, List<BeanInfo> beanInfos) {
         for (BeanInfo beanInfo : beanInfos) {
-            beanInfo.injectProperties(initializedBeans);
+            beanInfo.injectProperties(parentContainer, initializedBeans);
         }
     }
 

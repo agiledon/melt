@@ -1,5 +1,6 @@
 package com.melt.core;
 
+import com.melt.bean.AutoWiredBy;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
@@ -176,5 +177,43 @@ public class ContainerBuilderTest {
         assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
         assertThat(subContainer.resolve(BankService.class), instanceOf(BankService.class));
         assertThat(container.resolve(BankDao.class), nullValue());
+    }
+
+
+    @Test
+    public void should_global_auto_wired_by_type() {
+        builder = new ContainerBuilder(AutoWiredBy.TYPE);
+        container = builder.register(DefaultBankService.class)
+                .register(DefaultBankDao.class)
+                .build();
+
+        DefaultBankService bankService = container.resolve(BankService.class);
+        assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
+    }
+
+    @Test
+    public void should_auto_wired_by_type_for_each_bean() {
+        container = builder.register(DefaultBankService.class)
+                .autoWiredBy(AutoWiredBy.TYPE)
+                .register(DefaultBankDao.class)
+                .build();
+
+        DefaultBankService bankService = container.resolve(BankService.class);
+        assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
+    }
+
+    @Test
+    public void should_auto_wired_by_type_from_parent_container() {
+        container = builder.register(DefaultBankDao.class)
+                .build();
+        ContainerBuilder builder1 = new ContainerBuilder();
+        Container subContext = builder1.parent(container)
+                .register(DefaultBankService.class)
+                .autoWiredBy(AutoWiredBy.TYPE)
+                .build();
+        assertThat(subContext.resolve(BankDao.class), instanceOf(BankDao.class));
+        DefaultBankService bankService = subContext.resolve(BankService.class);
+        assertThat(bankService, instanceOf(BankService.class));
+        assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
     }
 }

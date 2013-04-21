@@ -35,7 +35,7 @@ public class AutoWiredByNameTest {
     public void should_auto_wire_bank_dao_by_name(){
         initializedBeans.addBean("bankDao", bankDao);
         AutoWiredByName autoWired = new AutoWiredByName();
-        autoWired.autoWired(initializedBeans, bankServiceBeanInfo);
+        autoWired.autoWired(null, initializedBeans, bankServiceBeanInfo);
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
@@ -44,6 +44,6 @@ public class AutoWiredByNameTest {
     public void should_throw_exception_when_bank_dao_is_not_right_type(){
         initializedBeans.addBean("bankDao", new DefaultBankService());
         AutoWiredByName autoWired = new AutoWiredByName();
-        autoWired.autoWired(initializedBeans, bankServiceBeanInfo);
+        autoWired.autoWired(null, initializedBeans, bankServiceBeanInfo);
     }
 }

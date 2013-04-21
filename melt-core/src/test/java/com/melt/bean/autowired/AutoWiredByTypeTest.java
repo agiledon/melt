@@ -36,7 +36,7 @@ public class AutoWiredByTypeTest {
     @Test
     public void should_auto_wire_bank_dao_by_type(){
         initializedBeans.addBean("bankDao", bankDao);
-        autoWired.autoWired(initializedBeans, bankServiceBeanInfo);
+        autoWired.autoWired(null, initializedBeans, bankServiceBeanInfo);
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
@@ -46,6 +46,6 @@ public class AutoWiredByTypeTest {
         Class bankDaoClass = BankDao.class;
         initializedBeans.addBean("bankDao2", bankDaoClass, new DefaultBankDao());
 
-        autoWired.autoWired(initializedBeans, bankServiceBeanInfo);
+        autoWired.autoWired(null, initializedBeans, bankServiceBeanInfo);
     }
 }

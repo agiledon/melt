@@ -35,7 +35,7 @@ public class BeansInitializerTest {
         BeanInfo bankService = new BeanInfo("bankService", DefaultBankService.class);
         bankService.addProperty(new BeanRefProperty(bankService, "bankDao", "bankDao"));
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(bankService));
+        InitializedBeans initializedBeans = initializer.initialize(newArrayList(bankService), null);
         assertThat(initializedBeans.getBean("bankService"), instanceOf(DefaultBankService.class));
     }
 
@@ -45,7 +45,7 @@ public class BeansInitializerTest {
         customerService.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
         BeanInfo customerDao = new BeanInfo("customerDao", CustomerDao.class);
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(customerService, customerDao));
+        InitializedBeans initializedBeans = initializer.initialize(newArrayList(customerService, customerDao), null);
         DefaultCustomerService customerServiceBean = (DefaultCustomerService) initializedBeans.getBean("customerService");
         assertThat(customerServiceBean, instanceOf(DefaultCustomerService.class));
         assertThat(customerServiceBean.allCustomers().size(), is(1));
@@ -60,7 +60,7 @@ public class BeansInitializerTest {
         BeanInfo customerDao = new BeanInfo("customerDao", CustomerDao.class);
         BeanInfo customerFiller = new BeanInfo("customerFiller", CustomerFiller.class);
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(customerService, customerDao, customerFiller));
+        InitializedBeans initializedBeans = initializer.initialize(newArrayList(customerService, customerDao, customerFiller), null);
         DefaultCustomerService customerServiceBean = (DefaultCustomerService) initializedBeans.getBean("customerService");
         assertThat(customerServiceBean, instanceOf(DefaultCustomerService.class));
         List<Customer> customers = customerServiceBean.allCustomers();
