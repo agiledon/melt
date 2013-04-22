@@ -229,6 +229,22 @@ public class ContainerBuilderTest {
     }
 
     @Test
+    public void should_inject_from_parent_container() {
+        container = builder.register(DefaultBankDao.class)
+                .build();
+        ContainerBuilder subBuilder = new ContainerBuilder();
+        Container subContainer = subBuilder.parent(container)
+                .register(DefaultBankService.class)
+                .autoWiredBy(AutoWiredBy.TYPE)
+                .build();
+        assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
+        DefaultBankService bankService = subContainer.resolve(BankService.class);
+        assertThat(bankService, instanceOf(BankService.class));
+        assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
+        //TODO
+    }
+
+    @Test
     public void should_can_resolve_with_interface_type() {
         container = builder.register(DefaultBankDao.class)
                 .build();
