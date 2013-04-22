@@ -1,8 +1,8 @@
-package com.melt.bean;
+package com.melt.config;
 
-import com.melt.bean.constructor.ConstructorParameter;
-import com.melt.bean.constructor.ConstructorParameters;
-import com.melt.bean.property.BeanProperty;
+import com.melt.config.constructor.ConstructorParameter;
+import com.melt.config.constructor.ConstructorParameters;
+import com.melt.config.property.BeanProperty;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;

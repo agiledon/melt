@@ -1,4 +1,4 @@
-package com.melt.bean.constructor;
+package com.melt.config.constructor;
 
 public class ConstructorParameter {
     protected int index;

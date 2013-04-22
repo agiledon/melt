@@ -1,8 +1,8 @@
 package com.melt.core;
 
-import com.melt.bean.BeanInfo;
-import com.melt.bean.constructor.RefConstructorParameter;
-import com.melt.bean.property.BeanRefProperty;
+import com.melt.config.BeanInfo;
+import com.melt.config.constructor.RefConstructorParameter;
+import com.melt.config.property.BeanRefProperty;
 import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.domain.Customer;

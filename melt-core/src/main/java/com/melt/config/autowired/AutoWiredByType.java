@@ -1,4 +1,4 @@
-package com.melt.bean.autowired;
+package com.melt.config.autowired;
 
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;

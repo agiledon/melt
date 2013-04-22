@@ -1,9 +1,9 @@
 package com.melt.core;
 
-import com.melt.bean.AutoWiredBy;
-import com.melt.bean.BeanInfo;
-import com.melt.bean.constructor.*;
-import com.melt.bean.property.*;
+import com.melt.config.AutoWiredBy;
+import com.melt.config.BeanInfo;
+import com.melt.config.constructor.*;
+import com.melt.config.property.*;
 import com.melt.exceptions.BeanConfigurationException;
 
 import java.util.List;

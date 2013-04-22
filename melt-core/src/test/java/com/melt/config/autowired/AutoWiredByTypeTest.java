@@ -1,7 +1,7 @@
-package com.melt.bean.autowired;
+package com.melt.config.autowired;
 
-import com.melt.bean.AutoWiredBy;
-import com.melt.bean.BeanInfo;
+import com.melt.config.AutoWiredBy;
+import com.melt.config.BeanInfo;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.AutoWiredException;
 import com.melt.sample.bank.beans.BankDao;
@@ -13,10 +13,11 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class AutoWiredByNameTest {
+public class AutoWiredByTypeTest {
     private BeanInfo bankServiceBeanInfo;
     private BankDao bankDao;
     private InitializedBeans initializedBeans;
+    private AutoWiredByType autoWired;
 
 
     @Before
@@ -29,12 +30,12 @@ public class AutoWiredByNameTest {
         initializedBeans.addBean("bankDao", DefaultBankDao.class, bankDao);
         initializedBeans.addBean("bankDao", BankDao.class, bankDao);
         initializedBeans.addBean("bankService", new DefaultBankService());
+        autoWired = new AutoWiredByType();
     }
 
     @Test
-    public void should_auto_wire_bank_dao_by_name(){
+    public void should_auto_wire_bank_dao_by_type(){
         initializedBeans.addBean("bankDao", bankDao);
-        AutoWiredByName autoWired = new AutoWiredByName();
         autoWired.autoWired(null, initializedBeans, bankServiceBeanInfo);
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
@@ -42,8 +43,9 @@ public class AutoWiredByNameTest {
 
     @Test(expected = AutoWiredException.class)
     public void should_throw_exception_when_bank_dao_is_not_right_type(){
-        initializedBeans.addBean("bankDao", new DefaultBankService());
-        AutoWiredByName autoWired = new AutoWiredByName();
+        Class bankDaoClass = BankDao.class;
+        initializedBeans.addBean("bankDao2", bankDaoClass, new DefaultBankDao());
+
         autoWired.autoWired(null, initializedBeans, bankServiceBeanInfo);
     }
 }

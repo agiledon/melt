@@ -1,6 +1,6 @@
-package com.melt.bean;
+package com.melt.config;
 
-import com.melt.bean.property.*;
+import com.melt.config.property.*;
 import com.melt.core.InitializedBeans;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.DefaultBankDao;

@@ -1,10 +1,9 @@
-package com.melt.bean.constructor;
+package com.melt.config.constructor;
 
 import com.google.common.primitives.Primitives;
-import com.melt.bean.BeanInfo;
+import com.melt.config.BeanInfo;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
-import com.melt.util.ReflectionUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

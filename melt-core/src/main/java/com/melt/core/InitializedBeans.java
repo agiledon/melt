@@ -1,7 +1,7 @@
 package com.melt.core;
 
 import com.google.common.collect.Iterators;
-import com.melt.bean.BeanInfo;
+import com.melt.config.BeanInfo;
 import com.melt.exceptions.MoreThanOneBeanWithSameClass;
 
 import java.util.Collection;

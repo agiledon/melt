@@ -1,6 +1,6 @@
-package com.melt.bean.autowired;
+package com.melt.config.autowired;
 
-import com.melt.bean.BeanInfo;
+import com.melt.config.BeanInfo;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 

@@ -1,7 +1,7 @@
-package com.melt.bean;
+package com.melt.config;
 
-import com.melt.bean.constructor.RefConstructorParameter;
-import com.melt.bean.property.BeanRefProperty;
+import com.melt.config.constructor.RefConstructorParameter;
+import com.melt.config.property.BeanRefProperty;
 import com.melt.core.InitializedBeans;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.DefaultBankDao;

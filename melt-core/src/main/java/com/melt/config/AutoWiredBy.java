@@ -1,9 +1,9 @@
-package com.melt.bean;
+package com.melt.config;
 
-import com.melt.bean.autowired.AutoWired;
-import com.melt.bean.autowired.AutoWiredByName;
-import com.melt.bean.autowired.AutoWiredByNull;
-import com.melt.bean.autowired.AutoWiredByType;
+import com.melt.config.autowired.AutoWired;
+import com.melt.config.autowired.AutoWiredByName;
+import com.melt.config.autowired.AutoWiredByNull;
+import com.melt.config.autowired.AutoWiredByType;
 
 public enum AutoWiredBy {
     NAME {

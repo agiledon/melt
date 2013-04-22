@@ -1,6 +1,6 @@
 package com.melt.core;
 
-import com.melt.bean.BeanInfo;
+import com.melt.config.BeanInfo;
 
 import java.util.List;
 

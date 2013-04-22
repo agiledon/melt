@@ -1,4 +1,4 @@
-package com.melt.bean.property;
+package com.melt.config.property;
 
 public class BeanIntPropertyTest {
 

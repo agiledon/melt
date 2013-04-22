@@ -1,6 +1,6 @@
 package com.melt.core;
 
-import com.melt.bean.AutoWiredBy;
+import com.melt.config.AutoWiredBy;
 import com.melt.exceptions.BeanConfigurationException;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.BankService;
