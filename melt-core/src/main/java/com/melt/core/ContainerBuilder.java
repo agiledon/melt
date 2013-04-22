@@ -109,10 +109,17 @@ public class ContainerBuilder {
     }
 
     public <T> ContainerBuilder withClass(Class<T> propertyClass) {
+        checkIsInterface(propertyClass);
         addProperty(propertyClass);
         registerBeanInfoWithClass(propertyClass);
         ConstructorIndexer.reset();
         return this;
+    }
+
+    private <T> void checkIsInterface(Class<T> propertyClass) {
+        if (propertyClass.isInterface()) {
+            throw new BeanConfigurationException(String.format("%s can't be interface type.", propertyClass.getName()));
+        }
     }
 
     public ContainerBuilder withValue(String propertyName, int propertyValue) {

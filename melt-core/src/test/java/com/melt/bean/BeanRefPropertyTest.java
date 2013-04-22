@@ -83,7 +83,7 @@ public class BeanRefPropertyTest {
 
     private void injectProperty() {
         for (BeanProperty beanProperty : bankServiceBeanInfo.getProperties()) {
-            beanProperty.injectPropertyValue(initializedBeans);
+            beanProperty.injectPropertyValue(initializedBeans, null);
         }
     }
 }

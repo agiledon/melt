@@ -27,7 +27,7 @@ public class BeanInfo {
     public void injectProperties(Container parentContainer, InitializedBeans initializedBeans) {
         autoWiredProperties(parentContainer, initializedBeans);
         for (BeanProperty beanProperty : getProperties()) {
-            beanProperty.injectPropertyValue(initializedBeans);
+            beanProperty.injectPropertyValue(initializedBeans, parentContainer);
         }
     }
 

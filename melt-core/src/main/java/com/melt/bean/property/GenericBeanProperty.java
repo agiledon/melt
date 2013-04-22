@@ -1,6 +1,7 @@
 package com.melt.bean.property;
 
 import com.melt.bean.BeanInfo;
+import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 
 public class GenericBeanProperty<T> extends BeanProperty {
@@ -12,7 +13,7 @@ public class GenericBeanProperty<T> extends BeanProperty {
     }
 
     @Override
-    protected Object getValue(InitializedBeans initializedBeans) {
+    protected Object getValue(InitializedBeans initializedBeans, Container parentContainer) {
         return value;
     }
 }

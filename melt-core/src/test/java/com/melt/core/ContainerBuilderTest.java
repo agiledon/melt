@@ -1,11 +1,13 @@
 package com.melt.core;
 
 import com.melt.bean.AutoWiredBy;
+import com.melt.exceptions.BeanConfigurationException;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.sample.customer.dao.CustomerDao;
+import com.melt.sample.customer.dao.CustomerDaoInterface;
 import com.melt.sample.customer.dao.JdbcTemplate;
 import com.melt.sample.customer.domain.Customer;
 import com.melt.sample.customer.service.CustomerFiller;
@@ -128,6 +130,15 @@ public class ContainerBuilderTest {
 
     }
 
+    @Test(expected = BeanConfigurationException.class)
+    public void should_throw_configuration_exception_when_register_interface_with_class() {
+        container = builder.register(DefaultCustomerService.class)
+                .withClass(CustomerDaoInterface.class)
+                .withClass(CustomerFiller.class)
+                .withValue("count", 3)
+                .build();
+    }
+
     @Test
     public void should_register_CustomerService_bean_with_two_properties_and_one_string_value_properties() {
         container = builder.register(DefaultCustomerService.class)
@@ -206,13 +217,13 @@ public class ContainerBuilderTest {
     public void should_auto_wired_by_type_from_parent_container() {
         container = builder.register(DefaultBankDao.class)
                 .build();
-        ContainerBuilder builder1 = new ContainerBuilder();
-        Container subContext = builder1.parent(container)
+        ContainerBuilder subBuilder = new ContainerBuilder();
+        Container subContainer = subBuilder.parent(container)
                 .register(DefaultBankService.class)
                 .autoWiredBy(AutoWiredBy.TYPE)
                 .build();
-        assertThat(subContext.resolve(BankDao.class), instanceOf(BankDao.class));
-        DefaultBankService bankService = subContext.resolve(BankService.class);
+        assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
+        DefaultBankService bankService = subContainer.resolve(BankService.class);
         assertThat(bankService, instanceOf(BankService.class));
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
     }
@@ -224,5 +235,16 @@ public class ContainerBuilderTest {
 
         assertThat(container.resolve(BankDao.class), instanceOf(BankDao.class));
         assertThat(container.resolve(BankDao.class), instanceOf(DefaultBankDao.class));
+    }
+
+    @Test
+    public void should_can_register_to_interface_type_with_class() {
+        container = builder.register(DefaultBankService.class)
+                .withClass(DefaultBankDao.class)
+                .build();
+
+        DefaultBankService bankService = container.resolve(BankService.class);
+        assertThat(bankService, instanceOf(BankService.class));
+        assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
     }
 }

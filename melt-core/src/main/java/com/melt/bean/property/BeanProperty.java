@@ -1,6 +1,7 @@
 package com.melt.bean.property;
 
 import com.melt.bean.BeanInfo;
+import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
 
@@ -16,11 +17,11 @@ public abstract class BeanProperty {
         this.beanInfo = beanInfo;
     }
 
-    public void injectPropertyValue(InitializedBeans initializedBeans) {
+    public void injectPropertyValue(InitializedBeans initializedBeans, Container parentContainer) {
         String beanName = beanInfo.getName();
         Object targetBean = initializedBeans.getBean(beanName);
         try {
-            getMethod().invoke(targetBean, new Object[]{getValue(initializedBeans)});
+            getMethod().invoke(targetBean, new Object[]{getValue(initializedBeans, parentContainer)});
         } catch (IllegalAccessException e) {
             throw new InitBeanException(String.format("Can't initialize bean: %s", beanName), e);
         } catch (InvocationTargetException e) {
@@ -42,7 +43,7 @@ public abstract class BeanProperty {
         throw new InitBeanException(String.format("The property '%s' of bean '%s' has not set method", name, beanInfo.getName()));
     }
 
-    protected abstract Object getValue(InitializedBeans initializedBeans);
+    protected abstract Object getValue(InitializedBeans initializedBeans, Container parentContainer);
 
     public String getName() {
         return name;
