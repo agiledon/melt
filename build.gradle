@@ -17,8 +17,7 @@ subprojects {
                 'com.google.guava:guava:14.0.1'
         )
         testCompile(
-                'junit:junit:4.11',
-                'org.mockito:mockito-all:1.9.5'
+                'junit:junit:4.11'
         )
     }
 
