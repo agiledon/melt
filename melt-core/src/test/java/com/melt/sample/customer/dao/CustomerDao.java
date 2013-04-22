@@ -6,7 +6,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class CustomerDao implements CustomerDaoInterface {
+public class CustomerDao implements CustomerDaoInterface, AnotherCustomerDaoInterface {
     private JdbcTemplate jdbcTemplate;
 
 

@@ -6,6 +6,7 @@ import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
+import com.melt.sample.customer.dao.AnotherCustomerDaoInterface;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.dao.CustomerDaoInterface;
 import com.melt.sample.customer.dao.JdbcTemplate;
@@ -262,5 +263,30 @@ public class ContainerBuilderTest {
         DefaultBankService bankService = container.resolve(BankService.class);
         assertThat(bankService, instanceOf(BankService.class));
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
+    }
+
+    @Test
+    public void should_can_register_with_name_and_resolve_by_name() {
+        container = builder.register(DefaultBankService.class)
+                .asName("bankService")
+                .build();
+
+        DefaultBankService bankService = container.resolve("bankService");
+        assertThat(bankService, instanceOf(BankService.class));
+    }
+
+    @Test
+    public void should_can_register_bean_which_implements_two_interfaces() {
+        container = builder.register(CustomerDao.class)
+                .asName("customerDao")
+                .register(DefaultCustomerService.class)
+                .withName("customerDao")
+                .build();
+
+        DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
+        assertThat(customerService, instanceOf(DefaultCustomerService.class));
+        assertThat(customerService.getCustomerDao(), instanceOf(CustomerDao.class));
+        assertThat(customerService.getCustomerDao(), instanceOf(CustomerDaoInterface.class));
+        assertThat(customerService.getCustomerDao(), instanceOf(AnotherCustomerDaoInterface.class));
     }
 }

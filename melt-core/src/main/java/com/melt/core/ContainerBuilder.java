@@ -91,9 +91,12 @@ public class ContainerBuilder {
     }
 
     private void addConstructorParameter(ConstructorParameter constructorParameter) {
-        if (currentBean != null) {
-            currentBean.addConstructorParameter(constructorParameter);
-        } else {
+        validateBeanIsRegistered();
+        currentBean.addConstructorParameter(constructorParameter);
+    }
+
+    private void validateBeanIsRegistered() {
+        if (currentBean == null) {
             throw new BeanConfigurationException("Didn't register main bean");
         }
     }
@@ -109,14 +112,20 @@ public class ContainerBuilder {
     }
 
     public <T> ContainerBuilder withClass(Class<T> propertyClass) {
-        checkIsInterface(propertyClass);
-        addProperty(propertyClass);
+        validateIsInterface(propertyClass);
+        addProperty(getBeanName(propertyClass), getBeanName(propertyClass));
         registerBeanInfoWithClass(propertyClass);
         ConstructorIndexer.reset();
         return this;
     }
 
-    private <T> void checkIsInterface(Class<T> propertyClass) {
+    public ContainerBuilder withName(String beanName) {
+        addProperty(beanName, beanName);
+        ConstructorIndexer.reset();
+        return this;
+    }
+
+    private <T> void validateIsInterface(Class<T> propertyClass) {
         if (propertyClass.isInterface()) {
             throw new BeanConfigurationException(String.format("%s can't be interface type.", propertyClass.getName()));
         }
@@ -169,11 +178,11 @@ public class ContainerBuilder {
         return registeredClass.getSimpleName();
     }
 
-    private <T> void addProperty(Class<T> propertyClass) {
+    private <T> void addProperty(String beanName, String refName) {
         BeanProperty property = new BeanRefProperty(
                 currentBean,
-                getBeanName(propertyClass),
-                getBeanName(propertyClass));
+                beanName,
+                refName);
         currentBean.addProperty(property);
 
     }
@@ -184,6 +193,12 @@ public class ContainerBuilder {
 
     private <T> boolean registerBeanInfoWithClass(Class<T> propertyClass) {
         return beans.add(new BeanInfo(getBeanName(propertyClass), propertyClass));
+    }
+
+    public ContainerBuilder asName(String beanName) {
+        validateBeanIsRegistered();
+        currentBean.setName(beanName);
+        return this;
     }
 
     private static class ConstructorIndexer {

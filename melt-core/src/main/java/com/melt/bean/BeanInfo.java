@@ -55,6 +55,10 @@ public class BeanInfo {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Class getClazz() {
         return clazz;
     }
