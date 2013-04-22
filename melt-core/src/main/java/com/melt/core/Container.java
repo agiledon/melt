@@ -13,8 +13,8 @@ public class Container {
         return bean;
     }
 
-    public Object resolve(String beanName) {
-        Object bean = initializedBeans.getBean(beanName);
+    public <T> T resolve(String beanName) {
+        T bean = (T) initializedBeans.getBean(beanName);
         if (bean == null) {
             bean = parentContainer.resolve(beanName);
         }
