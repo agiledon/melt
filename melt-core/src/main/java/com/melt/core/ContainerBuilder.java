@@ -42,7 +42,7 @@ public class ContainerBuilder {
         return this;
     }
 
-    public <T> ContainerBuilder construct(Class<T> constructorParameterClass) {
+    public <T> ContainerBuilder withConstructorParameter(Class<T> constructorParameterClass) {
         ConstructorParameter constructorParameter = new RefConstructorParameter(
                 ConstructorIndexer.index(), constructorParameterClass.getSimpleName());
         if (currentBean != null) {
@@ -54,19 +54,19 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder construct(int paraValue) {
+    public ContainerBuilder withConstructorParameter(int paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder construct(long paraValue) {
+    public ContainerBuilder withConstructorParameter(long paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder construct(float paraValue) {
+    public ContainerBuilder withConstructorParameter(float paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
@@ -78,13 +78,13 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder construct(String paraValue) {
+    public ContainerBuilder withConstructorParameter(String paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder construct(Object paraValue) {
+    public ContainerBuilder withConstructorParameter(Object paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
@@ -111,7 +111,7 @@ public class ContainerBuilder {
         return this;
     }
 
-    public <T> ContainerBuilder withClass(Class<T> propertyClass) {
+    public <T> ContainerBuilder withProperty(Class<T> propertyClass) {
         validateIsInterface(propertyClass);
         addProperty(getBeanName(propertyClass), getBeanName(propertyClass));
         registerBeanInfoWithClass(propertyClass);
@@ -119,7 +119,7 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder withName(String beanName) {
+    public ContainerBuilder withRefProperty(String beanName) {
         addProperty(beanName, beanName);
         ConstructorIndexer.reset();
         return this;
@@ -131,33 +131,39 @@ public class ContainerBuilder {
         }
     }
 
-    public ContainerBuilder withValue(String propertyName, int propertyValue) {
+    public ContainerBuilder withProperty(String propertyName, int propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withValue(String propertyName, double propertyValue) {
+    public ContainerBuilder withProperty(String propertyName, double propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withValue(String propertyName, float propertyValue) {
+    public ContainerBuilder withProperty(String propertyName, float propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withValue(String propertyName, long propertyValue) {
+    public ContainerBuilder withProperty(String propertyName, long propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withValue(String propertyName, String propertyValue) {
+    public ContainerBuilder withProperty(String propertyName, String propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withValue(String propertyName, Object propertyValue) {
+    public ContainerBuilder withProperty(String propertyName, Object propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
+        return this;
+    }
+
+    public ContainerBuilder asName(String beanName) {
+        validateBeanIsRegistered();
+        currentBean.setName(beanName);
         return this;
     }
 
@@ -193,12 +199,6 @@ public class ContainerBuilder {
 
     private <T> boolean registerBeanInfoWithClass(Class<T> propertyClass) {
         return beans.add(new BeanInfo(getBeanName(propertyClass), propertyClass));
-    }
-
-    public ContainerBuilder asName(String beanName) {
-        validateBeanIsRegistered();
-        currentBean.setName(beanName);
-        return this;
     }
 
     private static class ConstructorIndexer {

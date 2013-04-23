@@ -47,8 +47,8 @@ public class ContainerBuilderTest {
     @Test
     public void should_register_CustomerService_bean_with_two_constructor_parameters() {
         container = builder.register(DefaultCustomerService.class)
-                .construct(CustomerDao.class)
-                .construct(CustomerFiller.class)
+                .withConstructorParameter(CustomerDao.class)
+                .withConstructorParameter(CustomerFiller.class)
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
@@ -63,13 +63,13 @@ public class ContainerBuilderTest {
     public void should_register_CustomerService_bean_with_different_constructor_parameters() {
         ArrayList<Customer> newCustomers = newArrayList(new Customer(1, "zhangyi"));
         container = builder.register(DefaultCustomerService.class)
-                .construct(CustomerDao.class)
-                .construct(5)
-                .construct("hello melt")
+                .withConstructorParameter(CustomerDao.class)
+                .withConstructorParameter(5)
+                .withConstructorParameter("hello melt")
                 .construct(50.0)
-                .construct(5000L)
-                .construct(40.0f)
-                .construct(newCustomers)
+                .withConstructorParameter(5000L)
+                .withConstructorParameter(40.0f)
+                .withConstructorParameter(newCustomers)
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
@@ -90,7 +90,7 @@ public class ContainerBuilderTest {
     @Test
     public void should_register_DefaultBankService_bean_with_one_property() {
         container = builder.register(DefaultBankService.class)
-                .withClass(DefaultBankDao.class)
+                .withProperty(DefaultBankDao.class)
                 .build();
 
         DefaultBankService bankService = container.resolve(DefaultBankService.class);
@@ -101,10 +101,10 @@ public class ContainerBuilderTest {
     @Test
     public void should_register_CustomerService_bean_with_nested_properties() {
         container = builder.register(CustomerDao.class)
-                .withClass(JdbcTemplate.class)
+                .withProperty(JdbcTemplate.class)
                 .register(DefaultCustomerService.class)
-                .withClass(CustomerDao.class)
-                .withClass(CustomerFiller.class)
+                .withProperty(CustomerDao.class)
+                .withProperty(CustomerFiller.class)
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
@@ -118,9 +118,9 @@ public class ContainerBuilderTest {
     @Test
     public void should_register_CustomerService_bean_with_two_properties_and_one_int_value_properties() {
         container = builder.register(DefaultCustomerService.class)
-                .withClass(CustomerDao.class)
-                .withClass(CustomerFiller.class)
-                .withValue("count", 3)
+                .withProperty(CustomerDao.class)
+                .withProperty(CustomerFiller.class)
+                .withProperty("count", 3)
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
@@ -134,18 +134,18 @@ public class ContainerBuilderTest {
     @Test(expected = BeanConfigurationException.class)
     public void should_throw_configuration_exception_when_register_interface_with_class() {
         container = builder.register(DefaultCustomerService.class)
-                .withClass(CustomerDaoInterface.class)
-                .withClass(CustomerFiller.class)
-                .withValue("count", 3)
+                .withProperty(CustomerDaoInterface.class)
+                .withProperty(CustomerFiller.class)
+                .withProperty("count", 3)
                 .build();
     }
 
     @Test
     public void should_register_CustomerService_bean_with_two_properties_and_one_string_value_properties() {
         container = builder.register(DefaultCustomerService.class)
-                .withClass(CustomerDao.class)
-                .withClass(CustomerFiller.class)
-                .withValue("message", "hello melt")
+                .withProperty(CustomerDao.class)
+                .withProperty(CustomerFiller.class)
+                .withProperty("message", "hello melt")
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
@@ -159,13 +159,13 @@ public class ContainerBuilderTest {
     public void should_register_BankService_bean_with_different_properties() {
         List<String> accounts = newArrayList("haha");
         container = builder.register(DefaultBankService.class)
-                .withClass(DefaultBankDao.class)
-                .withValue("max", 1)
-                .withValue("tax", 2.3)
-                .withValue("interest", 2.3f)
-                .withValue("maxMoney", 12345l)
-                .withValue("account", "haha")
-                .withValue("accounts", accounts)
+                .withProperty(DefaultBankDao.class)
+                .withProperty("max", 1)
+                .withProperty("tax", 2.3)
+                .withProperty("interest", 2.3f)
+                .withProperty("maxMoney", 12345l)
+                .withProperty("account", "haha")
+                .withProperty("accounts", accounts)
                 .build();
 
         DefaultBankService bankService = container.resolve(BankService.class);
@@ -257,7 +257,7 @@ public class ContainerBuilderTest {
     @Test
     public void should_can_register_to_interface_type_with_class() {
         container = builder.register(DefaultBankService.class)
-                .withClass(DefaultBankDao.class)
+                .withProperty(DefaultBankDao.class)
                 .build();
 
         DefaultBankService bankService = container.resolve(BankService.class);
@@ -280,7 +280,7 @@ public class ContainerBuilderTest {
         container = builder.register(CustomerDao.class)
                 .asName("customerDao")
                 .register(DefaultCustomerService.class)
-                .withName("customerDao")
+                .withRefProperty("customerDao")
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
