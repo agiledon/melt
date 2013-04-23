@@ -34,6 +34,7 @@ public class ContainerBuilder {
     }
 
     public <T> ContainerBuilder register(Class<T> registeredClass) {
+        validateIsInterface(registeredClass);
         BeanInfo registeredBean = new BeanInfo(getBeanName(registeredClass), registeredClass);
         registeredBean.setAutoWiredBy(globalAutoWiredBy);
         beans.add(registeredBean);
@@ -72,7 +73,7 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder construct(double paraValue) {
+    public ContainerBuilder withConstructorParameter(double paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
@@ -164,6 +165,11 @@ public class ContainerBuilder {
     public ContainerBuilder asName(String beanName) {
         validateBeanIsRegistered();
         currentBean.setName(beanName);
+        return this;
+    }
+
+    public ContainerBuilder factory(String factoryMethod) {
+        currentBean.setFactoryMethod(factoryMethod);
         return this;
     }
 

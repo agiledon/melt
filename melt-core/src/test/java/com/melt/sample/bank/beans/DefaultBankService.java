@@ -11,6 +11,10 @@ public class DefaultBankService implements BankService {
     private String account;
     private List<String> accounts;
 
+    public DefaultBankService init(){
+        return new DefaultBankService();
+    }
+
     @Override
     public void deposit(String account, double money) {
         bankDao.deposit(account, money);

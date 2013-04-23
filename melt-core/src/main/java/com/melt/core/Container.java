@@ -15,7 +15,7 @@ public class Container {
 
     public <T> T resolve(String beanName) {
         T bean = (T) initializedBeans.getBean(beanName);
-        if (bean == null) {
+        if (bean == null && parentContainer != null) {
             bean = parentContainer.resolve(beanName);
         }
         return bean;

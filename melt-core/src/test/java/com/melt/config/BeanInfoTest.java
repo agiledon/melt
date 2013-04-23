@@ -80,4 +80,11 @@ public class BeanInfoTest {
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), nullValue());
     }
+
+    @Test
+    public void should_return_bank_service_by_factory_method(){
+        bankServiceBeanInfo.setFactoryMethod("init");
+        Object initialize = bankServiceBeanInfo.initialize();
+        assertThat(initialize, instanceOf(DefaultBankService.class));
+    }
 }

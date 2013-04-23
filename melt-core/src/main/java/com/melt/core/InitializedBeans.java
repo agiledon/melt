@@ -38,7 +38,7 @@ public class InitializedBeans {
 
     public void addBean(BeanInfo beanInfo, Object bean) {
         addBean(beanInfo.getName(), bean);
-        addBean(beanInfo.getName(), beanInfo.getClazz(), bean);
+        addBean(beanInfo.getName(), bean.getClass(), bean);
     }
 
     public Object getBean(String name) {

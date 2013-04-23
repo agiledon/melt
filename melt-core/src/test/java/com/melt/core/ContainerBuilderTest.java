@@ -66,7 +66,7 @@ public class ContainerBuilderTest {
                 .withConstructorParameter(CustomerDao.class)
                 .withConstructorParameter(5)
                 .withConstructorParameter("hello melt")
-                .construct(50.0)
+                .withConstructorParameter(50.0)
                 .withConstructorParameter(5000L)
                 .withConstructorParameter(40.0f)
                 .withConstructorParameter(newCustomers)
@@ -230,23 +230,23 @@ public class ContainerBuilderTest {
     }
 
     @Test
-    public void should_inject_from_parent_container() {
+    public void should_inject_from_parent_container_by_name() {
         container = builder.register(DefaultBankDao.class)
+                .asName("bankDao")
                 .build();
         ContainerBuilder subBuilder = new ContainerBuilder();
         Container subContainer = subBuilder.parent(container)
                 .register(DefaultBankService.class)
-                .autoWiredBy(AutoWiredBy.TYPE)
+                .autoWiredBy(AutoWiredBy.NAME)
                 .build();
         assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
         DefaultBankService bankService = subContainer.resolve(BankService.class);
         assertThat(bankService, instanceOf(BankService.class));
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
-        //TODO
     }
 
     @Test
-    public void should_can_resolve_with_interface_type() {
+    public void should_resolve_with_interface_type() {
         container = builder.register(DefaultBankDao.class)
                 .build();
 
@@ -255,7 +255,7 @@ public class ContainerBuilderTest {
     }
 
     @Test
-    public void should_can_register_to_interface_type_with_class() {
+    public void should_register_to_interface_type_with_class() {
         container = builder.register(DefaultBankService.class)
                 .withProperty(DefaultBankDao.class)
                 .build();
@@ -266,7 +266,7 @@ public class ContainerBuilderTest {
     }
 
     @Test
-    public void should_can_register_with_name_and_resolve_by_name() {
+    public void should_register_with_name_and_resolve_by_name() {
         container = builder.register(DefaultBankService.class)
                 .asName("bankService")
                 .build();
@@ -276,7 +276,7 @@ public class ContainerBuilderTest {
     }
 
     @Test
-    public void should_can_register_bean_which_implements_two_interfaces() {
+    public void should_register_bean_which_implements_two_interfaces() {
         container = builder.register(CustomerDao.class)
                 .asName("customerDao")
                 .register(DefaultCustomerService.class)
@@ -288,5 +288,14 @@ public class ContainerBuilderTest {
         assertThat(customerService.getCustomerDao(), instanceOf(CustomerDao.class));
         assertThat(customerService.getCustomerDao(), instanceOf(CustomerDaoInterface.class));
         assertThat(customerService.getCustomerDao(), instanceOf(AnotherCustomerDaoInterface.class));
+    }
+
+    @Test
+    public void should_register_bean_from_factory() {
+        container = builder.register(DefaultBankService.class)
+                .factory("init")
+                .build();
+        DefaultBankService bankService = container.resolve(DefaultBankService.class);
+        assertThat(bankService, instanceOf(DefaultBankService.class));
     }
 }
