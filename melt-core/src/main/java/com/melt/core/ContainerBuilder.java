@@ -67,6 +67,12 @@ public class ContainerBuilder {
     }
 
 
+    public ContainerBuilder withRefConstructorParameter(String beanName) {
+        addConstructorParameter(new RefConstructorParameter(
+                ConstructorIndexer.index(), beanName));
+        return this;
+    }
+
     public ContainerBuilder withConstructorParameter(int paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));

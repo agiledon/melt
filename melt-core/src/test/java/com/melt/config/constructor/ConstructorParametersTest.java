@@ -30,7 +30,7 @@ public class ConstructorParametersTest {
         customerServiceBean.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
         container.addBean("customerDao", new CustomerDao());
 
-        customerServiceBean.getConstructorParameters().initialize(container);
+        customerServiceBean.getConstructorParameters().initialize(null, container);
 
         DefaultCustomerService customerService = (DefaultCustomerService) container.getBean("customerService");
 
@@ -49,7 +49,7 @@ public class ConstructorParametersTest {
         container.addBean("customerDao", new CustomerDao());
         container.addBean("customerFiller", new CustomerFiller());
 
-        customerServiceBean.getConstructorParameters().initialize(container);
+        customerServiceBean.getConstructorParameters().initialize(null, container);
 
         DefaultCustomerService customerService = (DefaultCustomerService) container.getBean("customerService");
 

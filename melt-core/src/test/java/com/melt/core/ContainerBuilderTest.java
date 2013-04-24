@@ -302,7 +302,7 @@ public class ContainerBuilderTest {
     }
 
     @Test(expected = MoreThanOneClassRegisteredException.class)
-    public void should_throw_exception_when_register_same_class_without_name(){
+    public void should_throw_exception_when_register_same_class_without_name() {
         builder.register(DefaultBankDao.class)
                 .register(DefaultBankDao.class)
                 .register(DefaultCustomerService.class)
@@ -310,9 +310,33 @@ public class ContainerBuilderTest {
     }
 
     @Test(expected = MoreThanOneClassRegisteredException.class)
-    public void should_throw_exception_when_register_same_class_without_name_then_build(){
+    public void should_throw_exception_when_register_same_class_without_name_then_build() {
         builder.register(DefaultBankDao.class)
                 .register(DefaultBankDao.class)
                 .build();
+    }
+
+    @Test
+    public void should_register_CustomerService_bean_with_two_constructor_parameters_from_parent_container() {
+
+        container = builder.register(CustomerDao.class)
+                .asName("customerDao")
+                .register(CustomerFiller.class)
+                .asName("customerFiller")
+                .build();
+
+        ContainerBuilder childBuilder = new ContainerBuilder();
+        Container childContainer = childBuilder.register(DefaultCustomerService.class)
+                .withRefConstructorParameter("customerDao")
+                .withRefConstructorParameter("customerFiller")
+                .parent(container)
+                .build();
+
+        DefaultCustomerService customerService = childContainer.resolve(DefaultCustomerService.class);
+        assertThat(customerService, not(nullValue()));
+        List<Customer> customers = customerService.allCustomers();
+        assertThat(customers.size(), is(1));
+        assertThat(customers.get(0).getId(), is(1));
+        assertThat(customers.get(0).getName(), is("zhangyi"));
     }
 }

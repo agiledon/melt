@@ -2,6 +2,7 @@ package com.melt.config.constructor;
 
 import com.google.common.primitives.Primitives;
 import com.melt.config.BeanInfo;
+import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
 
@@ -34,29 +35,33 @@ public class ConstructorParameters {
         return beanInfo;
     }
 
-    public void initialize(InitializedBeans container) {
+    public void initialize(Container parentContainer, InitializedBeans container) {
         if (beanInfo.isDefaultConstructorBean()) {
             return;
         }
 
-        Object targetBean = initializeTargetBean(container, beanInfo);
+        Object targetBean = initializeTargetBean(parentContainer, container, beanInfo);
         container.addBean(beanInfo, targetBean);
     }
 
-    private Object initializeTargetBean(InitializedBeans container, BeanInfo targetBean) {
+    private Object initializeTargetBean(Container parentContainer, InitializedBeans container, BeanInfo targetBean) {
         Class targetClass = targetBean.getClazz();
 
-        Object[] parameterBeans = getParameterBeans(container);
+        Object[] parameterBeans = getParameterBeans(parentContainer, container);
         return createInstance(targetClass, parameterBeans);
     }
 
-    private Object[] getParameterBeans(InitializedBeans container) {
+    private Object[] getParameterBeans(Container parentContainer, InitializedBeans container) {
         Map<Integer, Object> parameterMap = newHashMap();
         for (ConstructorParameter parameter : getConstructorParameters()) {
             int index = parameter.getIndex();
             if (parameter instanceof RefConstructorParameter) {
                 RefConstructorParameter refParameter = (RefConstructorParameter) parameter;
-                parameter.setValue(container.getBean(refParameter.getRef()));
+                Object bean = container.getBean(refParameter.getRef());
+                if (bean == null && parentContainer != null) {
+                    bean = parentContainer.resolve(refParameter.getRef());
+                }
+                parameter.setValue(bean);
             }
             parameterMap.put(index, parameter.getValue());
         }
