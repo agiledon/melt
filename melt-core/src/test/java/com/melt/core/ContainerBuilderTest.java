@@ -2,6 +2,8 @@ package com.melt.core;
 
 import com.melt.config.AutoWiredBy;
 import com.melt.exceptions.BeanConfigurationException;
+import com.melt.exceptions.MoreThanOneBeanWithSameClass;
+import com.melt.exceptions.MoreThanOneClassRegisteredException;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
@@ -297,5 +299,20 @@ public class ContainerBuilderTest {
                 .build();
         DefaultBankService bankService = container.resolve(DefaultBankService.class);
         assertThat(bankService, instanceOf(DefaultBankService.class));
+    }
+
+    @Test(expected = MoreThanOneClassRegisteredException.class)
+    public void should_throw_exception_when_register_same_class_without_name(){
+        builder.register(DefaultBankDao.class)
+                .register(DefaultBankDao.class)
+                .register(DefaultCustomerService.class)
+                .build();
+    }
+
+    @Test(expected = MoreThanOneClassRegisteredException.class)
+    public void should_throw_exception_when_register_same_class_without_name_then_build(){
+        builder.register(DefaultBankDao.class)
+                .register(DefaultBankDao.class)
+                .build();
     }
 }

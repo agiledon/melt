@@ -1,14 +1,20 @@
 package com.melt.core;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 import com.melt.config.AutoWiredBy;
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.*;
 import com.melt.config.property.*;
 import com.melt.exceptions.BeanConfigurationException;
+import com.melt.exceptions.MoreThanOneClassRegisteredException;
 
 import java.util.List;
+import java.util.Map;
 
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class ContainerBuilder {
     private final BeansInitializer beansInitializer = new BeansInitializer();
@@ -17,6 +23,8 @@ public class ContainerBuilder {
     private final Container container = new Container();
     private BeanInfo currentBean = null;
     private Container parentContainer;
+    private Map<Class, List<BeanInfo>> classBeanInfoMap = newHashMap();
+    private Class latestRegisteredClass;
 
     public ContainerBuilder() {
         this(AutoWiredBy.NULL);
@@ -27,6 +35,7 @@ public class ContainerBuilder {
     }
 
     public Container build() {
+        validateMoreThanOneClassRegistered();
         InitializedBeans initializedBeans = beansInitializer.initialize(beans, parentContainer);
         container.setInitializedBeans(initializedBeans);
         container.setParentContainer(parentContainer);
@@ -35,11 +44,13 @@ public class ContainerBuilder {
 
     public <T> ContainerBuilder register(Class<T> registeredClass) {
         validateIsInterface(registeredClass);
+        validateMoreThanOneClassRegistered();
         BeanInfo registeredBean = new BeanInfo(getBeanName(registeredClass), registeredClass);
         registeredBean.setAutoWiredBy(globalAutoWiredBy);
         beans.add(registeredBean);
         currentBean = registeredBean;
         ConstructorIndexer.reset();
+        addClassAndBeanInfoForValidate(registeredClass);
         return this;
     }
 
@@ -54,6 +65,7 @@ public class ContainerBuilder {
         }
         return this;
     }
+
 
     public ContainerBuilder withConstructorParameter(int paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
@@ -91,17 +103,6 @@ public class ContainerBuilder {
         return this;
     }
 
-    private void addConstructorParameter(ConstructorParameter constructorParameter) {
-        validateBeanIsRegistered();
-        currentBean.addConstructorParameter(constructorParameter);
-    }
-
-    private void validateBeanIsRegistered() {
-        if (currentBean == null) {
-            throw new BeanConfigurationException("Didn't register main bean");
-        }
-    }
-
     public <T> ContainerBuilder parent(Container container) {
         this.parentContainer = container;
         return this;
@@ -124,12 +125,6 @@ public class ContainerBuilder {
         addProperty(beanName, beanName);
         ConstructorIndexer.reset();
         return this;
-    }
-
-    private <T> void validateIsInterface(Class<T> propertyClass) {
-        if (propertyClass.isInterface()) {
-            throw new BeanConfigurationException(String.format("%s can't be interface type.", propertyClass.getName()));
-        }
     }
 
     public ContainerBuilder withProperty(String propertyName, int propertyValue) {
@@ -199,12 +194,39 @@ public class ContainerBuilder {
 
     }
 
+    private <T> void validateIsInterface(Class<T> propertyClass) {
+        if (propertyClass.isInterface()) {
+            throw new BeanConfigurationException(String.format("%s can't be interface type.", propertyClass.getName()));
+        }
+    }
+
     private <T> boolean matchInterfaceClassName(Class<T> registeredClass, Class<?> anInterface) {
         return registeredClass.getSimpleName().toLowerCase().contains(anInterface.getSimpleName().toLowerCase());
     }
 
+    private <T> void addClassAndBeanInfoForValidate(Class<T> registeredClass) {
+        latestRegisteredClass = registeredClass;
+        List<BeanInfo> beanInfos = classBeanInfoMap.get(registeredClass);
+        if (beanInfos == null) {
+            beanInfos = newArrayList();
+            classBeanInfoMap.put(registeredClass, beanInfos);
+        }
+        beanInfos.add(currentBean);
+    }
+
     private <T> boolean registerBeanInfoWithClass(Class<T> propertyClass) {
         return beans.add(new BeanInfo(getBeanName(propertyClass), propertyClass));
+    }
+
+    private void addConstructorParameter(ConstructorParameter constructorParameter) {
+        validateBeanIsRegistered();
+        currentBean.addConstructorParameter(constructorParameter);
+    }
+
+    private void validateBeanIsRegistered() {
+        if (currentBean == null) {
+            throw new BeanConfigurationException("Didn't register main bean");
+        }
     }
 
     private static class ConstructorIndexer {
@@ -216,6 +238,24 @@ public class ContainerBuilder {
 
         public static void reset() {
             index = 0;
+        }
+    }
+
+    private <T> void validateMoreThanOneClassRegistered() {
+        if (latestRegisteredClass != null && classBeanInfoMap.containsKey(latestRegisteredClass)) {
+            List<BeanInfo> beanInfos = classBeanInfoMap.get(latestRegisteredClass);
+            if (beanInfos.size() < 2) {
+                return;
+            }
+            ImmutableSet<String> beanNames = from(beanInfos).transform(new Function<BeanInfo, String>() {
+                @Override
+                public String apply(BeanInfo beanInfo) {
+                    return beanInfo.getName();
+                }
+            }).toSet();
+            if (beanNames.size() != beanInfos.size()) {
+                throw new MoreThanOneClassRegisteredException(String.format("%s has been already registered, please use asName to assign a name to this bean", latestRegisteredClass));
+            }
         }
     }
 }
