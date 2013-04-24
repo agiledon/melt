@@ -13,8 +13,8 @@ In melt framework, Container and ContainerBuilder are the core classes. The basi
 
 ####Manage POJO object
 Java class with default construtor:
-{% codeblock lang:java %}
+```java
 Container container = builder.register(DefaultCustomerService.class)
                 .build();
 DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
-{% endcodeblock %}                
+```              
