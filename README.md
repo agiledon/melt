@@ -18,7 +18,6 @@ Java class with default construtor:
 Container container = builder.register(DefaultCustomerService.class)
                              .build();
 DefaultCustomerService container.resolve(DefaultCustomerService.class);
-    }
 ```              
 
 ####Constructor Injection
