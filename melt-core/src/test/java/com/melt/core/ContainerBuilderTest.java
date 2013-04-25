@@ -2,16 +2,12 @@ package com.melt.core;
 
 import com.melt.config.AutoWiredBy;
 import com.melt.exceptions.BeanConfigurationException;
-import com.melt.exceptions.MoreThanOneBeanWithSameClass;
 import com.melt.exceptions.MoreThanOneClassRegisteredException;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
-import com.melt.sample.customer.dao.AnotherCustomerDaoInterface;
-import com.melt.sample.customer.dao.CustomerDao;
-import com.melt.sample.customer.dao.CustomerDaoInterface;
-import com.melt.sample.customer.dao.JdbcTemplate;
+import com.melt.sample.customer.dao.*;
 import com.melt.sample.customer.domain.Customer;
 import com.melt.sample.customer.service.CustomerFiller;
 import com.melt.sample.customer.service.DefaultCustomerService;
@@ -98,6 +94,19 @@ public class ContainerBuilderTest {
         DefaultBankService bankService = container.resolve(DefaultBankService.class);
         assertThat(bankService, not(nullValue()));
         assertThat(bankService.getBankDao(), instanceOf(DefaultBankDao.class));
+    }
+
+    @Test
+    public void should_register_DefaultBankService_bean_with_super_property() {
+        container = builder.register(DefaultBankService.class)
+                .withProperty(DefaultBankDao.class)
+                .withProperty(JdbcTemplate.class)
+                .build();
+
+        DefaultBankService bankService = container.resolve(DefaultBankService.class);
+        assertThat(bankService, not(nullValue()));
+        assertThat(bankService.getBankDao(), instanceOf(DefaultBankDao.class));
+        assertThat(bankService.getJdbcTemplate(), instanceOf(JdbcTemplate.class));
     }
 
     @Test
@@ -282,7 +291,7 @@ public class ContainerBuilderTest {
         container = builder.register(CustomerDao.class)
                 .asName("customerDao")
                 .register(DefaultCustomerService.class)
-                .withRefProperty("customerDao")
+                .withRefProperty("customerDao", "customerDao")
                 .build();
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);

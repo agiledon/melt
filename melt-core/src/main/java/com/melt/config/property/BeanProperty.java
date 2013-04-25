@@ -32,12 +32,14 @@ public abstract class BeanProperty {
     }
 
     protected Method getMethod() {
-        Class clazz = beanInfo.getClazz();
-        Method[] declaredMethods = clazz.getDeclaredMethods();
-        for (Method method : declaredMethods) {
-            String methodName = method.getName();
-            if (methodName.startsWith("set") && methodName.substring(3).equalsIgnoreCase(name)) {
-                return method;
+        Class currentClazz = beanInfo.getClazz();
+        for (Class clazz = currentClazz; clazz != Object.class; clazz = clazz.getSuperclass()) {
+            Method[] declaredMethods = clazz.getDeclaredMethods();
+            for (Method method : declaredMethods) {
+                String methodName = method.getName();
+                if (methodName.startsWith("set") && methodName.substring(3).equalsIgnoreCase(name)) {
+                    return method;
+                }
             }
         }
         throw new InitBeanException(String.format("The property '%s' of bean '%s' has not set method", name, beanInfo.getName()));

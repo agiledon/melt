@@ -127,8 +127,8 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder withRefProperty(String beanName) {
-        addProperty(beanName, beanName);
+    public ContainerBuilder withRefProperty(String propertyName, String refBeanName) {
+        addProperty(propertyName, refBeanName);
         ConstructorIndexer.reset();
         return this;
     }

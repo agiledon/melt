@@ -2,7 +2,7 @@ package com.melt.sample.bank.beans;
 
 import java.util.List;
 
-public class DefaultBankService implements BankService {
+public class DefaultBankService extends AbstractBankService implements BankService {
     private BankDao bankDao;
     private int max;
     private double tax;
