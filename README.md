@@ -8,6 +8,7 @@ Melt is lightweight IoC container and no intrusiveness based on Java platform. I
 * Pure pojo object support;
 * DSL feature let it more make sense;
 * Support container scope;
+* Autowired by type or name;
 
 ###How to use it
 In melt framework, Container and ContainerBuilder are the core classes. The basic operations are register() and resolve() method. 
@@ -160,6 +161,24 @@ DefaultBankService bankService = container.resolve(BankService.class);
 assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
 ```
 
+Autowired by name:
+```java
+container = builder.register(DefaultBankDao.class)
+                   .asName("bankDao")
+                  .build();
+
+ContainerBuilder subBuilder = new ContainerBuilder();
+Container subContainer = subBuilder.parent(container)
+                                  .register(DefaultBankService.class)
+                                  .autoWiredBy(AutoWiredBy.NAME)
+                                  .build();
+
+assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
+DefaultBankService bankService = subContainer.resolve(BankService.class);
+assertThat(bankService, instanceOf(BankService.class));
+assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
+```
+
 ####Factory Method Injection
 Provide factory method:
 ```java
@@ -223,3 +242,7 @@ DefaultBankService bankService = subContainer.resolve(BankService.class);
 assertThat(bankService, instanceOf(BankService.class));                     
 assertThat(bankService.getBankDao(), instanceOf(BankDao.class));            
 ```
+
+###Todo
+* Bean scope; currently, just support singleton scope;
+* Plan to support JDK 1.8, and introduce Lambda expression feature;
