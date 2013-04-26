@@ -6,15 +6,7 @@ Melt is lightweight IoC container and no intrusiveness based on Java platform. I
 * No intrusiveness;
 * No xml configure files to be managed;
 * Pure pojo object support;
-```java
-public class DefaultBankDao implements BankDao {    private Map<String, Double> accounts = newHashMap();    public void deposit(String account, double money) {        if (isAccountExisted(account)) {            money += accounts.get(account);        }        accounts.put(account, money);    }    public double query(String account) {        if (isAccountExisted(account)) {            return accounts.get(account);        }        return 0;    }    private boolean isAccountExisted(String account) {        return accounts.containsKey(account);    }}
-```
-
 * DSL feature let it more make sense;
-```java
-container = builder.register(CustomerDao.class)                  .withProperty(JdbcTemplate.class)                  .register(DefaultCustomerService.class)                  .withProperty(CustomerDao.class)                  .withProperty(CustomerFiller.class)                  .build();DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);assertThat(customerService, not(nullValue()));
-```
-
 * Support container scope;
 * Autowired by type or name;
 
