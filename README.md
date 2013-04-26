@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/agiledon/melt.png?branch=master)](https://travis-ci.org/agiledon/melt)
 ##MELT
 
 Melt is lightweight IoC container and no intrusiveness based on Java platform. It provides common features of IoC including constructor injection, setter injection, autowire injection and factory method injection. It doesn't use stuffy xml configuraiton mechanic or annotation style. It supports POJO object to initialize all java objects automatically.
