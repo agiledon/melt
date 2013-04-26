@@ -182,6 +182,12 @@ assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
 ####Factory Method Injection
 Provide factory method:
 ```java
+public class DefaultBankService extends AbstractBankService implements BankService {
+    public DefaultBankService init(){
+        return new DefaultBankService();
+    }
+}
+
 container = builder.register(DefaultBankService.class)
                    .factory("init")
                    .build();
