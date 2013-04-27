@@ -5,6 +5,15 @@ public class Container {
     private InitializedBeans initializedBeans;
     private Container parentContainer;
 
+    protected Container(InjectionModule module) {
+        initializedBeans = module.build(null);
+    }
+
+    public Container(InjectionModule module, Container parentContainer) {
+        this.parentContainer = parentContainer;
+        initializedBeans = module.build(parentContainer);
+    }
+
     public <T> T resolve(Class targetClass) {
         T bean = initializedBeans.getBean(targetClass);
         if (bean == null && parentContainer != null) {
@@ -19,13 +28,5 @@ public class Container {
             bean = parentContainer.resolve(beanName);
         }
         return bean;
-    }
-
-    public void setInitializedBeans(InitializedBeans initializedBeans) {
-        this.initializedBeans = initializedBeans;
-    }
-
-    public void setParentContainer(Container parentContainer) {
-        this.parentContainer = parentContainer;
     }
 }

@@ -24,30 +24,36 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class ContainerBuilderTest {
+public class InjectionModuleTest {
 
-    private ContainerBuilder builder;
+    private InjectionModule builder;
     private Container container;
 
     @Before
     public void setUp() throws Exception {
-        builder = new ContainerBuilder();
     }
 
     @Test
     public void should_register_CustomerService_bean() {
-        container = builder.register(DefaultCustomerService.class)
-                .build();
-
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class);
+            }
+        });
         assertThat(container.resolve(DefaultCustomerService.class), instanceOf(DefaultCustomerService.class));
     }
 
     @Test
     public void should_register_CustomerService_bean_with_two_constructor_parameters() {
-        container = builder.register(DefaultCustomerService.class)
-                .withConstructorParameter(CustomerDao.class)
-                .withConstructorParameter(CustomerFiller.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class)
+                        .withConstructorParameter(CustomerDao.class)
+                        .withConstructorParameter(CustomerFiller.class);
+            }
+        });
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));
@@ -59,16 +65,21 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_CustomerService_bean_with_different_constructor_parameters() {
-        ArrayList<Customer> newCustomers = newArrayList(new Customer(1, "zhangyi"));
-        container = builder.register(DefaultCustomerService.class)
-                .withConstructorParameter(CustomerDao.class)
-                .withConstructorParameter(5)
-                .withConstructorParameter("hello melt")
-                .withConstructorParameter(50.0)
-                .withConstructorParameter(5000L)
-                .withConstructorParameter(40.0f)
-                .withConstructorParameter(newCustomers)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            ArrayList<Customer> newCustomers = newArrayList(new Customer(1, "zhangyi"));
+
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class)
+                        .withConstructorParameter(CustomerDao.class)
+                        .withConstructorParameter(5)
+                        .withConstructorParameter("hello melt")
+                        .withConstructorParameter(50.0)
+                        .withConstructorParameter(5000L)
+                        .withConstructorParameter(40.0f)
+                        .withConstructorParameter(newCustomers);
+            }
+        });
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));
@@ -87,9 +98,13 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_DefaultBankService_bean_with_one_property() {
-        container = builder.register(DefaultBankService.class)
-                .withProperty(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .withProperty(DefaultBankDao.class);
+            }
+        });
 
         DefaultBankService bankService = container.resolve(DefaultBankService.class);
         assertThat(bankService, not(nullValue()));
@@ -98,10 +113,14 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_DefaultBankService_bean_with_super_property() {
-        container = builder.register(DefaultBankService.class)
-                .withProperty(DefaultBankDao.class)
-                .withProperty(JdbcTemplate.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .withProperty(DefaultBankDao.class)
+                        .withProperty(JdbcTemplate.class);
+            }
+        });
 
         DefaultBankService bankService = container.resolve(DefaultBankService.class);
         assertThat(bankService, not(nullValue()));
@@ -111,12 +130,16 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_CustomerService_bean_with_nested_properties() {
-        container = builder.register(CustomerDao.class)
-                .withProperty(JdbcTemplate.class)
-                .register(DefaultCustomerService.class)
-                .withProperty(CustomerDao.class)
-                .withProperty(CustomerFiller.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(CustomerDao.class)
+                        .withProperty(JdbcTemplate.class)
+                        .register(DefaultCustomerService.class)
+                        .withProperty(CustomerDao.class)
+                        .withProperty(CustomerFiller.class);
+            }
+        });
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));
@@ -128,11 +151,15 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_CustomerService_bean_with_two_properties_and_one_int_value_properties() {
-        container = builder.register(DefaultCustomerService.class)
-                .withProperty(CustomerDao.class)
-                .withProperty(CustomerFiller.class)
-                .withProperty("count", 3)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class)
+                        .withProperty(CustomerDao.class)
+                        .withProperty(CustomerFiller.class)
+                        .withProperty("count", 3);
+            }
+        });
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));
@@ -144,20 +171,28 @@ public class ContainerBuilderTest {
 
     @Test(expected = BeanConfigurationException.class)
     public void should_throw_configuration_exception_when_register_interface_with_class() {
-        container = builder.register(DefaultCustomerService.class)
-                .withProperty(CustomerDaoInterface.class)
-                .withProperty(CustomerFiller.class)
-                .withProperty("count", 3)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class)
+                        .withProperty(CustomerDaoInterface.class)
+                        .withProperty(CustomerFiller.class)
+                        .withProperty("count", 3);
+            }
+        });
     }
 
     @Test
     public void should_register_CustomerService_bean_with_two_properties_and_one_string_value_properties() {
-        container = builder.register(DefaultCustomerService.class)
-                .withProperty(CustomerDao.class)
-                .withProperty(CustomerFiller.class)
-                .withProperty("message", "hello melt")
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class)
+                        .withProperty(CustomerDao.class)
+                        .withProperty(CustomerFiller.class)
+                        .withProperty("message", "hello melt");
+            }
+        });
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));
@@ -168,16 +203,21 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_BankService_bean_with_different_properties() {
-        List<String> accounts = newArrayList("haha");
-        container = builder.register(DefaultBankService.class)
-                .withProperty(DefaultBankDao.class)
-                .withProperty("max", 1)
-                .withProperty("tax", 2.3)
-                .withProperty("interest", 2.3f)
-                .withProperty("maxMoney", 12345l)
-                .withProperty("account", "haha")
-                .withProperty("accounts", accounts)
-                .build();
+        final List<String> accounts = newArrayList("haha");
+        container = Melt.createContainer(new InjectionModule() {
+
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .withProperty(DefaultBankDao.class)
+                        .withProperty("max", 1)
+                        .withProperty("tax", 2.3)
+                        .withProperty("interest", 2.3f)
+                        .withProperty("maxMoney", 12345l)
+                        .withProperty("account", "haha")
+                        .withProperty("accounts", accounts);
+            }
+        });
 
         DefaultBankService bankService = container.resolve(BankService.class);
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
@@ -191,12 +231,19 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_have_container_scope() {
-        container = builder.register(DefaultBankService.class)
-                .build();
-        ContainerBuilder childBuilder = new ContainerBuilder();
-        Container subContainer = childBuilder.parent(container)
-                .register(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class);
+            }
+        });
+
+        Container subContainer = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankDao.class);
+            }
+        }, container);
         assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
         assertThat(subContainer.resolve(BankService.class), instanceOf(BankService.class));
         assertThat(container.resolve(BankDao.class), nullValue());
@@ -205,10 +252,13 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_global_auto_wired_by_type() {
-        builder = new ContainerBuilder(AutoWiredBy.TYPE);
-        container = builder.register(DefaultBankService.class)
-                .register(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule(AutoWiredBy.TYPE) {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .register(DefaultBankDao.class);
+            }
+        });
 
         DefaultBankService bankService = container.resolve(BankService.class);
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
@@ -216,10 +266,14 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_auto_wired_by_type_for_each_bean() {
-        container = builder.register(DefaultBankService.class)
-                .autoWiredBy(AutoWiredBy.TYPE)
-                .register(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .autoWiredBy(AutoWiredBy.TYPE)
+                        .register(DefaultBankDao.class);
+            }
+        });
 
         DefaultBankService bankService = container.resolve(BankService.class);
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
@@ -227,29 +281,45 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_auto_wired_by_type_from_parent_container() {
-        container = builder.register(DefaultBankDao.class)
-                .build();
-        ContainerBuilder subBuilder = new ContainerBuilder();
-        Container subContainer = subBuilder.parent(container)
-                .register(DefaultBankService.class)
-                .autoWiredBy(AutoWiredBy.TYPE)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankDao.class);
+            }
+        });
+
+        Container subContainer = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .autoWiredBy(AutoWiredBy.TYPE);
+            }
+        }, container);
+
         assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
         DefaultBankService bankService = subContainer.resolve(BankService.class);
         assertThat(bankService, instanceOf(BankService.class));
         assertThat(bankService.getBankDao(), instanceOf(BankDao.class));
     }
 
+
     @Test
     public void should_inject_from_parent_container_by_name() {
-        container = builder.register(DefaultBankDao.class)
-                .asName("bankDao")
-                .build();
-        ContainerBuilder subBuilder = new ContainerBuilder();
-        Container subContainer = subBuilder.parent(container)
-                .register(DefaultBankService.class)
-                .autoWiredBy(AutoWiredBy.NAME)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankDao.class)
+                        .asName("bankDao");
+            }
+        });
+        Container subContainer = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .autoWiredBy(AutoWiredBy.NAME);
+            }
+        }, container);
+
         assertThat(subContainer.resolve(BankDao.class), instanceOf(BankDao.class));
         DefaultBankService bankService = subContainer.resolve(BankService.class);
         assertThat(bankService, instanceOf(BankService.class));
@@ -258,8 +328,12 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_resolve_with_interface_type() {
-        container = builder.register(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankDao.class);
+            }
+        });
 
         assertThat(container.resolve(BankDao.class), instanceOf(BankDao.class));
         assertThat(container.resolve(BankDao.class), instanceOf(DefaultBankDao.class));
@@ -267,9 +341,13 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_to_interface_type_with_class() {
-        container = builder.register(DefaultBankService.class)
-                .withProperty(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .withProperty(DefaultBankDao.class);
+            }
+        });
 
         DefaultBankService bankService = container.resolve(BankService.class);
         assertThat(bankService, instanceOf(BankService.class));
@@ -278,9 +356,13 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_with_name_and_resolve_by_name() {
-        container = builder.register(DefaultBankService.class)
-                .asName("bankService")
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .asName("bankService");
+            }
+        });
 
         DefaultBankService bankService = container.resolve("bankService");
         assertThat(bankService, instanceOf(BankService.class));
@@ -288,11 +370,15 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_bean_which_implements_two_interfaces() {
-        container = builder.register(CustomerDao.class)
-                .asName("customerDao")
-                .register(DefaultCustomerService.class)
-                .withRefProperty("customerDao", "customerDao")
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(CustomerDao.class)
+                        .asName("customerDao")
+                        .register(DefaultCustomerService.class)
+                        .withRefProperty("customerDao", "customerDao");
+            }
+        });
 
         DefaultCustomerService customerService = container.resolve(DefaultCustomerService.class);
         assertThat(customerService, instanceOf(DefaultCustomerService.class));
@@ -303,43 +389,51 @@ public class ContainerBuilderTest {
 
     @Test
     public void should_register_bean_from_factory() {
-        container = builder.register(DefaultBankService.class)
-                .factory("init")
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankService.class)
+                        .factory("init");
+            }
+        });
+
         DefaultBankService bankService = container.resolve(DefaultBankService.class);
         assertThat(bankService, instanceOf(DefaultBankService.class));
     }
 
     @Test(expected = MoreThanOneClassRegisteredException.class)
     public void should_throw_exception_when_register_same_class_without_name() {
-        builder.register(DefaultBankDao.class)
-                .register(DefaultBankDao.class)
-                .register(DefaultCustomerService.class)
-                .build();
-    }
-
-    @Test(expected = MoreThanOneClassRegisteredException.class)
-    public void should_throw_exception_when_register_same_class_without_name_then_build() {
-        builder.register(DefaultBankDao.class)
-                .register(DefaultBankDao.class)
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultBankDao.class)
+                        .register(DefaultBankDao.class)
+                        .register(DefaultCustomerService.class);
+            }
+        });
     }
 
     @Test
     public void should_register_CustomerService_bean_with_two_constructor_parameters_from_parent_container() {
 
-        container = builder.register(CustomerDao.class)
-                .asName("customerDao")
-                .register(CustomerFiller.class)
-                .asName("customerFiller")
-                .build();
+        container = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(CustomerDao.class)
+                        .asName("customerDao")
+                        .register(CustomerFiller.class)
+                        .asName("customerFiller");
+            }
+        });
 
-        ContainerBuilder childBuilder = new ContainerBuilder();
-        Container childContainer = childBuilder.register(DefaultCustomerService.class)
-                .withRefConstructorParameter("customerDao")
-                .withRefConstructorParameter("customerFiller")
-                .parent(container)
-                .build();
+        Container childContainer = Melt.createContainer(new InjectionModule() {
+            @Override
+            public void configure() {
+                register(DefaultCustomerService.class)
+                        .withRefConstructorParameter("customerDao")
+                        .withRefConstructorParameter("customerFiller");
+            }
+        }, container);
 
         DefaultCustomerService customerService = childContainer.resolve(DefaultCustomerService.class);
         assertThat(customerService, not(nullValue()));

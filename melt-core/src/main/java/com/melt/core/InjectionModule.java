@@ -16,33 +16,31 @@ import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
-public class ContainerBuilder {
+public abstract class InjectionModule {
     private final BeansInitializer beansInitializer = new BeansInitializer();
     private final AutoWiredBy globalAutoWiredBy;
     private List<BeanInfo> beans = newArrayList();
-    private final Container container = new Container();
     private BeanInfo currentBean = null;
-    private Container parentContainer;
     private Map<Class, List<BeanInfo>> classBeanInfoMap = newHashMap();
     private Class latestRegisteredClass;
 
-    public ContainerBuilder() {
+    public InjectionModule() {
         this(AutoWiredBy.NULL);
     }
 
-    public ContainerBuilder(AutoWiredBy by) {
+    public InjectionModule(AutoWiredBy by) {
         this.globalAutoWiredBy = by;
     }
 
-    public Container build() {
+    public abstract void configure();
+
+    public InitializedBeans build(Container parentContainer) {
+        configure();
         validateMoreThanOneClassRegistered();
-        InitializedBeans initializedBeans = beansInitializer.initialize(beans, parentContainer);
-        container.setInitializedBeans(initializedBeans);
-        container.setParentContainer(parentContainer);
-        return container;
+        return  beansInitializer.initialize(beans, parentContainer);
     }
 
-    public <T> ContainerBuilder register(Class<T> registeredClass) {
+    public <T> InjectionModule register(Class<T> registeredClass) {
         validateIsInterface(registeredClass);
         validateMoreThanOneClassRegistered();
         BeanInfo registeredBean = new BeanInfo(getBeanName(registeredClass), registeredClass);
@@ -54,7 +52,7 @@ public class ContainerBuilder {
         return this;
     }
 
-    public <T> ContainerBuilder withConstructorParameter(Class<T> constructorParameterClass) {
+    public <T> InjectionModule withConstructorParameter(Class<T> constructorParameterClass) {
         ConstructorParameter constructorParameter = new RefConstructorParameter(
                 ConstructorIndexer.index(), constructorParameterClass.getSimpleName());
         if (currentBean != null) {
@@ -67,59 +65,54 @@ public class ContainerBuilder {
     }
 
 
-    public ContainerBuilder withRefConstructorParameter(String beanName) {
+    public InjectionModule withRefConstructorParameter(String beanName) {
         addConstructorParameter(new RefConstructorParameter(
                 ConstructorIndexer.index(), beanName));
         return this;
     }
 
-    public ContainerBuilder withConstructorParameter(int paraValue) {
+    public InjectionModule withConstructorParameter(int paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder withConstructorParameter(long paraValue) {
+    public InjectionModule withConstructorParameter(long paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder withConstructorParameter(float paraValue) {
+    public InjectionModule withConstructorParameter(float paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder withConstructorParameter(double paraValue) {
+    public InjectionModule withConstructorParameter(double paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder withConstructorParameter(String paraValue) {
+    public InjectionModule withConstructorParameter(String paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public ContainerBuilder withConstructorParameter(Object paraValue) {
+    public InjectionModule withConstructorParameter(Object paraValue) {
         addConstructorParameter(new GenericConstructorParameter(
                 ConstructorIndexer.index(), paraValue));
         return this;
     }
 
-    public <T> ContainerBuilder parent(Container container) {
-        this.parentContainer = container;
-        return this;
-    }
-
-    public ContainerBuilder autoWiredBy(AutoWiredBy by) {
+    public InjectionModule autoWiredBy(AutoWiredBy by) {
         currentBean.setAutoWiredBy(by);
         return this;
     }
 
-    public <T> ContainerBuilder withProperty(Class<T> propertyClass) {
+    public <T> InjectionModule withProperty(Class<T> propertyClass) {
         validateIsInterface(propertyClass);
         addProperty(getBeanName(propertyClass), getBeanName(propertyClass));
         registerBeanInfoWithClass(propertyClass);
@@ -127,49 +120,49 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder withRefProperty(String propertyName, String refBeanName) {
+    public InjectionModule withRefProperty(String propertyName, String refBeanName) {
         addProperty(propertyName, refBeanName);
         ConstructorIndexer.reset();
         return this;
     }
 
-    public ContainerBuilder withProperty(String propertyName, int propertyValue) {
+    public InjectionModule withProperty(String propertyName, int propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withProperty(String propertyName, double propertyValue) {
+    public InjectionModule withProperty(String propertyName, double propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withProperty(String propertyName, float propertyValue) {
+    public InjectionModule withProperty(String propertyName, float propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withProperty(String propertyName, long propertyValue) {
+    public InjectionModule withProperty(String propertyName, long propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withProperty(String propertyName, String propertyValue) {
+    public InjectionModule withProperty(String propertyName, String propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder withProperty(String propertyName, Object propertyValue) {
+    public InjectionModule withProperty(String propertyName, Object propertyValue) {
         addPropertyAndResetConstructorIndexer(new GenericBeanProperty(currentBean, propertyName, propertyValue));
         return this;
     }
 
-    public ContainerBuilder asName(String beanName) {
+    public InjectionModule asName(String beanName) {
         validateBeanIsRegistered();
         currentBean.setName(beanName);
         return this;
     }
 
-    public ContainerBuilder factory(String factoryMethod) {
+    public InjectionModule factory(String factoryMethod) {
         currentBean.setFactoryMethod(factoryMethod);
         return this;
     }
