@@ -134,8 +134,8 @@ public class InjectionModuleTest {
             @Override
             public void configure() {
                 register(CustomerDao.class)
-                        .withProperty(JdbcTemplate.class)
-                        .register(DefaultCustomerService.class)
+                        .withProperty(JdbcTemplate.class);
+                register(DefaultCustomerService.class)
                         .withProperty(CustomerDao.class)
                         .withProperty(CustomerFiller.class);
             }
@@ -255,8 +255,8 @@ public class InjectionModuleTest {
         container = Melt.createContainer(new InjectionModule(AutoWiredBy.TYPE) {
             @Override
             public void configure() {
-                register(DefaultBankService.class)
-                        .register(DefaultBankDao.class);
+                register(DefaultBankService.class);
+                register(DefaultBankDao.class);
             }
         });
 
@@ -270,8 +270,8 @@ public class InjectionModuleTest {
             @Override
             public void configure() {
                 register(DefaultBankService.class)
-                        .autoWiredBy(AutoWiredBy.TYPE)
-                        .register(DefaultBankDao.class);
+                        .autoWiredBy(AutoWiredBy.TYPE);
+                register(DefaultBankDao.class);
             }
         });
 
@@ -374,8 +374,8 @@ public class InjectionModuleTest {
             @Override
             public void configure() {
                 register(CustomerDao.class)
-                        .asName("customerDao")
-                        .register(DefaultCustomerService.class)
+                        .asName("customerDao");
+                register(DefaultCustomerService.class)
                         .withRefProperty("customerDao", "customerDao");
             }
         });
@@ -406,9 +406,9 @@ public class InjectionModuleTest {
         container = Melt.createContainer(new InjectionModule() {
             @Override
             public void configure() {
-                register(DefaultBankDao.class)
-                        .register(DefaultBankDao.class)
-                        .register(DefaultCustomerService.class);
+                register(DefaultBankDao.class);
+                register(DefaultBankDao.class);
+                register(DefaultCustomerService.class);
             }
         });
     }
@@ -420,8 +420,8 @@ public class InjectionModuleTest {
             @Override
             public void configure() {
                 register(CustomerDao.class)
-                        .asName("customerDao")
-                        .register(CustomerFiller.class)
+                        .asName("customerDao");
+                register(CustomerFiller.class)
                         .asName("customerFiller");
             }
         });
