@@ -4,9 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.melt.config.AutoWiredBy;
 import com.melt.config.BeanInfo;
-import com.melt.exceptions.BeanConfigurationException;
 import com.melt.exceptions.MoreThanOneClassRegisteredException;
 import com.melt.util.ConstructorIndexer;
+import com.melt.util.InjectionValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -41,18 +41,31 @@ public abstract class InjectionModule {
     }
 
     public <T> SubordinateInjectionModule register(Class<T> registeredClass) {
-        validateIsInterface(registeredClass);
-        validateMoreThanOneClassRegistered();
+        validateInjection(registeredClass);
+        registerBeanAndUpdateCurrentBean(registeredClass);
+        addClassAndBeanInfoForValidate(registeredClass);
+
+        ConstructorIndexer.reset();
+        updateSubordinateModule();
+
+        return subordinateModule;
+    }
+
+    private <T> void registerBeanAndUpdateCurrentBean(Class<T> registeredClass) {
         BeanInfo registeredBean = new BeanInfo(getBeanName(registeredClass), registeredClass);
         registeredBean.setAutoWiredBy(globalAutoWiredBy);
         beans.add(registeredBean);
         currentBean = registeredBean;
-        ConstructorIndexer.reset();
-        addClassAndBeanInfoForValidate(registeredClass);
+    }
+
+    private <T> void validateInjection(Class<T> registeredClass) {
+        InjectionValidator.validateIsInterface(registeredClass);
+        validateMoreThanOneClassRegistered();
+    }
+
+    private void updateSubordinateModule() {
         subordinateModule.setCurrentBean(currentBean);
         subordinateModule.setBeans(beans);
-
-        return subordinateModule;
     }
 
     private  <T> String getBeanName(Class<T> registeredClass) {
@@ -69,12 +82,6 @@ public abstract class InjectionModule {
 
     private <T> boolean matchInterfaceClassName(Class<T> registeredClass, Class<?> anInterface) {
         return registeredClass.getSimpleName().toLowerCase().contains(anInterface.getSimpleName().toLowerCase());
-    }
-
-    private <T> void validateIsInterface(Class<T> propertyClass) {
-        if (propertyClass.isInterface()) {
-            throw new BeanConfigurationException(String.format("%s can't be interface type.", propertyClass.getName()));
-        }
     }
 
     private <T> void addClassAndBeanInfoForValidate(Class<T> registeredClass) {

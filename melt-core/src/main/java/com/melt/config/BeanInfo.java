@@ -91,11 +91,11 @@ public class BeanInfo {
             Object bean = createBean(clazz);
             return factory.invoke(bean, null);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return null;
     }
@@ -113,9 +113,5 @@ public class BeanInfo {
 
     public void setFactoryMethod(String factoryMethod) {
         this.factoryMethod = factoryMethod;
-    }
-
-    public String getFactoryMethod() {
-        return factoryMethod;
     }
 }
