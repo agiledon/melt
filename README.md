@@ -11,7 +11,7 @@ Melt is lightweight IoC container and no intrusiveness based on Java platform. I
 * Autowired by type or name;
 
 ###How to use it
-In melt framework, Container and ContainerBuilder are the core classes. The basic operations are register() and resolve() method. 
+In melt framework, Container and InjectionModule are the core classes. The basic operations are register() and resolve() method. 
 
 #### Step 1: Define Module
 Define the class derived from InjectionModule provided by Melt, then register the bean what you want to resolve. For example:
