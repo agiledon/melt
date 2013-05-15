@@ -1,4 +1,4 @@
-package com.melt.config;
+package com.melt.config.autowired;
 
 import com.melt.config.autowired.AutoWired;
 import com.melt.config.autowired.AutoWiredByName;

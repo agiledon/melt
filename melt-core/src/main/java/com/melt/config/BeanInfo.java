@@ -1,5 +1,6 @@
 package com.melt.config;
 
+import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.constructor.Constructor;
 import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.property.BeanProperty;

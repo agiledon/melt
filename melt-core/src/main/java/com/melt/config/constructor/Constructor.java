@@ -49,7 +49,7 @@ public class Constructor {
     private Object[] getParameterBeans(Container parentContainer, InitializedBeans container) {
         Map<Integer, Object> parameterMap = newHashMap();
         for (ConstructorParameter parameter : parameters) {
-            parameter.updateValue(parentContainer, container);
+            parameter.updateValue(container, parentContainer);
             parameterMap.put(parameter.getIndex(), parameter.getValue());
         }
 

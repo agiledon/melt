@@ -25,7 +25,7 @@ public abstract class BeanProperty {
         Object targetBean = initializedBeans.getBean(beanName);
         String message = String.format("Can't initialize bean: %s", beanName);
         try {
-            getMethod().invoke(targetBean, new Object[]{getValue(initializedBeans, parentContainer)});
+            getSetMethod().invoke(targetBean, getInputParameters(initializedBeans, parentContainer));
         } catch (IllegalAccessException e) {
             logger.error(message);
             throw new InitBeanException(message, e);
@@ -38,13 +38,17 @@ public abstract class BeanProperty {
         }
     }
 
-    protected Method getMethod() {
+    private Object[] getInputParameters(InitializedBeans initializedBeans, Container parentContainer) {
+        return new Object[]{getValue(initializedBeans, parentContainer)};
+    }
+
+    protected Method getSetMethod() {
         Class currentClazz = beanInfo.getClazz();
         for (Class clazz = currentClazz; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Method[] declaredMethods = clazz.getDeclaredMethods();
             for (Method method : declaredMethods) {
                 String methodName = method.getName();
-                if (methodName.startsWith("set") && methodName.substring(3).equalsIgnoreCase(name)) {
+                if (isTargetSetMethodFound(methodName)) {
                     return method;
                 }
             }
@@ -52,6 +56,10 @@ public abstract class BeanProperty {
         String message = String.format("The property '%s' of bean '%s' has not set method", name, beanInfo.getName());
         logger.error(message);
         throw new InitBeanException(message);
+    }
+
+    private boolean isTargetSetMethodFound(String methodName) {
+        return methodName.startsWith("set") && methodName.substring(3).equalsIgnoreCase(name);
     }
 
     protected abstract Object getValue(InitializedBeans initializedBeans, Container parentContainer);

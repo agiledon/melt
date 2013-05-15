@@ -1,5 +1,6 @@
 package com.melt.config;
 
+import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.constructor.RefConstructorParameter;
 import com.melt.config.property.BeanRefProperty;
 import com.melt.core.InitializedBeans;

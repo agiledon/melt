@@ -3,6 +3,8 @@ package com.melt.core;
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.RefConstructorParameter;
 import com.melt.config.property.BeanRefProperty;
+import com.melt.sample.bank.beans.BankService;
+import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.domain.Customer;
@@ -15,8 +17,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class BeansInitializerTest {
@@ -34,9 +35,13 @@ public class BeansInitializerTest {
 
         BeanInfo bankService = new BeanInfo("bankService", DefaultBankService.class);
         bankService.addProperty(new BeanRefProperty(bankService, "bankDao", "bankDao"));
+        BeanInfo bankDao = new BeanInfo("bankDao", DefaultBankDao.class);
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(bankService), null);
-        assertThat(initializedBeans.getBean("bankService"), instanceOf(DefaultBankService.class));
+        InitializedBeans initializedBeans = initializer.initialize(newArrayList(bankService, bankDao), null);
+        DefaultBankService bankServiceBean = (DefaultBankService) initializedBeans.getBean("bankService");
+        assertThat(bankServiceBean, instanceOf(DefaultBankService.class));
+        assertThat(bankServiceBean.getBankDao(), not(nullValue()));
+        assertThat(bankServiceBean.getBankDao(), instanceOf(DefaultBankDao.class));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.melt.config.autowired;
 
-import com.melt.config.AutoWiredBy;
 import com.melt.config.BeanInfo;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.AutoWiredException;

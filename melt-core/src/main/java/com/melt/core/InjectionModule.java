@@ -2,7 +2,7 @@ package com.melt.core;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
-import com.melt.config.AutoWiredBy;
+import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.BeanInfo;
 import com.melt.exceptions.MoreThanOneClassRegisteredException;
 import com.melt.util.ConstructorIndexer;
