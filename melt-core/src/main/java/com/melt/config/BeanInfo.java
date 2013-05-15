@@ -40,10 +40,6 @@ public class BeanInfo {
         autoWiredBy.autoWired().autoWired(injectionContext, this);
     }
 
-    public boolean isDefaultConstructorBean() {
-        return constructor.isDefaultConstructor();
-    }
-
     public void addProperty(BeanProperty beanProperty) {
         this.properties.add(beanProperty);
     }
@@ -68,7 +64,7 @@ public class BeanInfo {
         return clazz;
     }
 
-    public Constructor getConstructorParameters() {
+    public Constructor getConstructor() {
         return constructor;
     }
 
@@ -77,7 +73,7 @@ public class BeanInfo {
     }
 
     public Object initialize() {
-        if (isDefaultConstructorBean()) {
+        if (constructor.isDefaultConstructor()) {
             Class clazz = getClazz();
             if (factoryMethod == null) {
                 return createBean(clazz);
@@ -89,9 +85,9 @@ public class BeanInfo {
 
     private Object createBeanByFactory(Class clazz) {
         try {
-            Method factory = clazz.getDeclaredMethod(factoryMethod, null);
+            Method factory = clazz.getDeclaredMethod(factoryMethod);
             Object bean = createBean(clazz);
-            return factory.invoke(bean, null);
+            return factory.invoke(bean);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

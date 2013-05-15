@@ -24,7 +24,7 @@ public abstract class InjectionModule {
     private BeanInfo currentBean = null;
     private Map<Class, List<BeanInfo>> classBeanInfoMap = newHashMap();
     private Class latestRegisteredClass;
-    private SubordinateInjectionModule subordinateModule = new SubordinateInjectionModule();
+    private NestedInjectionModule subordinateModule = new NestedInjectionModule();
     private Logger logger = LoggerFactory.getLogger(InjectionModule.class);
 
     public InjectionModule() {
@@ -43,7 +43,7 @@ public abstract class InjectionModule {
         return  beansInitializer.initialize(parentContainer, beans);
     }
 
-    public <T> SubordinateInjectionModule register(Class<T> registeredClass) {
+    public <T> NestedInjectionModule register(Class<T> registeredClass) {
         validateInjection(registeredClass);
         registerBeanAndUpdateCurrentBean(registeredClass);
         addClassAndBeanInfoForValidate(registeredClass);

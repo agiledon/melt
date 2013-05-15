@@ -18,53 +18,53 @@ import java.util.List;
 
 import static com.melt.util.InjectionValidator.validateBeanIsRegistered;
 
-public class SubordinateInjectionModule {
+public class NestedInjectionModule {
     private BeanInfo currentBean;
     private List<BeanInfo> beans;
-    private Logger logger = LoggerFactory.getLogger(SubordinateInjectionModule.class);
+    private Logger logger = LoggerFactory.getLogger(NestedInjectionModule.class);
 
-    public SubordinateInjectionModule autoWiredBy(AutoWiredBy by) {
+    public NestedInjectionModule autoWiredBy(AutoWiredBy by) {
         currentBean.setAutoWiredBy(by);
         return this;
     }
 
-    public SubordinateInjectionModule withRefConstructorParameter(String beanName) {
+    public NestedInjectionModule withRefConstructorParameter(String beanName) {
         addConstructorParameter(new RefConstructorParameter(
                 ConstructorIndexer.index(), beanName));
         return this;
     }
 
-    public SubordinateInjectionModule withConstructorParameter(int paraValue) {
+    public NestedInjectionModule withConstructorParameter(int paraValue) {
         addConstructorParameter(createConstructorParameter(paraValue));
         return this;
     }
 
-    public SubordinateInjectionModule withConstructorParameter(long paraValue) {
+    public NestedInjectionModule withConstructorParameter(long paraValue) {
         addConstructorParameter(createConstructorParameter(paraValue));
         return this;
     }
 
-    public SubordinateInjectionModule withConstructorParameter(float paraValue) {
+    public NestedInjectionModule withConstructorParameter(float paraValue) {
        addConstructorParameter(createConstructorParameter(paraValue));
         return this;
     }
 
-    public SubordinateInjectionModule withConstructorParameter(double paraValue) {
+    public NestedInjectionModule withConstructorParameter(double paraValue) {
         addConstructorParameter(createConstructorParameter(paraValue));
         return this;
     }
 
-    public SubordinateInjectionModule withConstructorParameter(String paraValue) {
+    public NestedInjectionModule withConstructorParameter(String paraValue) {
         addConstructorParameter(createConstructorParameter(paraValue));
         return this;
     }
 
-    public SubordinateInjectionModule withConstructorParameter(Object paraValue) {
+    public NestedInjectionModule withConstructorParameter(Object paraValue) {
         addConstructorParameter(createConstructorParameter(paraValue));
         return this;
     }
 
-    public <T> SubordinateInjectionModule withConstructorParameter(Class<T> constructorParameterClass) {
+    public <T> NestedInjectionModule withConstructorParameter(Class<T> constructorParameterClass) {
         ConstructorParameter constructorParameter = new RefConstructorParameter(
                 ConstructorIndexer.index(), constructorParameterClass.getSimpleName());
         if (this.currentBean != null) {
@@ -83,13 +83,13 @@ public class SubordinateInjectionModule {
                 ConstructorIndexer.index(), paraValue);
     }
 
-    public SubordinateInjectionModule withRefProperty(String propertyName, String refBeanName) {
+    public NestedInjectionModule withRefProperty(String propertyName, String refBeanName) {
         addProperty(propertyName, refBeanName);
         ConstructorIndexer.reset();
         return this;
     }
 
-    public <T> SubordinateInjectionModule withProperty(Class<T> propertyClass) {
+    public <T> NestedInjectionModule withProperty(Class<T> propertyClass) {
         InjectionValidator.validateIsInterface(propertyClass);
         addProperty(getBeanName(propertyClass), getBeanName(propertyClass));
         registerBeanInfoWithClass(propertyClass, beans);
@@ -97,32 +97,32 @@ public class SubordinateInjectionModule {
         return this;
     }
 
-    public SubordinateInjectionModule withProperty(String propertyName, int propertyValue) {
+    public NestedInjectionModule withProperty(String propertyName, int propertyValue) {
         addPropertyAndResetConstructorIndexer(createBeanProperty(propertyName, propertyValue));
         return this;
     }
 
-    public SubordinateInjectionModule withProperty(String propertyName, double propertyValue) {
+    public NestedInjectionModule withProperty(String propertyName, double propertyValue) {
         addPropertyAndResetConstructorIndexer(createBeanProperty(propertyName, propertyValue));
         return this;
     }
 
-    public SubordinateInjectionModule withProperty(String propertyName, float propertyValue) {
+    public NestedInjectionModule withProperty(String propertyName, float propertyValue) {
         addPropertyAndResetConstructorIndexer(createBeanProperty(propertyName, propertyValue));
         return this;
     }
 
-    public SubordinateInjectionModule withProperty(String propertyName, long propertyValue) {
+    public NestedInjectionModule withProperty(String propertyName, long propertyValue) {
         addPropertyAndResetConstructorIndexer(createBeanProperty(propertyName, propertyValue));
         return this;
     }
 
-    public SubordinateInjectionModule withProperty(String propertyName, String propertyValue) {
+    public NestedInjectionModule withProperty(String propertyName, String propertyValue) {
         addPropertyAndResetConstructorIndexer(createBeanProperty(propertyName, propertyValue));
         return this;
     }
 
-    public SubordinateInjectionModule withProperty(String propertyName, Object propertyValue) {
+    public NestedInjectionModule withProperty(String propertyName, Object propertyValue) {
         addPropertyAndResetConstructorIndexer(createBeanProperty(propertyName, propertyValue));
         return this;
     }
@@ -131,14 +131,14 @@ public class SubordinateInjectionModule {
         return new GenericBeanProperty(currentBean, propertyName, propertyValue);
     }
 
-    public SubordinateInjectionModule asName(String beanName) {
+    public NestedInjectionModule asName(String beanName) {
         validateBeanIsRegistered(this.currentBean);
         currentBean.setName(beanName);
         return this;
     }
 
 
-    public SubordinateInjectionModule factory(String factoryMethod) {
+    public NestedInjectionModule factory(String factoryMethod) {
         currentBean.setFactoryMethod(factoryMethod);
         return this;
     }

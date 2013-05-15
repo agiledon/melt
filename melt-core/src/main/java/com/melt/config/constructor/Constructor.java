@@ -30,7 +30,7 @@ public class Constructor {
     }
 
     public void initialize(InjectionContext injectionContext) {
-        if (beanInfo.isDefaultConstructorBean()) {
+        if (isDefaultConstructor()) {
             return;
         }
 

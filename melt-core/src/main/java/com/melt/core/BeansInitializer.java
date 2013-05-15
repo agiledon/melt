@@ -30,13 +30,17 @@ public class BeansInitializer {
 
     private void propertyInitializing(Container parentContainer, List<BeanInfo> beanInfos) {
         for (BeanInfo beanInfo : beanInfos) {
-            beanInfo.injectProperties(new InjectionContext(parentContainer, initializedBeans));
+            beanInfo.injectProperties(createInjectionContext(parentContainer));
         }
     }
 
     private void parameterConstructorInitializing(Container parentContainer, List<BeanInfo> beanInfos) {
         for (BeanInfo beanInfo : beanInfos) {
-            beanInfo.getConstructorParameters().initialize(new InjectionContext(parentContainer, initializedBeans));
+            beanInfo.getConstructor().initialize(createInjectionContext(parentContainer));
         }
+    }
+
+    private InjectionContext createInjectionContext(Container parentContainer) {
+        return new InjectionContext(parentContainer, initializedBeans);
     }
 }
