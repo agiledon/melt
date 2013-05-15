@@ -49,22 +49,11 @@ public class Constructor {
     private Object[] getParameterBeans(Container parentContainer, InitializedBeans container) {
         Map<Integer, Object> parameterMap = newHashMap();
         for (ConstructorParameter parameter : parameters) {
-            if (parameter instanceof RefConstructorParameter) {
-                setRefParameterValue(parentContainer, container, parameter);
-            }
+            parameter.updateValue(parentContainer, container);
             parameterMap.put(parameter.getIndex(), parameter.getValue());
         }
 
         return parameterMap.values().toArray();
-    }
-
-    private void setRefParameterValue(Container parentContainer, InitializedBeans container, ConstructorParameter parameter) {
-        RefConstructorParameter refParameter = (RefConstructorParameter) parameter;
-        Object bean = container.getBean(refParameter.getRef());
-        if (bean == null && parentContainer != null) {
-            bean = parentContainer.resolve(refParameter.getRef());
-        }
-        parameter.setValue(bean);
     }
 
     private <T> T createInstance(Class<T> targetClass, Object... dependencies) {

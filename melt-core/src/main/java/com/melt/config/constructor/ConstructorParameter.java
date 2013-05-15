@@ -1,6 +1,9 @@
 package com.melt.config.constructor;
 
-public class ConstructorParameter {
+import com.melt.core.Container;
+import com.melt.core.InitializedBeans;
+
+public class ConstructorParameter implements ParameterValueUpdater {
     protected int index;
     private Object value;
 
@@ -18,5 +21,9 @@ public class ConstructorParameter {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    @Override
+    public void updateValue(Container parentContainer, InitializedBeans container) {
     }
 }
