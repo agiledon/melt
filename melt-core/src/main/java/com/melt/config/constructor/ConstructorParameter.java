@@ -25,5 +25,9 @@ public class ConstructorParameter implements ParameterValueUpdater {
 
     @Override
     public void updateValue(Container parentContainer, InitializedBeans container) {
+        doNothing();
+    }
+
+    private void doNothing() {
     }
 }

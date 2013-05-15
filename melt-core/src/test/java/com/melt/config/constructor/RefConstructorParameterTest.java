@@ -2,6 +2,7 @@ package com.melt.config.constructor;
 
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
+import com.melt.exceptions.InitBeanException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,5 +49,13 @@ public class RefConstructorParameterTest {
         verify(beans).getBean(refName);
         verify(container).resolve(refName);
         assertThat(parameter.getValue(), is(targetObject));
+    }
+
+    @Test(expected = InitBeanException.class)
+    public void shouldThrowInitBeanExceptionIfGetNullObject() {
+        when(beans.getBean(refName)).thenReturn(null);
+        when(container.resolve(refName)).thenReturn(null);
+
+        parameter.updateValue(container, beans);
     }
 }
