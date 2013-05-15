@@ -5,6 +5,8 @@ import com.melt.config.BeanInfo;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +20,7 @@ import static com.melt.util.ReflectionUtil.findConstructor;
 public class ConstructorParameters {
     private List<ConstructorParameter> parameters = newArrayList();
     private BeanInfo beanInfo;
+    private Logger logger = LoggerFactory.getLogger(ConstructorParameter.class);
 
     public ConstructorParameters(BeanInfo beanInfo) {
         this.beanInfo = beanInfo;
@@ -29,10 +32,6 @@ public class ConstructorParameters {
 
     public List<ConstructorParameter> getConstructorParameters() {
         return parameters;
-    }
-
-    public BeanInfo getBeanInfo() {
-        return beanInfo;
     }
 
     public void initialize(Container parentContainer, InitializedBeans container) {
@@ -70,18 +69,23 @@ public class ConstructorParameters {
     }
 
     private <T> T createInstance(Class<T> targetClass, Object... dependencies) {
+        String message = String.format("Can't initialize bean: %s", targetClass.getName());
         try {
             Class[] classes = getClassesFrom(dependencies);
             Constructor<T> correctConstructor = findConstructor(targetClass, classes);
             return correctConstructor.newInstance(dependencies);
         } catch (NoSuchMethodException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         } catch (InvocationTargetException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         } catch (InstantiationException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         } catch (IllegalAccessException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", targetClass.getName()), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         }
     }
 

@@ -11,15 +11,17 @@ import com.melt.config.property.GenericBeanProperty;
 import com.melt.exceptions.BeanConfigurationException;
 import com.melt.util.ConstructorIndexer;
 import com.melt.util.InjectionValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 import static com.melt.util.InjectionValidator.validateBeanIsRegistered;
 
 public class SubordinateInjectionModule {
-
     private BeanInfo currentBean;
     private List<BeanInfo> beans;
+    private Logger logger = LoggerFactory.getLogger(SubordinateInjectionModule.class);
 
     public SubordinateInjectionModule autoWiredBy(AutoWiredBy by) {
         currentBean.setAutoWiredBy(by);
@@ -69,7 +71,9 @@ public class SubordinateInjectionModule {
             this.currentBean.addConstructorParameter(constructorParameter);
             registerBeanInfoWithClass(constructorParameterClass, this.beans);
         } else {
-            throw new BeanConfigurationException("Didn't register main bean");
+            String message = "Didn't register main bean";
+            logger.error(message);
+            throw new BeanConfigurationException(message);
         }
         return this;
     }

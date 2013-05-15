@@ -6,6 +6,8 @@ import com.melt.config.property.BeanProperty;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,6 +22,7 @@ public class BeanInfo {
     private ConstructorParameters constructorParameters = new ConstructorParameters(this);
     private List<BeanProperty> properties = newArrayList();
     private String factoryMethod;
+    private Logger logger = LoggerFactory.getLogger(BeanInfo.class);
 
     public BeanInfo(String name, Class clazz) {
         this.name = name;
@@ -101,13 +104,15 @@ public class BeanInfo {
     }
 
     private Object createBean(Class clazz) {
-        String className = clazz.getName();
+        String message = String.format("Can't initialize bean: %s", clazz.getName());
         try {
             return clazz.newInstance();
         } catch (InstantiationException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", className), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         } catch (IllegalAccessException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", className), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         }
     }
 

@@ -4,10 +4,13 @@ import com.melt.config.BeanInfo;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.AutoWiredException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
 public abstract class AbstractAutoWiredBy implements AutoWired {
+    private Logger logger = LoggerFactory.getLogger(AbstractAutoWiredBy.class);
     @Override
     public void autoWired(Container parentContainer, InitializedBeans initializedBeans, BeanInfo beanInfo) {
         Field[] fields = beanInfo.getClazz().getDeclaredFields();
@@ -19,7 +22,9 @@ public abstract class AbstractAutoWiredBy implements AutoWired {
                     field.set(bean, getValue(parentContainer, initializedBeans, field));
                 }
             } catch (Throwable e) {
-                throw new AutoWiredException(String.format("AutoWired %s of %s failed!", field.getName(), beanInfo.getName()));
+                String message = String.format("AutoWired %s of %s failed!", field.getName(), beanInfo.getName());
+                logger.error(message);
+                throw new AutoWiredException(message);
             }
         }
     }

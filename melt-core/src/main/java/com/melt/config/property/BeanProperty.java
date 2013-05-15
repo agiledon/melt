@@ -4,6 +4,8 @@ import com.melt.config.BeanInfo;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +13,7 @@ import java.lang.reflect.Method;
 public abstract class BeanProperty {
     private String name;
     private BeanInfo beanInfo;
+    private Logger logger = LoggerFactory.getLogger(BeanProperty.class);
 
     public BeanProperty(BeanInfo beanInfo, String name) {
         this.name = name;
@@ -20,14 +23,18 @@ public abstract class BeanProperty {
     public void injectPropertyValue(InitializedBeans initializedBeans, Container parentContainer) {
         String beanName = beanInfo.getName();
         Object targetBean = initializedBeans.getBean(beanName);
+        String message = String.format("Can't initialize bean: %s", beanName);
         try {
             getMethod().invoke(targetBean, new Object[]{getValue(initializedBeans, parentContainer)});
         } catch (IllegalAccessException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", beanName), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         } catch (InvocationTargetException e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", beanName), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         } catch (Throwable e) {
-            throw new InitBeanException(String.format("Can't initialize bean: %s", beanName), e);
+            logger.error(message);
+            throw new InitBeanException(message, e);
         }
     }
 
@@ -42,7 +49,9 @@ public abstract class BeanProperty {
                 }
             }
         }
-        throw new InitBeanException(String.format("The property '%s' of bean '%s' has not set method", name, beanInfo.getName()));
+        String message = String.format("The property '%s' of bean '%s' has not set method", name, beanInfo.getName());
+        logger.error(message);
+        throw new InitBeanException(message);
     }
 
     protected abstract Object getValue(InitializedBeans initializedBeans, Container parentContainer);
@@ -51,7 +60,4 @@ public abstract class BeanProperty {
         return name;
     }
 
-    protected BeanInfo getBeanInfo() {
-        return beanInfo;
-    }
 }

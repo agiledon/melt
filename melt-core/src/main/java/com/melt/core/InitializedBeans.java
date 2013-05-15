@@ -3,6 +3,8 @@ package com.melt.core;
 import com.google.common.collect.Iterators;
 import com.melt.config.BeanInfo;
 import com.melt.exceptions.MoreThanOneBeanWithSameClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +16,7 @@ import static com.google.common.collect.Maps.newHashMap;
 public class InitializedBeans {
     private final Map<String, Object> beansWithBeanName = newHashMap();
     private final Map<Class, Map<String, Object>> beansWithClass = newHashMap();
+    private Logger logger = LoggerFactory.getLogger(InitializedBeans.class);
 
     public void addBean(String beanName, Object bean) {
         beansWithBeanName.put(beanName, bean);
@@ -52,7 +55,9 @@ public class InitializedBeans {
         }
         Collection<Object> values = beans.values();
         if (values.size() > 1) {
-            throw new MoreThanOneBeanWithSameClass(String.format("The %s more than one instance", T.getName()));
+            String message = String.format("The %s more than one instance", T.getName());
+            logger.error(message);
+            throw new MoreThanOneBeanWithSameClass(message);
         }
         return (T)Iterators.get(values.iterator(), 0);
     }
