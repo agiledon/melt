@@ -1,8 +1,7 @@
 package com.melt.config.property;
 
 import com.melt.config.BeanInfo;
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+import com.melt.config.InjectionContext;
 
 public class GenericBeanProperty<T> extends BeanProperty {
     private T value;
@@ -13,7 +12,7 @@ public class GenericBeanProperty<T> extends BeanProperty {
     }
 
     @Override
-    protected Object getValue(InitializedBeans initializedBeans, Container parentContainer) {
+    protected Object getValue(InjectionContext injectionContext) {
         return value;
     }
 }

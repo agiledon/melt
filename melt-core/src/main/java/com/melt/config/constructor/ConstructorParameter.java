@@ -1,7 +1,6 @@
 package com.melt.config.constructor;
 
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+import com.melt.config.InjectionContext;
 
 public class ConstructorParameter implements ParameterValueUpdater {
     protected int index;
@@ -24,7 +23,7 @@ public class ConstructorParameter implements ParameterValueUpdater {
     }
 
     @Override
-    public void updateValue(InitializedBeans container, Container parentContainer) {
+    public void updateValue(InjectionContext injectionContext) {
         doNothing();
     }
 

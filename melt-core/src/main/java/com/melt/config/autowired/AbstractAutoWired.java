@@ -1,6 +1,7 @@
 package com.melt.config.autowired;
 
 import com.melt.config.BeanInfo;
+import com.melt.config.InjectionContext;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.AutoWiredException;
@@ -12,14 +13,14 @@ import java.lang.reflect.Field;
 public abstract class AbstractAutoWired implements AutoWired {
     private Logger logger = LoggerFactory.getLogger(AbstractAutoWired.class);
     @Override
-    public void autoWired(Container parentContainer, InitializedBeans initializedBeans, BeanInfo beanInfo) {
+    public void autoWired(InjectionContext injectionContext, BeanInfo beanInfo) {
         Field[] fields = beanInfo.getClazz().getDeclaredFields();
-        Object bean = initializedBeans.getBean(beanInfo.getName());
+        Object bean = injectionContext.getInitializedBeans().getBean(beanInfo.getName());
         for (Field field : fields) {
             field.setAccessible(true);
             try {
                 if (isNotPrimitive(field)) {
-                    field.set(bean, getValue(parentContainer, initializedBeans, field));
+                    field.set(bean, getValue(injectionContext, field));
                 }
             } catch (Throwable e) {
                 String message = String.format("AutoWired %s of %s failed!", field.getName(), beanInfo.getName());
@@ -29,10 +30,10 @@ public abstract class AbstractAutoWired implements AutoWired {
         }
     }
 
-    protected Object getValue(Container parentContainer, InitializedBeans initializedBeans, Field field) {
-        Object resolvedBean = getBean(initializedBeans, field);
-        if (resolvedBean == null && parentContainer != null) {
-            resolvedBean = resolveBean(parentContainer, field);
+    protected Object getValue(InjectionContext injectionContext, Field field) {
+        Object resolvedBean = getBean(injectionContext.getInitializedBeans(), field);
+        if (resolvedBean == null && injectionContext.getParentContainer() != null) {
+            resolvedBean = resolveBean(injectionContext.getParentContainer(), field);
         }
         return resolvedBean;
     }

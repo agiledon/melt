@@ -1,7 +1,6 @@
 package com.melt.config.constructor;
 
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+import com.melt.config.InjectionContext;
 import com.melt.util.BeanLoader;
 
 public class RefConstructorParameter extends ConstructorParameter {
@@ -13,8 +12,8 @@ public class RefConstructorParameter extends ConstructorParameter {
     }
 
     @Override
-    public void updateValue(InitializedBeans initializedBeans, Container parentContainer) {
-        Object bean = BeanLoader.loadReferenceBean(initializedBeans, parentContainer, ref);
+    public void updateValue(InjectionContext injectionContext) {
+        Object bean = BeanLoader.loadReferenceBean(injectionContext, ref);
         setValue(bean);
     }
 }

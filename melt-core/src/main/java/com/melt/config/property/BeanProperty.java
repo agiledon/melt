@@ -1,8 +1,7 @@
 package com.melt.config.property;
 
 import com.melt.config.BeanInfo;
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+import com.melt.config.InjectionContext;
 import com.melt.exceptions.InitBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +19,12 @@ public abstract class BeanProperty {
         this.beanInfo = beanInfo;
     }
 
-    public void injectPropertyValue(InitializedBeans initializedBeans, Container parentContainer) {
+    public void injectPropertyValue(InjectionContext injectionContext) {
         String beanName = beanInfo.getName();
-        Object targetBean = initializedBeans.getBean(beanName);
+        Object targetBean = injectionContext.getInitializedBeans().getBean(beanName);
         String message = String.format("Can't initialize bean: %s", beanName);
         try {
-            getSetMethod().invoke(targetBean, getInputParameters(initializedBeans, parentContainer));
+            getSetMethod().invoke(targetBean, getInputParameters(injectionContext));
         } catch (IllegalAccessException e) {
             logger.error(message);
             throw new InitBeanException(message, e);
@@ -38,8 +37,8 @@ public abstract class BeanProperty {
         }
     }
 
-    private Object[] getInputParameters(InitializedBeans initializedBeans, Container parentContainer) {
-        return new Object[]{getValue(initializedBeans, parentContainer)};
+    private Object[] getInputParameters(InjectionContext injectionContext) {
+        return new Object[]{getValue(injectionContext)};
     }
 
     protected Method getSetMethod() {
@@ -62,7 +61,7 @@ public abstract class BeanProperty {
         return methodName.startsWith("set") && methodName.substring(3).equalsIgnoreCase(name);
     }
 
-    protected abstract Object getValue(InitializedBeans initializedBeans, Container parentContainer);
+    protected abstract Object getValue(InjectionContext injectionContext);
 
     public String getName() {
         return name;

@@ -1,5 +1,6 @@
 package com.melt.config.autowired;
 
+import com.melt.config.InjectionContext;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 
@@ -8,10 +9,10 @@ import java.lang.reflect.Field;
 public class AutoWiredByName extends AbstractAutoWired {
 
     @Override
-    protected Object getValue(Container parentContainer, InitializedBeans initializedBeans, Field field) {
-        Object resolvedBean = initializedBeans.getBean(field.getName());
-        if (resolvedBean == null && parentContainer != null) {
-            resolvedBean = parentContainer.resolve(field.getName());
+    protected Object getValue(InjectionContext injectionContext, Field field) {
+        Object resolvedBean = injectionContext.getInitializedBeans().getBean(field.getName());
+        if (resolvedBean == null && injectionContext.getParentContainer() != null) {
+            resolvedBean = injectionContext.getParentContainer().resolve(field.getName());
         }
         return resolvedBean;
     }

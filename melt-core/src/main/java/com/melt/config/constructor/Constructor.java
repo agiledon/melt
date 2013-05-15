@@ -1,8 +1,7 @@
 package com.melt.config.constructor;
 
 import com.melt.config.BeanInfo;
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+import com.melt.config.InjectionContext;
 import com.melt.exceptions.InitBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,26 +29,26 @@ public class Constructor {
         parameters.add(parameter);
     }
 
-    public void initialize(Container parentContainer, InitializedBeans container) {
+    public void initialize(InjectionContext injectionContext) {
         if (beanInfo.isDefaultConstructorBean()) {
             return;
         }
 
-        Object targetBean = initializeTargetBean(parentContainer, container, beanInfo);
-        container.addBean(beanInfo, targetBean);
+        Object targetBean = initializeTargetBean(injectionContext, beanInfo);
+        injectionContext.getInitializedBeans().addBean(beanInfo, targetBean);
     }
 
-    private Object initializeTargetBean(Container parentContainer, InitializedBeans container, BeanInfo targetBean) {
+    private Object initializeTargetBean(InjectionContext injectionContext, BeanInfo targetBean) {
         Class targetClass = targetBean.getClazz();
 
-        Object[] parameterBeans = getParameterBeans(parentContainer, container);
+        Object[] parameterBeans = getParameterBeans(injectionContext);
         return createInstance(targetClass, parameterBeans);
     }
 
-    private Object[] getParameterBeans(Container parentContainer, InitializedBeans container) {
+    private Object[] getParameterBeans(InjectionContext injectionContext) {
         Map<Integer, Object> parameterMap = newHashMap();
         for (ConstructorParameter parameter : parameters) {
-            parameter.updateValue(container, parentContainer);
+            parameter.updateValue(injectionContext);
             parameterMap.put(parameter.getIndex(), parameter.getValue());
         }
 

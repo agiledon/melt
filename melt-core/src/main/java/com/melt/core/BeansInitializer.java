@@ -1,6 +1,7 @@
 package com.melt.core;
 
 import com.melt.config.BeanInfo;
+import com.melt.config.InjectionContext;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class BeansInitializer {
 
     private InitializedBeans initializedBeans;
 
-    public InitializedBeans initialize(List<BeanInfo> beanInfos, Container parentContainer) {
+    public InitializedBeans initialize(Container parentContainer, List<BeanInfo> beanInfos) {
         initializedBeans = new InitializedBeans();
 
         defaultConstructorInitializing(beanInfos);
@@ -29,13 +30,13 @@ public class BeansInitializer {
 
     private void propertyInitializing(Container parentContainer, List<BeanInfo> beanInfos) {
         for (BeanInfo beanInfo : beanInfos) {
-            beanInfo.injectProperties(parentContainer, initializedBeans);
+            beanInfo.injectProperties(new InjectionContext(parentContainer, initializedBeans));
         }
     }
 
     private void parameterConstructorInitializing(Container parentContainer, List<BeanInfo> beanInfos) {
         for (BeanInfo beanInfo : beanInfos) {
-            beanInfo.getConstructorParameters().initialize(parentContainer, initializedBeans);
+            beanInfo.getConstructorParameters().initialize(new InjectionContext(parentContainer, initializedBeans));
         }
     }
 }

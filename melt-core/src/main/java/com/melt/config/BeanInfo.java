@@ -4,8 +4,6 @@ import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.constructor.Constructor;
 import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.property.BeanProperty;
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +29,15 @@ public class BeanInfo {
         this.autoWiredBy = AutoWiredBy.NULL;
     }
 
-    public void injectProperties(Container parentContainer, InitializedBeans initializedBeans) {
-        autoWiredProperties(parentContainer, initializedBeans);
+    public void injectProperties(InjectionContext injectionContext) {
+        autoWiredProperties(injectionContext);
         for (BeanProperty beanProperty : getProperties()) {
-            beanProperty.injectPropertyValue(initializedBeans, parentContainer);
+            beanProperty.injectPropertyValue(injectionContext);
         }
     }
 
-    public void autoWiredProperties(Container parentContainer, InitializedBeans initializedBeans) {
-        autoWiredBy.autoWired().autoWired(parentContainer, initializedBeans, this);
+    public void autoWiredProperties(InjectionContext injectionContext) {
+        autoWiredBy.autoWired().autoWired(injectionContext, this);
     }
 
     public boolean isDefaultConstructorBean() {

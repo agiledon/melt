@@ -1,12 +1,11 @@
 package com.melt.config.autowired;
 
 import com.melt.config.BeanInfo;
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+import com.melt.config.InjectionContext;
 
 public class AutoWiredByNull implements AutoWired {
     @Override
-    public void autoWired(Container parentContainer, InitializedBeans initializedBeans, BeanInfo beanInfo) {
+    public void autoWired(InjectionContext injectionContext, BeanInfo beanInfo) {
 
     }
 }

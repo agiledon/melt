@@ -52,7 +52,7 @@ public class BeanInfoTest {
 
     @Test
     public void the_bank_service_should_be_set_the_bank_dao_as_value(){
-        bankServiceBeanInfo.injectProperties(null, initializedBeans);
+        bankServiceBeanInfo.injectProperties(createInjectionContext());
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
@@ -60,7 +60,7 @@ public class BeanInfoTest {
     @Test
     public void should_auto_wire_bank_dao_to_bank_service_by_name(){
         bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.NAME);
-        bankServiceBeanInfo.autoWiredProperties(null, initializedBeans);
+        bankServiceBeanInfo.autoWiredProperties(createInjectionContext());
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
@@ -68,7 +68,7 @@ public class BeanInfoTest {
     @Test
     public void should_auto_wire_bank_dao_to_bank_service_by_type(){
         bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.TYPE);
-        bankServiceBeanInfo.autoWiredProperties(null, initializedBeans);
+        bankServiceBeanInfo.autoWiredProperties(createInjectionContext());
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), is(bankDao));
     }
@@ -76,7 +76,7 @@ public class BeanInfoTest {
     @Test
     public void should_not_auto_wire_bank_dao_to_bank_service_by_null(){
         bankServiceBeanInfo.setAutoWiredBy(AutoWiredBy.NULL);
-        bankServiceBeanInfo.autoWiredProperties(null, initializedBeans);
+        bankServiceBeanInfo.autoWiredProperties(createInjectionContext());
         DefaultBankService bankService = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankService.getBankDao(), nullValue());
     }
@@ -86,5 +86,9 @@ public class BeanInfoTest {
         bankServiceBeanInfo.setFactoryMethod("init");
         Object initialize = bankServiceBeanInfo.initialize();
         assertThat(initialize, instanceOf(DefaultBankService.class));
+    }
+
+    private InjectionContext createInjectionContext() {
+        return new InjectionContext(null, initializedBeans);
     }
 }

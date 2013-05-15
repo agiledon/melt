@@ -3,7 +3,6 @@ package com.melt.core;
 import com.melt.config.BeanInfo;
 import com.melt.config.constructor.RefConstructorParameter;
 import com.melt.config.property.BeanRefProperty;
-import com.melt.sample.bank.beans.BankService;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;
 import com.melt.sample.customer.dao.CustomerDao;
@@ -37,7 +36,7 @@ public class BeansInitializerTest {
         bankService.addProperty(new BeanRefProperty(bankService, "bankDao", "bankDao"));
         BeanInfo bankDao = new BeanInfo("bankDao", DefaultBankDao.class);
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(bankService, bankDao), null);
+        InitializedBeans initializedBeans = initializer.initialize(null, newArrayList(bankService, bankDao));
         DefaultBankService bankServiceBean = (DefaultBankService) initializedBeans.getBean("bankService");
         assertThat(bankServiceBean, instanceOf(DefaultBankService.class));
         assertThat(bankServiceBean.getBankDao(), not(nullValue()));
@@ -50,7 +49,7 @@ public class BeansInitializerTest {
         customerService.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
         BeanInfo customerDao = new BeanInfo("customerDao", CustomerDao.class);
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(customerService, customerDao), null);
+        InitializedBeans initializedBeans = initializer.initialize(null, newArrayList(customerService, customerDao));
         DefaultCustomerService customerServiceBean = (DefaultCustomerService) initializedBeans.getBean("customerService");
         assertThat(customerServiceBean, instanceOf(DefaultCustomerService.class));
         assertThat(customerServiceBean.allCustomers().size(), is(1));
@@ -65,7 +64,7 @@ public class BeansInitializerTest {
         BeanInfo customerDao = new BeanInfo("customerDao", CustomerDao.class);
         BeanInfo customerFiller = new BeanInfo("customerFiller", CustomerFiller.class);
 
-        InitializedBeans initializedBeans = initializer.initialize(newArrayList(customerService, customerDao, customerFiller), null);
+        InitializedBeans initializedBeans = initializer.initialize(null, newArrayList(customerService, customerDao, customerFiller));
         DefaultCustomerService customerServiceBean = (DefaultCustomerService) initializedBeans.getBean("customerService");
         assertThat(customerServiceBean, instanceOf(DefaultCustomerService.class));
         List<Customer> customers = customerServiceBean.allCustomers();

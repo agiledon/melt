@@ -1,6 +1,7 @@
 package com.melt.config.constructor;
 
 import com.melt.config.BeanInfo;
+import com.melt.config.InjectionContext;
 import com.melt.core.InitializedBeans;
 import com.melt.sample.customer.dao.CustomerDao;
 import com.melt.sample.customer.domain.Customer;
@@ -30,7 +31,7 @@ public class ConstructorTest {
         customerServiceBean.addConstructorParameter(new RefConstructorParameter(0, "customerDao"));
         container.addBean("customerDao", new CustomerDao());
 
-        customerServiceBean.getConstructorParameters().initialize(null, container);
+        customerServiceBean.getConstructorParameters().initialize(new InjectionContext(null, container));
 
         DefaultCustomerService customerService = (DefaultCustomerService) container.getBean("customerService");
 
@@ -49,7 +50,7 @@ public class ConstructorTest {
         container.addBean("customerDao", new CustomerDao());
         container.addBean("customerFiller", new CustomerFiller());
 
-        customerServiceBean.getConstructorParameters().initialize(null, container);
+        customerServiceBean.getConstructorParameters().initialize(new InjectionContext(null, container));
 
         DefaultCustomerService customerService = (DefaultCustomerService) container.getBean("customerService");
 

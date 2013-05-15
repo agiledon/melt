@@ -1,5 +1,6 @@
 package com.melt.config.constructor;
 
+import com.melt.config.InjectionContext;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 import com.melt.exceptions.InitBeanException;
@@ -32,7 +33,7 @@ public class RefConstructorParameterTest {
         Object targetObject = new Object();
         when(beans.getBean(refName)).thenReturn(targetObject);
 
-        parameter.updateValue(beans, container);
+        parameter.updateValue(new InjectionContext(container, beans));
         verify(beans).getBean(refName);
         assertThat(parameter.getValue(), is(targetObject));
     }
@@ -43,7 +44,7 @@ public class RefConstructorParameterTest {
         when(beans.getBean(refName)).thenReturn(null);
         when(container.resolve(refName)).thenReturn(targetObject);
 
-        parameter.updateValue(beans, container);
+        parameter.updateValue(new InjectionContext(container, beans));
         verify(beans).getBean(refName);
         verify(container).resolve(refName);
         assertThat(parameter.getValue(), is(targetObject));
@@ -54,6 +55,6 @@ public class RefConstructorParameterTest {
         when(beans.getBean(refName)).thenReturn(null);
         when(container.resolve(refName)).thenReturn(null);
 
-        parameter.updateValue(beans, container);
+        parameter.updateValue(new InjectionContext(container, beans));
     }
 }

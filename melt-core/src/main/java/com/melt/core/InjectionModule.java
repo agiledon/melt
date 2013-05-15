@@ -40,7 +40,7 @@ public abstract class InjectionModule {
     public InitializedBeans build(Container parentContainer) {
         configure();
         validateMoreThanOneClassRegistered();
-        return  beansInitializer.initialize(beans, parentContainer);
+        return  beansInitializer.initialize(parentContainer, beans);
     }
 
     public <T> SubordinateInjectionModule register(Class<T> registeredClass) {
