@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ConstructorParametersTest {
+public class ConstructorTest {
     private BeanInfo customerServiceBean;
     private InitializedBeans container;
 

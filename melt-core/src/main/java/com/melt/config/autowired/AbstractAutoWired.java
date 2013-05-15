@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
-public abstract class AbstractAutoWiredBy implements AutoWired {
-    private Logger logger = LoggerFactory.getLogger(AbstractAutoWiredBy.class);
+public abstract class AbstractAutoWired implements AutoWired {
+    private Logger logger = LoggerFactory.getLogger(AbstractAutoWired.class);
     @Override
     public void autoWired(Container parentContainer, InitializedBeans initializedBeans, BeanInfo beanInfo) {
         Field[] fields = beanInfo.getClazz().getDeclaredFields();
@@ -29,9 +29,19 @@ public abstract class AbstractAutoWiredBy implements AutoWired {
         }
     }
 
-    protected abstract Object getValue(Container parentContainer, InitializedBeans initializedBeans, Field field);
+    protected Object getValue(Container parentContainer, InitializedBeans initializedBeans, Field field) {
+        Object resolvedBean = getBean(initializedBeans, field);
+        if (resolvedBean == null && parentContainer != null) {
+            resolvedBean = resolveBean(parentContainer, field);
+        }
+        return resolvedBean;
+    }
 
     private boolean isNotPrimitive(Field field) {
         return !field.getType().isPrimitive();
     }
+
+    protected abstract Object resolveBean(Container parentContainer, Field field);
+
+    protected abstract Object getBean(InitializedBeans initializedBeans, Field field);
 }

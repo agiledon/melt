@@ -1,7 +1,7 @@
 package com.melt.config;
 
+import com.melt.config.constructor.Constructor;
 import com.melt.config.constructor.ConstructorParameter;
-import com.melt.config.constructor.ConstructorParameters;
 import com.melt.config.property.BeanProperty;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
@@ -19,7 +19,7 @@ public class BeanInfo {
     private String name;
     private Class clazz;
     private AutoWiredBy autoWiredBy;
-    private ConstructorParameters constructorParameters = new ConstructorParameters(this);
+    private Constructor constructor = new Constructor(this);
     private List<BeanProperty> properties = newArrayList();
     private String factoryMethod;
     private Logger logger = LoggerFactory.getLogger(BeanInfo.class);
@@ -42,7 +42,7 @@ public class BeanInfo {
     }
 
     public boolean isDefaultConstructorBean() {
-        return constructorParameters.getConstructorParameters().size() == 0;
+        return constructor.isDefaultConstructor();
     }
 
     public void addProperty(BeanProperty beanProperty) {
@@ -50,7 +50,7 @@ public class BeanInfo {
     }
 
     public void addConstructorParameter(ConstructorParameter constructorParameter) {
-        this.constructorParameters.addConstructorParameter(constructorParameter);
+        this.constructor.addParameter(constructorParameter);
     }
 
     public List<BeanProperty> getProperties() {
@@ -69,8 +69,8 @@ public class BeanInfo {
         return clazz;
     }
 
-    public ConstructorParameters getConstructorParameters() {
-        return constructorParameters;
+    public Constructor getConstructorParameters() {
+        return constructor;
     }
 
     public void setAutoWiredBy(AutoWiredBy autoWiredBy) {
