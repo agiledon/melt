@@ -1,6 +1,6 @@
 package com.melt.config.constructor;
 
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 import com.melt.util.BeanLoader;
 
 public class RefConstructorParameter extends ConstructorParameter {

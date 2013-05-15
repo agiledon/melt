@@ -1,7 +1,7 @@
 package com.melt.config.autowired;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 
 public class AutoWiredByNull implements AutoWired {
     @Override

@@ -1,6 +1,6 @@
 package com.melt.config.constructor;
 
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 
 public class ConstructorParameter implements ParameterValueUpdater {
     protected int index;

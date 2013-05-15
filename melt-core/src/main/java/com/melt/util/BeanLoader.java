@@ -1,6 +1,6 @@
 package com.melt.util;
 
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 import com.melt.exceptions.InitBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

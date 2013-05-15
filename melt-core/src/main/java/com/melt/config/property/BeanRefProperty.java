@@ -1,7 +1,7 @@
 package com.melt.config.property;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 import static com.melt.util.BeanLoader.loadReferenceBean;
 
 public class BeanRefProperty extends BeanProperty {

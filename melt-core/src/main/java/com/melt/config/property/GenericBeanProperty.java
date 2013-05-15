@@ -1,7 +1,7 @@
 package com.melt.config.property;
 
 import com.melt.config.BeanInfo;
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 
 public class GenericBeanProperty<T> extends BeanProperty {
     private T value;

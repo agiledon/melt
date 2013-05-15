@@ -1,7 +1,4 @@
-package com.melt.config;
-
-import com.melt.core.Container;
-import com.melt.core.InitializedBeans;
+package com.melt.core;
 
 public class InjectionContext {
     private final Container parentContainer;

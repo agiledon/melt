@@ -4,6 +4,7 @@ import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.constructor.RefConstructorParameter;
 import com.melt.config.property.BeanRefProperty;
 import com.melt.core.InitializedBeans;
+import com.melt.core.InjectionContext;
 import com.melt.sample.bank.beans.BankDao;
 import com.melt.sample.bank.beans.DefaultBankDao;
 import com.melt.sample.bank.beans.DefaultBankService;

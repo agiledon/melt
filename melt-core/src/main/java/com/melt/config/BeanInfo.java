@@ -4,6 +4,7 @@ import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.constructor.Constructor;
 import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.property.BeanProperty;
+import com.melt.core.InjectionContext;
 import com.melt.exceptions.InitBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

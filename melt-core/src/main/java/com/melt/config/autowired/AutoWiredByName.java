@@ -1,6 +1,6 @@
 package com.melt.config.autowired;
 
-import com.melt.config.InjectionContext;
+import com.melt.core.InjectionContext;
 import com.melt.core.Container;
 import com.melt.core.InitializedBeans;
 
