@@ -23,7 +23,7 @@ public class ClassHelperTest {
     @Test
     public void should_return_models(){
         List<Class> classes = helper.getClassesUnderPackage("sample.model");
-        assertThat(classes.get(2).getName(), is(Order.class.getName()));
+        assertThat(classes.size(), is(3));
     }
 
     @Test(expected = MeltOrmException.class)
