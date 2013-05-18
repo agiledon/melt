@@ -1,0 +1,6 @@
+dependencies {
+    compile(
+            'cglib:cglib:3.0'
+    )
+}
+
