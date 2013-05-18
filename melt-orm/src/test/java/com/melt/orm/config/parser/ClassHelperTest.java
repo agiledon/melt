@@ -23,7 +23,7 @@ public class ClassHelperTest {
     @Test
     public void should_return_models(){
         List<Class> classes = helper.getClassesUnderPackage("sample.model");
-        assertThat(classes.get(0).getName(), is(Order.class.getName()));
+        assertThat(classes.get(2).getName(), is(Order.class.getName()));
     }
 
     @Test(expected = MeltOrmException.class)
@@ -42,6 +42,6 @@ public class ClassHelperTest {
         FieldConfig config = fieldConfigs.get(0);
         assertThat(config.isPrimaryKeyField(), is(true));
         assertThat(config.getFieldName(), is("fieldId"));
-        assertThat(config.getFieldType(), is(Integer.TYPE));
+        assertThat(config.getFieldType().getName(), is(Integer.TYPE.getName()));
     }
 }

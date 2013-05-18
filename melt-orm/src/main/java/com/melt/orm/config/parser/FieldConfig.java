@@ -4,14 +4,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FieldConfig {
     private String fieldName;
-    private Class filedType;
-    private String fieldType;
+    private Class fieldType;
 
-    public FieldConfig(String fieldName, Class filedType) {
+    public FieldConfig(String fieldName, Class fieldType) {
         checkNotNull(fieldName);
-        checkNotNull(filedType);
+        checkNotNull(fieldType);
         this.fieldName = fieldName;
-        this.filedType = filedType;
+        this.fieldType = fieldType;
     }
 
     public boolean isPrimaryKeyField() {
@@ -25,7 +24,7 @@ public class FieldConfig {
         return fieldName;
     }
 
-    public String getFieldType() {
+    public Class getFieldType() {
         return fieldType;
     }
 }
