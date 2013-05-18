@@ -89,6 +89,13 @@ public class BeanInfoTest {
         assertThat(initialize, instanceOf(DefaultBankService.class));
     }
 
+    @Test
+    public void should_return_bank_service_by_static_factory_method(){
+        bankServiceBeanInfo.setFactoryMethod("classInit");
+        Object initialize = bankServiceBeanInfo.initialize();
+        assertThat(initialize, instanceOf(DefaultBankService.class));
+    }
+
     private InjectionContext createInjectionContext() {
         return new InjectionContext(null, initializedBeans);
     }

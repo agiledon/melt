@@ -15,6 +15,10 @@ public class DefaultBankService extends AbstractBankService implements BankServi
         return new DefaultBankService();
     }
 
+    public static DefaultBankService classInit(){
+        return new DefaultBankService();
+    }
+
     @Override
     public void deposit(String account, double money) {
         bankDao.deposit(account, money);

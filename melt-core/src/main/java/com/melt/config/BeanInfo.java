@@ -87,7 +87,12 @@ public class BeanInfo {
     private Object createBeanByFactory(Class clazz) {
         try {
             Method factory = clazz.getDeclaredMethod(factoryMethod);
-            Object bean = createBean(clazz);
+            Object bean = null;
+            try {
+                bean = createBean(clazz);
+            } catch (InitBeanException e) {
+
+            }
             return factory.invoke(bean);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
