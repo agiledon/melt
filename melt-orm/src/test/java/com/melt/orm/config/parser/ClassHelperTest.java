@@ -4,7 +4,6 @@ import com.melt.orm.exceptions.MeltOrmException;
 import org.junit.Before;
 import org.junit.Test;
 import sample.model.OnlyOneField;
-import sample.model.Order;
 
 import java.util.List;
 
