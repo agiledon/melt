@@ -4,25 +4,20 @@ import com.melt.orm.exceptions.MeltOrmException;
 import org.junit.Before;
 import org.junit.Test;
 import sample.model.OnlyOneField;
+import sample.model.Order;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class ClassHelperTest {
+public class ModelMappingHelperTest {
 
-    private ClassHelper helper;
+    private ModelMappingHelper helper;
 
     @Before
     public void setUp() throws Exception {
-        helper = new ClassHelper();
-    }
-
-    @Test
-    public void should_return_models(){
-        List<Class> classes = helper.getClassesUnderPackage("sample.model");
-        assertThat(classes.size(), is(3));
+        helper = new ModelMappingHelper();
     }
 
     @Test(expected = MeltOrmException.class)
@@ -42,5 +37,12 @@ public class ClassHelperTest {
         assertThat(config.isPrimaryKeyField(), is(true));
         assertThat(config.getFieldName(), is("fieldId"));
         assertThat(config.getFieldType().getName(), is(Integer.TYPE.getName()));
+    }
+
+    @Test
+    public void should_return_model_config_from_class() {
+        ModelConfig modelConfig = helper.mappingClass2Model(Order.class);
+        assertThat(modelConfig.getModelClass().getName(), is(Order.class.getName()));
+        assertThat(modelConfig.getPrimaryKeys().get(0).getFieldName(), is("id"));
     }
 }

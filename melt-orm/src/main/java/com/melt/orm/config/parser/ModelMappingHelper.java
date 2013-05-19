@@ -11,15 +11,22 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.io.File.separator;
 
-public class ClassHelper {
-    private Logger logger = LoggerFactory.getLogger(ClassHelper.class);
+public class ModelMappingHelper {
+    private Logger logger = LoggerFactory.getLogger(ModelMappingHelper.class);
+
+    public ModelConfig mappingClass2Model(Class clazz) {
+        return new ModelConfig(getFieldConfigs(clazz), clazz);
+    }
 
     public List<Class> getClassesUnderPackage(final String packageName) {
         final String packagePath = getPackagePath(packageName);
@@ -48,7 +55,19 @@ public class ClassHelper {
         return from(newArrayList(declaredFields)).transform(new Function<Field, FieldConfig>() {
             @Override
             public FieldConfig apply(java.lang.reflect.Field field) {
-                return new FieldConfig(field.getName(), field.getType());
+                Class fieldType = field.getType();
+                if (fieldType.isAssignableFrom(List.class) || fieldType.isAssignableFrom(Set.class)) {
+                    Type genericType = field.getGenericType();
+                    if (genericType != null && genericType instanceof ParameterizedType) {
+                        ParameterizedType pt = (ParameterizedType) genericType;
+                        Class genericClazz = (Class) pt.getActualTypeArguments()[0];
+                        return new FieldConfig(field.getName(), fieldType, true, genericClazz);
+                    }
+                }
+                if (fieldType.isArray() && !fieldType.getComponentType().isArray()) {
+                    return new FieldConfig(field.getName(), fieldType, true, fieldType.getComponentType());
+                }
+                return new FieldConfig(field.getName(), fieldType);
             }
         }).toList();
     }
@@ -69,7 +88,7 @@ public class ClassHelper {
     }
 
     private String getPackagePath(String packageName) {
-        URL url = ClassHelper.class.getClassLoader().getResource("");
+        URL url = ModelMappingHelper.class.getClassLoader().getResource("");
         try {
             return String.format("%s%s%s", java.net.URLDecoder.decode(url.getPath(), "UTF-8"), packageName.replaceAll("[.]", separator), separator);
         } catch (UnsupportedEncodingException e) {

@@ -9,6 +9,8 @@ public class Order {
     private boolean hasSent;
     private String orderAddress;
     private List<Item> items;
+    private Customer customer;
+    private Bill bill;
 
     public int getId() {
         return id;
@@ -56,5 +58,21 @@ public class Order {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
     }
 }
