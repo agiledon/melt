@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.io.File.separator;
@@ -55,7 +56,7 @@ public class ModelMappingHelper {
         return from(newArrayList(declaredFields)).transform(new Function<Field, FieldConfig>() {
             @Override
             public FieldConfig apply(java.lang.reflect.Field field) {
-                Class fieldType = field.getType();
+                Class<?> fieldType = field.getType();
                 if (fieldType.isAssignableFrom(List.class) || fieldType.isAssignableFrom(Set.class)) {
                     Type genericType = field.getGenericType();
                     if (genericType != null && genericType instanceof ParameterizedType) {
@@ -74,7 +75,7 @@ public class ModelMappingHelper {
 
     private List<File> getClassFiles(String packageName, String packagePath) {
         File dir = new File(packagePath);
-        if (dir == null || !dir.isDirectory()) {
+        if (!dir.isDirectory()) {
             throw new MeltOrmException(String.format("The %s is not right package", packageName));
         }
         return newArrayList(dir.listFiles(new FileFilter() {
@@ -90,6 +91,7 @@ public class ModelMappingHelper {
     private String getPackagePath(String packageName) {
         URL url = ModelMappingHelper.class.getClassLoader().getResource("");
         try {
+            checkNotNull(url);
             return String.format("%s%s%s", java.net.URLDecoder.decode(url.getPath(), "UTF-8"), packageName.replaceAll("[.]", separator), separator);
         } catch (UnsupportedEncodingException e) {
             logger.error(String.format("Parse model under %s error", packageName));
