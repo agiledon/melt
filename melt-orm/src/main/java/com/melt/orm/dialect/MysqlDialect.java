@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-public class MySQLDialect implements DatabaseDialect {
+public class MysqlDialect implements DatabaseDialect {
     private final static Map<String, String> TYPE_MAPPINGS = newHashMap();
 
     static {
@@ -45,11 +45,4 @@ public class MySQLDialect implements DatabaseDialect {
     public boolean isBasicType(Class fieldType) {
         return TYPE_MAPPINGS.containsKey(fieldType.getName());
     }
-
-    @Override
-    public String generateInsertSQL(ModelConfig modelConfig) {
-        return null;
-    }
-
-
 }

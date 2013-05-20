@@ -1,11 +1,10 @@
 package com.melt.orm.config.parser;
 
-import com.melt.orm.dialect.MySQLDialect;
+import com.melt.orm.dialect.MysqlDialect;
 import org.junit.Before;
 import org.junit.Test;
 import sample.model.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.google.common.collect.ImmutableMap.of;
@@ -33,7 +32,7 @@ public class ModelConfigTest {
     @Test
     public void should_generate_create_table_sql() {
         assertThat(modelConfig.getPrimaryKeys().get(0).getFieldName(), is("id"));
-        System.out.println(modelConfig.generateCreateTableSQL(new MySQLDialect(), modelConfigs));
+        System.out.println(modelConfig.generateCreateTableSQL(new MysqlDialect(), modelConfigs));
     }
 
     @Test
