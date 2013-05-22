@@ -15,15 +15,69 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
 import static java.io.File.separator;
 
-public class ModelMappingHelper {
-    private Logger logger = LoggerFactory.getLogger(ModelMappingHelper.class);
+public class ModelMappingHandler {
+    private Logger logger = LoggerFactory.getLogger(ModelMappingHandler.class);
+
+    public Map<String, ModelConfig> mappingModelConfigs(String packageName) {
+        List<Class> classesUnderPackage = getClassesUnderPackage(packageName);
+        Map<String, ModelConfig> modelConfigMaps = newHashMap();
+        for (Class modelClass : classesUnderPackage) {
+            modelConfigMaps.put(modelClass.getName(), mappingClass2Model(modelClass));
+        }
+        handleOneToOneMapping(modelConfigMaps);
+        handleOneToManyMapping(modelConfigMaps);
+        handleManyToOneMapping(modelConfigMaps);
+        return modelConfigMaps;
+    }
+
+    public void handleOneToOneMapping(Map<String, ModelConfig> modelConfigs) {
+        for (ModelConfig modelConfig : modelConfigs.values()) {
+            for (FieldConfig fieldConfig : modelConfig.getFields()) {
+                String fieldTypeName = fieldConfig.getFieldType().getName();
+                if (!modelConfigs.containsKey(fieldTypeName)) {
+                    continue;
+                }
+                ModelConfig referenceModelConfig = modelConfigs.get(fieldTypeName);
+                if (referenceModelConfig.hasFieldWithType(modelConfig.getModelClass())) {
+                    fieldConfig.setOneToOne(true);
+                }
+            }
+        }
+    }
+
+    public void handleOneToManyMapping(Map<String, ModelConfig> modelConfigs) {
+        for (ModelConfig modelConfig : modelConfigs.values()) {
+            for (FieldConfig fieldConfig : modelConfig.getFields()) {
+                if(fieldConfig.isSetType() && modelConfigs.containsKey(fieldConfig.getGenericType().getName())){
+                    fieldConfig.setOneToMany(true);
+                }
+            }
+        }
+    }
+
+    public void handleManyToOneMapping(Map<String, ModelConfig> modelConfigs) {
+        for (ModelConfig modelConfig : modelConfigs.values()) {
+            for (FieldConfig fieldConfig : modelConfig.getFields()) {
+                String fieldTypeName = fieldConfig.getFieldType().getName();
+                if (!modelConfigs.containsKey(fieldTypeName)) {
+                    continue;
+                }
+                ModelConfig referenceModelConfig = modelConfigs.get(fieldTypeName);
+                if (referenceModelConfig.hasSetFieldWithType(modelConfig.getModelClass())) {
+                    fieldConfig.setManyToOne(true);
+                }
+            }
+        }
+    }
 
     public ModelConfig mappingClass2Model(Class clazz) {
         return new ModelConfig(getFieldConfigs(clazz), clazz);
@@ -89,7 +143,7 @@ public class ModelMappingHelper {
     }
 
     private String getPackagePath(String packageName) {
-        URL url = ModelMappingHelper.class.getClassLoader().getResource("");
+        URL url = ModelMappingHandler.class.getClassLoader().getResource("");
         try {
             checkNotNull(url);
             return String.format("%s%s%s", java.net.URLDecoder.decode(url.getPath(), "UTF-8"), packageName.replaceAll("[.]", separator), separator);

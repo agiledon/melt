@@ -7,6 +7,9 @@ public class FieldConfig {
     private Class fieldType;
     private boolean setType;
     private Class genericType;
+    private boolean oneToOne;
+    private boolean manyToOne;
+    private boolean oneToMany;
 
     public FieldConfig(String fieldName, Class fieldType) {
         this(fieldName, fieldType, false, null);
@@ -42,5 +45,29 @@ public class FieldConfig {
 
     public Class getGenericType() {
         return genericType;
+    }
+
+    public void setOneToOne(boolean oneToOne) {
+        this.oneToOne = oneToOne;
+    }
+
+    public boolean isOneToOneField() {
+        return oneToOne;
+    }
+
+    public void setManyToOne(boolean manyToOne) {
+        this.manyToOne = manyToOne;
+    }
+
+    public boolean isManyToOneField() {
+        return manyToOne;
+    }
+
+    public boolean isOneToManyField() {
+        return oneToMany;
+    }
+
+    public void setOneToMany(boolean oneTOMany) {
+        this.oneToMany = oneTOMany;
     }
 }

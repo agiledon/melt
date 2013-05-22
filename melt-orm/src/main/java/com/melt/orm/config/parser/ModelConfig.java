@@ -1,5 +1,6 @@
 package com.melt.orm.config.parser;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.melt.orm.dialect.DatabaseDialect;
@@ -17,10 +18,6 @@ public class ModelConfig {
     public ModelConfig(List<FieldConfig> fields, Class modelClass) {
         this.fields = fields;
         this.modelClass = modelClass;
-    }
-
-    public List<FieldConfig> getFields() {
-        return fields;
     }
 
     public Class getModelClass() {
@@ -41,6 +38,10 @@ public class ModelConfig {
         return splitWordsByUpperCaseChar(simpleName) + "S";
     }
 
+    public List<FieldConfig> getFields() {
+        return fields;
+    }
+
     public String generateCreateTableSQL(DatabaseDialect dialect, Map<String, ModelConfig> modelConfigs) {
         StringBuilder sb = new StringBuilder("CREATE TABLE ");
         sb.append(getTableName());
@@ -50,11 +51,13 @@ public class ModelConfig {
             if (dialect.isBasicType(field.getFieldType())) {
                 sb.append(splitWordsByUpperCaseChar(field.getFieldName()));
                 sb.append(" ");
-
+                sb.append(dialect.mappingFieldType(field.getFieldType()));
+                sb.append(" ");
             } else if (isOneToOne(modelConfigs, field) || isManyToOne(modelConfigs, field)) {
                 sb.append(splitWordsByUpperCaseChar(field.getFieldName()));
                 sb.append("_ID");
                 sb.append(" ");
+//                sb.append()
             } else {
                 continue;
             }
@@ -70,7 +73,7 @@ public class ModelConfig {
             return false;
         }
         ModelConfig modelConfig = modelConfigs.get(fieldTypeName);
-        return modelConfig.hasCurrentTypeField(getModelClass());
+        return modelConfig.hasFieldWithType(getModelClass());
     }
 
     private boolean isManyToOne(Map<String, ModelConfig> modelConfigs, FieldConfig field) {
@@ -79,10 +82,19 @@ public class ModelConfig {
             return false;
         }
         ModelConfig modelConfig = modelConfigs.get(fieldTypeName);
-        return modelConfig.hasCurrentTypesField(getModelClass());
+        return modelConfig.hasSetFieldWithType(getModelClass());
     }
 
-    private boolean hasCurrentTypeField(final Class modelClass) {
+    public boolean hasFieldWithType(final Class modelClass) {
+        return from(fields).anyMatch(new Predicate<FieldConfig>() {
+            @Override
+            public boolean apply(com.melt.orm.config.parser.FieldConfig fieldConfig) {
+                return fieldConfig.getFieldType().getName().equals(modelClass.getName());
+            }
+        });
+    }
+
+    public boolean hasSetFieldWithType(final Class modelClass) {
         return from(fields).anyMatch(new Predicate<FieldConfig>() {
             @Override
             public boolean apply(com.melt.orm.config.parser.FieldConfig fieldConfig) {
@@ -91,17 +103,8 @@ public class ModelConfig {
         });
     }
 
-    private boolean hasCurrentTypesField(final Class modelClass) {
-        return from(fields).anyMatch(new Predicate<FieldConfig>() {
-            @Override
-            public boolean apply(com.melt.orm.config.parser.FieldConfig fieldConfig) {
-                return fieldConfig.getFieldType().getName().endsWith(modelClass.getName());
-            }
-        });
-    }
-
     private String splitWordsByUpperCaseChar(String words) {
-        return uppercaseJoiner.join(words.split("(?<=[a-z])(?=[A-Z])")).toUpperCase();
+        return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, words);
     }
 
     private boolean isMoreThanOnePrimaryKey(List<FieldConfig> primaryKeys) {

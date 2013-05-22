@@ -1,6 +1,6 @@
 package com.melt.orm.config.parser;
 
-//import com.melt.orm.dialect.MysqlDialect;
+import com.melt.orm.dialect.MySQLDialect;
 import org.junit.Before;
 import org.junit.Test;
 import sample.model.*;
@@ -13,13 +13,13 @@ import static org.junit.Assert.assertThat;
 
 public class ModelConfigTest {
 
-    private ModelMappingHelper helper;
+    private ModelMappingHandler helper;
     private ModelConfig modelConfig;
     private Map<String, ModelConfig> modelConfigs;
 
     @Before
     public void setUp() throws Exception {
-        helper = new ModelMappingHelper();
+        helper = new ModelMappingHandler();
         modelConfig = helper.mappingClass2Model(Order.class);
         modelConfigs = of(
                 Customer.class.getName(), helper.mappingClass2Model(Customer.class),
@@ -32,7 +32,7 @@ public class ModelConfigTest {
     @Test
     public void should_generate_create_table_sql() {
         assertThat(modelConfig.getPrimaryKeys().get(0).getFieldName(), is("id"));
-//        System.out.println(modelConfig.generateCreateTableSQL(new MysqlDialect(), modelConfigs));
+        System.out.println(modelConfig.generateCreateTableSQL(new MySQLDialect(), modelConfigs));
     }
 
     @Test
