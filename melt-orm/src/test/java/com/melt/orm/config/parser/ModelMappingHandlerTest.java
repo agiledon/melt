@@ -14,6 +14,7 @@ import java.util.Map;
 import static com.google.common.collect.FluentIterable.from;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.fail;
 
 public class ModelMappingHandlerTest {
 
@@ -47,7 +48,7 @@ public class ModelMappingHandlerTest {
     public void should_return_model_config_from_class() {
         ModelConfig modelConfig = helper.mappingClass2Model(Order.class);
         assertThat(modelConfig.getModelClass().getName(), is(Order.class.getName()));
-        assertThat(modelConfig.getPrimaryKeys().get(0).getFieldName(), is("id"));
+        assertThat(modelConfig.getPrimaryKey().get().getFieldName(), is("id"));
     }
 
     @Test
@@ -63,6 +64,8 @@ public class ModelMappingHandlerTest {
         });
         if (billFieldConfig.isPresent()) {
             assertThat(billFieldConfig.get().isOneToOneField(), is(true));
+        }else {
+            fail();
         }
 
         Optional<FieldConfig> customerFieldConfig = from(orderModelConfig.getFields()).firstMatch(new Predicate<FieldConfig>() {
@@ -73,6 +76,8 @@ public class ModelMappingHandlerTest {
         });
         if (customerFieldConfig.isPresent()) {
             assertThat(customerFieldConfig.get().isManyToOneField(), is(true));
+        }else {
+            fail();
         }
 
         Optional<FieldConfig> itemsFieldConfig = from(orderModelConfig.getFields()).firstMatch(new Predicate<FieldConfig>() {
@@ -83,6 +88,8 @@ public class ModelMappingHandlerTest {
         });
         if (itemsFieldConfig.isPresent()) {
             assertThat(itemsFieldConfig.get().isOneToManyField(), is(true));
+        }else {
+            fail();
         }
     }
 }

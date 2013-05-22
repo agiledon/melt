@@ -8,6 +8,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class MySQLDialectTest {
+
+    private final MySQLDialect dialect = new MySQLDialect();
+
     @Test
     public void should_return_true_when_type_is_basic(){
         MySQLDialect dialect = new MySQLDialect();
@@ -18,7 +21,11 @@ public class MySQLDialectTest {
 
     @Test
     public void should_return_false_when_type_is_not_basic(){
-        MySQLDialect dialect = new MySQLDialect();
         assertThat(dialect.isBasicType(List.class), is(false));
+    }
+
+    @Test
+    public void should_return_auto_increase_column(){
+        assertThat(dialect.getAutoIncreaseColumn(), is("NOT NULL AUTO_INCREMENT PRIMARY KEY"));
     }
 }

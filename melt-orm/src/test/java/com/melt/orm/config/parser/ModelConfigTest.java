@@ -20,18 +20,14 @@ public class ModelConfigTest {
     @Before
     public void setUp() throws Exception {
         helper = new ModelMappingHandler();
-        modelConfig = helper.mappingClass2Model(Order.class);
-        modelConfigs = of(
-                Customer.class.getName(), helper.mappingClass2Model(Customer.class),
-                Order.class.getName(), helper.mappingClass2Model(Order.class),
-                Bill.class.getName(), helper.mappingClass2Model(Bill.class),
-                Item.class.getName(), helper.mappingClass2Model(Item.class)
-        );
+        modelConfigs = helper.mappingModelConfigs("sample.model");
+        modelConfig = modelConfigs.get(Order.class.getName());
     }
 
     @Test
     public void should_generate_create_table_sql() {
-        assertThat(modelConfig.getPrimaryKeys().get(0).getFieldName(), is("id"));
+        assertThat(modelConfig.getPrimaryKey().get().getFieldName(), is("id"));
+        System.out.println(modelConfig.generateDropTableSQL());
         System.out.println(modelConfig.generateCreateTableSQL(new MySQLDialect(), modelConfigs));
     }
 

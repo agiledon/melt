@@ -14,8 +14,8 @@ public class MySQLDialect implements DatabaseDialect {
 
     static {
         TYPE_MAPPINGS.put(String.class.getName(), "TEXT");
-        TYPE_MAPPINGS.put(Integer.TYPE.getName(), "TINYINT UNSIGNED");
-        TYPE_MAPPINGS.put(Integer.class.getName(), "TINYINT UNSIGNED");
+        TYPE_MAPPINGS.put(Integer.TYPE.getName(), "INTEGER UNSIGNED");
+        TYPE_MAPPINGS.put(Integer.class.getName(), "INTEGER UNSIGNED");
         TYPE_MAPPINGS.put(Long.TYPE.getName(), "INTEGER UNSIGNED");
         TYPE_MAPPINGS.put(Long.class.getName(), "INTEGER UNSIGNED");
         TYPE_MAPPINGS.put(Long.TYPE.getName(), "INTEGER UNSIGNED");
@@ -43,5 +43,10 @@ public class MySQLDialect implements DatabaseDialect {
     @Override
     public boolean isBasicType(Class fieldType) {
         return TYPE_MAPPINGS.containsKey(fieldType.getName());
+    }
+
+    @Override
+    public String getAutoIncreaseColumn(){
+        return "NOT NULL AUTO_INCREMENT PRIMARY KEY";
     }
 }
