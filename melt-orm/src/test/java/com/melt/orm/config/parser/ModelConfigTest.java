@@ -35,10 +35,4 @@ public class ModelConfigTest {
     public void should_return_table_name() {
         assertThat(modelConfig.getTableName(), is("ORDERS"));
     }
-
-    @Test
-    public void should_return_table_name_with_many_words() {
-        modelConfig = helper.mappingClass2Model(OnlyOneField.class);
-        assertThat(modelConfig.getTableName(), is("ONLY_ONE_FIELDS"));
-    }
 }

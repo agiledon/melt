@@ -39,7 +39,7 @@ public class ModelMappingHandler {
         return modelConfigMaps;
     }
 
-    public void handleOneToOneMapping(Map<String, ModelConfig> modelConfigs) {
+    private void handleOneToOneMapping(Map<String, ModelConfig> modelConfigs) {
         for (ModelConfig modelConfig : modelConfigs.values()) {
             for (FieldConfig fieldConfig : modelConfig.getFields()) {
                 String fieldTypeName = fieldConfig.getFieldType().getName();
@@ -54,7 +54,7 @@ public class ModelMappingHandler {
         }
     }
 
-    public void handleOneToManyMapping(Map<String, ModelConfig> modelConfigs) {
+    private void handleOneToManyMapping(Map<String, ModelConfig> modelConfigs) {
         for (ModelConfig modelConfig : modelConfigs.values()) {
             for (FieldConfig fieldConfig : modelConfig.getFields()) {
                 if(fieldConfig.isSetType() && modelConfigs.containsKey(fieldConfig.getGenericType().getName())){
@@ -64,7 +64,7 @@ public class ModelMappingHandler {
         }
     }
 
-    public void handleManyToOneMapping(Map<String, ModelConfig> modelConfigs) {
+    private void handleManyToOneMapping(Map<String, ModelConfig> modelConfigs) {
         for (ModelConfig modelConfig : modelConfigs.values()) {
             for (FieldConfig fieldConfig : modelConfig.getFields()) {
                 String fieldTypeName = fieldConfig.getFieldType().getName();
@@ -79,11 +79,11 @@ public class ModelMappingHandler {
         }
     }
 
-    public ModelConfig mappingClass2Model(Class clazz) {
+    private ModelConfig mappingClass2Model(Class clazz) {
         return new ModelConfig(getFieldConfigs(clazz), clazz);
     }
 
-    public List<Class> getClassesUnderPackage(final String packageName) {
+    private List<Class> getClassesUnderPackage(final String packageName) {
         final String packagePath = getPackagePath(packageName);
         List<File> classFiles = getClassFiles(packageName, packagePath);
         ImmutableList<Class> classes = from(classFiles).transform(new Function<File, Class>() {
@@ -105,7 +105,7 @@ public class ModelMappingHandler {
         return classes;
     }
 
-    public List<FieldConfig> getFieldConfigs(Class clazz) {
+    private List<FieldConfig> getFieldConfigs(Class clazz) {
         Field[] declaredFields = clazz.getDeclaredFields();
         return from(newArrayList(declaredFields)).transform(new Function<Field, FieldConfig>() {
             @Override

@@ -16,7 +16,7 @@ public class MySQLDialectTest {
         MySQLDialect dialect = new MySQLDialect();
         assertThat(dialect.isBasicType(Integer.class), is(true));
         assertThat(dialect.isBasicType(Integer.TYPE), is(true));
-        assertThat(dialect.mappingFieldType(Integer.class), is("TINYINT UNSIGNED"));
+        assertThat(dialect.mappingFieldType(Integer.class), is("INTEGER UNSIGNED"));
     }
 
     @Test
