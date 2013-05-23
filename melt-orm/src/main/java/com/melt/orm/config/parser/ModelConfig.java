@@ -43,7 +43,7 @@ public class ModelConfig {
     }
 
     public String generateDropTableSQL(){
-        final StringBuilder sb = new StringBuilder("DROP TABLE");
+        final StringBuilder sb = new StringBuilder("DROP TABLE ");
         sb.append(getTableName());
         return sb.toString();
     }
