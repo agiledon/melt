@@ -48,7 +48,7 @@ public class DataSourceSessionFactoryTest {
                 .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
                 .withDialect(new MySQLDialect())
                 .build();
-        sessionFactory.createTables();
+//        sessionFactory.createTables();
     }
 
     @Test
