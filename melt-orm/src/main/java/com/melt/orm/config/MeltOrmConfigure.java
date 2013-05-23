@@ -9,40 +9,45 @@ import com.melt.orm.session.DataSourceSessionFactory;
 import com.melt.orm.session.SessionFactory;
 
 import javax.sql.DataSource;
-
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class MeltOrmConfigure {
     private String modelsPackageName;
     private DatabaseDialect dialect;
     private DataSource datasource;
-    private String url;
-    private String username;
-    private String password;
     private boolean isRegisteredDataSource = false;
     private boolean isRegisteredConnection = false;
     private String driver;
-    private final ModelMappingHandler modelMappingHandler = new ModelMappingHandler();
     private DatabaseDetail databaseDetail;
 
-    public MeltOrmConfigure registerModels(String modelsPackageName) {
-        this.modelsPackageName = modelsPackageName;
-        return this;
+    private static MeltOrmConfigure configure;
+
+    private MeltOrmConfigure() {
+    }
+
+
+    public static MeltOrmConfigure registerModels(String modelsPackageName) {
+        configure = new MeltOrmConfigure();
+        checkArgument(modelsPackageName != null);
+        configure.modelsPackageName = modelsPackageName;
+        return configure;
     }
 
     public MeltOrmConfigure withDialect(DatabaseDialect dialect) {
+        checkArgument(dialect != null);
         this.dialect = dialect;
         return this;
     }
 
     public MeltOrmConfigure withDataSource(DataSource datasource) {
-        if (this.isRegisteredDataSource) {
+        if (this.isRegisteredConnection) {
             throw new MeltOrmException("Has registered a database session, please don't registered again!");
         }
+        checkArgument(datasource != null);
+
         this.datasource = datasource;
         this.isRegisteredDataSource = true;
         return this;
@@ -52,19 +57,20 @@ public class MeltOrmConfigure {
         if (this.isRegisteredDataSource) {
             throw new MeltOrmException("Has registered a DataSource, please don't registered again!");
         }
-        this.url = url;
+        checkArgument(url != null);
+        checkArgument(driver != null);
+        checkArgument(username != null);
+        checkArgument(password != null);
+
         this.driver = driver;
-        this.username = username;
-        this.password = password;
         this.databaseDetail = new DatabaseDetail(url, username, password);
         this.isRegisteredConnection = true;
         return this;
     }
 
     public SessionFactory build() {
-        checkArgument(dialect != null);
-        checkArgument(modelsPackageName != null);
-        Map<String,ModelConfig> modelConfigs = modelMappingHandler.mappingModelConfigs(modelsPackageName);
+        ModelMappingHandler modelMappingHandler = new ModelMappingHandler();
+        Map<String, ModelConfig> modelConfigs = modelMappingHandler.mappingModelConfigs(modelsPackageName);
         if (isRegisteredConnection) {
             return createConnectionSessionFactory(modelConfigs);
         } else if (isRegisteredDataSource) {
@@ -78,10 +84,6 @@ public class MeltOrmConfigure {
     }
 
     private ConnectionSessionFactory createConnectionSessionFactory(Map<String, ModelConfig> modelConfigs) {
-        checkNotNull(url);
-        checkNotNull(driver);
-        checkNotNull(username);
-        checkNotNull(password);
         try {
             Class.forName(driver);
             return new ConnectionSessionFactory(dialect, modelConfigs, databaseDetail);

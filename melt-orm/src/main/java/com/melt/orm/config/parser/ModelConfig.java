@@ -43,7 +43,7 @@ public class ModelConfig {
     }
 
     public String generateDropTableSQL(){
-        final StringBuilder sb = new StringBuilder("DROP TABLE ");
+        final StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS ");
         sb.append(getTableName());
         return sb.toString();
     }
@@ -55,7 +55,7 @@ public class ModelConfig {
         sb.append(joiner
                 .skipNulls()
                 .join(getFieldSQLs(dialect, modelConfigs)));
-        sb.append(")");
+        sb.append("\n)");
         return sb.toString();
     }
 
@@ -64,6 +64,7 @@ public class ModelConfig {
             @Override
             public String apply(FieldConfig field) {
                 StringBuilder fieldSb = new StringBuilder();
+                fieldSb.append("    ");
                 if (dialect.isBasicType(field.getFieldType())) {
                     fieldSb.append(splitWordsByUpperCaseChar(field.getFieldName()));
                     fieldSb.append(" ");

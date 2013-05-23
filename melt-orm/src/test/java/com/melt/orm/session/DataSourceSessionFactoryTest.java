@@ -2,6 +2,7 @@ package com.melt.orm.session;
 
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.dialect.DatabaseDialect;
+import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.exceptions.MeltOrmException;
 import org.junit.Test;
 
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import static com.google.common.collect.Maps.newHashMap;
+import static com.melt.orm.config.MeltOrmConfigure.registerModels;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -38,5 +40,23 @@ public class DataSourceSessionFactoryTest {
         HashMap<String,ModelConfig> modelConfigs = newHashMap();
         DataSourceSessionFactory sessionFactory = new DataSourceSessionFactory(dialect, modelConfigs, dataSource);
         sessionFactory.createSession();
+    }
+
+    @Test
+    public void should_create_tables() {
+        SessionFactory sessionFactory = registerModels("sample.model")
+                .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
+                .withDialect(new MySQLDialect())
+                .build();
+        sessionFactory.createTables();
+    }
+
+    @Test
+    public void should_display_create_tables() {
+        SessionFactory sessionFactory = registerModels("sample.model")
+                .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
+                .withDialect(new MySQLDialect())
+                .build();
+        sessionFactory.showCreateTablesSQL();
     }
 }
