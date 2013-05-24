@@ -33,6 +33,15 @@ public class ModelConfig {
         }).first();
     }
 
+    public boolean isNeedBeProxy(){
+        return from(fields).anyMatch(new Predicate<FieldConfig>() {
+            @Override
+            public boolean apply( com.melt.orm.config.parser.FieldConfig fieldConfig) {
+                return fieldConfig.isNeedBeProxy();
+            }
+        });
+    }
+
     public String getTableName() {
         String simpleName = modelClass.getSimpleName();
         return splitWordsByUpperCaseChar(simpleName) + "S";

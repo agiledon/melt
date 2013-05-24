@@ -31,6 +31,10 @@ public class FieldConfig {
         return false;
     }
 
+    public boolean isNeedBeProxy(){
+        return manyToOne || oneToMany || oneToOne;
+    }
+
     public String getFieldName() {
         return fieldName;
     }

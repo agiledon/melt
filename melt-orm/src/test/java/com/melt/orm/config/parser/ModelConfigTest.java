@@ -35,4 +35,9 @@ public class ModelConfigTest {
     public void should_return_table_name() {
         assertThat(modelConfig.getTableName(), is("ORDERS"));
     }
+
+    @Test
+    public void should_return_true_when_model_need_be_proxy() {
+        assertThat(modelConfig.isNeedBeProxy(), is(true));
+    }
 }

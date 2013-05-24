@@ -2,6 +2,8 @@ package com.melt.orm.config.parser;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -22,5 +24,12 @@ public class FieldConfigTest {
     public void should_throw_exception_when_filed_type_is_null(){
         FieldConfig config = new FieldConfig(null, null);
         assertThat(config.isPrimaryKeyField(), is(true));
+    }
+
+    @Test
+    public void should_return_true_when_the_file_is_one_to_one() {
+        FieldConfig config = new FieldConfig("orders", List.class);
+        config.setManyToOne(true);
+        assertThat(config.isNeedBeProxy(), is(true));
     }
 }
