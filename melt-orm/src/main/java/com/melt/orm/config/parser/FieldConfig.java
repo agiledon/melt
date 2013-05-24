@@ -1,5 +1,7 @@
 package com.melt.orm.config.parser;
 
+import java.lang.reflect.Method;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FieldConfig {
@@ -10,6 +12,25 @@ public class FieldConfig {
     private boolean oneToOne;
     private boolean manyToOne;
     private boolean oneToMany;
+
+    public Method getReader() {
+        return reader;
+    }
+
+    public void setReader(Method reader) {
+        this.reader = reader;
+    }
+
+    public Method getWriter() {
+        return writer;
+    }
+
+    public void setWriter(Method writer) {
+        this.writer = writer;
+    }
+
+    private Method reader;
+    private Method writer;
 
     public FieldConfig(String fieldName, Class fieldType) {
         this(fieldName, fieldType, false, null);

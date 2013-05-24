@@ -2,22 +2,67 @@ package com.melt.orm.config.parser;
 
 import com.google.common.base.*;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableMap;
 import com.melt.orm.dialect.DatabaseDialect;
+import com.melt.orm.exceptions.MeltOrmException;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Maps.newHashMap;
+import static java.beans.Introspector.getBeanInfo;
 
 public class ModelConfig {
-    private final static Joiner uppercaseJoiner = Joiner.on("_");
     private final Joiner joiner = Joiner.on(",\n");
     private List<FieldConfig> fields;
     private Class modelClass;
+    private Map<String, FieldConfig> fieldNameAndFieldConfigMap;
+    private Map<String, FieldConfig> methodAndFieldConfigMap;
 
     public ModelConfig(List<FieldConfig> fields, Class modelClass) {
         this.fields = fields;
         this.modelClass = modelClass;
+        initFieldNameAndFiledConfigMap();
+        initMethodAndFieldConfigMap();
+    }
+
+    private void initFieldNameAndFiledConfigMap() {
+        fieldNameAndFieldConfigMap = newHashMap();
+        for (FieldConfig field : fields) {
+            fieldNameAndFieldConfigMap.put(field.getFieldName(), field);
+        }
+    }
+
+    private void initMethodAndFieldConfigMap() {
+        methodAndFieldConfigMap = newHashMap();
+        try {
+            BeanInfo beanInfo = getBeanInfo(modelClass);
+            for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
+                String name = propertyDescriptor.getName();
+                if (!name.equals("class")) {
+                    Method readMethod = propertyDescriptor.getReadMethod();
+                    Method writeMethod = propertyDescriptor.getWriteMethod();
+
+                    FieldConfig fieldConfig = fieldNameAndFieldConfigMap.get(name);
+                    fieldConfig.setReader(readMethod);
+                    fieldConfig.setWriter(writeMethod);
+
+                    methodAndFieldConfigMap.put(readMethod.getName(), fieldConfig);
+                    methodAndFieldConfigMap.put(writeMethod.getName(), fieldConfig);
+                }
+            }
+        } catch (IntrospectionException e) {
+            throw new MeltOrmException("Not valid JavaBean");
+        }
+    }
+
+    public FieldConfig getFieldConfigByMethodName(String methodName) {
+        return methodAndFieldConfigMap.get(methodName);
     }
 
     public Class getModelClass() {
@@ -33,10 +78,10 @@ public class ModelConfig {
         }).first();
     }
 
-    public boolean isNeedBeProxy(){
+    public boolean isNeedBeProxy() {
         return from(fields).anyMatch(new Predicate<FieldConfig>() {
             @Override
-            public boolean apply( com.melt.orm.config.parser.FieldConfig fieldConfig) {
+            public boolean apply(FieldConfig fieldConfig) {
                 return fieldConfig.isNeedBeProxy();
             }
         });
@@ -51,7 +96,7 @@ public class ModelConfig {
         return fields;
     }
 
-    public String generateDropTableSQL(){
+    public String generateDropTableSQL() {
         final StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS ");
         sb.append(getTableName());
         return sb.toString();
@@ -90,7 +135,7 @@ public class ModelConfig {
                     Optional<FieldConfig> primaryKey = referenceModelConfig.getPrimaryKey();
                     if (primaryKey.isPresent()) {
                         fieldSb.append(dialect.mappingFieldType(primaryKey.get().getFieldType()));
-                    }else {
+                    } else {
                         fieldSb.append(dialect.mappingFieldType(Integer.TYPE));
                     }
                     fieldSb.append(" ");
@@ -106,7 +151,7 @@ public class ModelConfig {
     public boolean hasFieldWithType(final Class modelClass) {
         return from(fields).anyMatch(new Predicate<FieldConfig>() {
             @Override
-            public boolean apply(com.melt.orm.config.parser.FieldConfig fieldConfig) {
+            public boolean apply(FieldConfig fieldConfig) {
                 return fieldConfig.getFieldType().getName().equals(modelClass.getName());
             }
         });
@@ -115,7 +160,7 @@ public class ModelConfig {
     public boolean hasSetFieldWithType(final Class modelClass) {
         return from(fields).anyMatch(new Predicate<FieldConfig>() {
             @Override
-            public boolean apply(com.melt.orm.config.parser.FieldConfig fieldConfig) {
+            public boolean apply(FieldConfig fieldConfig) {
                 return fieldConfig.isSetType() && fieldConfig.getGenericType().getName().equals(modelClass.getName());
             }
         });

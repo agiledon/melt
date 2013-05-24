@@ -1,13 +1,13 @@
 package com.melt.orm.session;
 
-import java.sql.Connection;
-import java.util.Map;
-
 import com.melt.orm.command.SqlCommand;
 import com.melt.orm.command.SqlCommandFactory;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.Criteria;
 import com.melt.orm.statement.SelectStatement;
+
+import java.sql.Connection;
+import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
@@ -16,9 +16,9 @@ public class Session {
     private SqlCommandFactory commandFactory;
     private Map<String, ModelConfig> modelConfigs;
 
-    public Session(Connection connection) {
+    public Session(Connection connection, Map<String, ModelConfig> modelConfigs) {
         this.connection = connection;
-        modelConfigs = newHashMap();
+        this.modelConfigs = modelConfigs;
     }
 
     public Connection getConnection() {

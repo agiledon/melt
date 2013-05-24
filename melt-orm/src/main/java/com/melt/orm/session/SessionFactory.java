@@ -27,9 +27,7 @@ public abstract class SessionFactory {
 
     public Session createSession() {
         try {
-            Session session = new Session(getConnection());
-            session.setModelConfigs(modelConfigs);
-            return session;
+            return new Session(getConnection(), modelConfigs);
         } catch (SQLException e) {
             throw new MeltOrmException("Can't get connection from the database configuration");
         }
