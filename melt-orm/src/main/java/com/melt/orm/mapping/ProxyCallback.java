@@ -30,7 +30,7 @@ public class ProxyCallback implements MethodInterceptor {
                 ModelConfig fieldModelConfig = modelConfigs.get(fieldClassName);
 
             }
-            return session.find();
+            return session.find(null, null);
         } else {
             return proxy.invokeSuper(obj, args);
         }
