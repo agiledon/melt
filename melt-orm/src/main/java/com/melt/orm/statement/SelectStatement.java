@@ -57,10 +57,13 @@ public class SelectStatement extends SqlStatement {
     }
 
     private void assembleFieldsClause(ModelConfig modelConfig) {
-        fieldsJoiner.appendTo(selectSql, from(modelConfig.getFields()).transform(new Function<FieldConfig, String>() {
+        fieldsJoiner.skipNulls().appendTo(selectSql, from(modelConfig.getFields()).transform(new Function<FieldConfig, String>() {
             @Override
             public String apply(FieldConfig input) {
-                return input.getFieldName();
+                if (!input.isNeedBeProxy()) {
+                    return input.getFieldName();
+                }
+                return null;
             }
         }));
     }

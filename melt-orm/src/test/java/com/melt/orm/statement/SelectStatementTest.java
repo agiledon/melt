@@ -2,6 +2,7 @@ package com.melt.orm.statement;
 
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
+import com.melt.orm.config.parser.ModelMappingHandler;
 import com.melt.orm.session.Session;
 import com.melt.orm.criteria.AndCriteria;
 import com.melt.orm.criteria.EqCriteria;
@@ -57,12 +58,8 @@ public class SelectStatementTest {
 
     private Session prepareSession() {
         Session session = mock(Session.class);
-        Map<String, ModelConfig> modelConfigs = newHashMap();
-        List<FieldConfig> fieldConfigs = newArrayList();
-        fieldConfigs.add(new FieldConfig("id", Integer.class));
-        fieldConfigs.add(new FieldConfig("name", String.class));
-        modelConfigs.put(Customer.class.getName(), new ModelConfig(fieldConfigs, Customer.class));
-
+        ModelMappingHandler helper = new ModelMappingHandler();
+        Map<String,ModelConfig> modelConfigs = helper.mappingModelConfigs("sample.model");
         when(session.getModelConfigs()).thenReturn(modelConfigs);
         return session;
     }
