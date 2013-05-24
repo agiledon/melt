@@ -40,7 +40,6 @@ public class InitializedBeansTest {
     @Test
     public void should_return_bean_when_add_bean_with_many_class(){
         DefaultBankDao bankDao = new DefaultBankDao();
-        Class<DefaultBankDao> clazz = DefaultBankDao.class;
         List<Class> classes = newArrayList(new Class[]{DefaultBankDao.class, BankDao.class});
         container.addBean("bankDao", classes, bankDao);
         assertThat((DefaultBankDao) container.getBean(DefaultBankDao.class), is(bankDao));
