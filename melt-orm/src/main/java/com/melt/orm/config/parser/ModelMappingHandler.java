@@ -90,7 +90,6 @@ public class ModelMappingHandler {
             @Override
             public Class apply(File file) {
                 String className = Files.getNameWithoutExtension(file.getName());
-                Object val = null;
                 try {
                     return Class.forName(packageName + "." + className);
                 } catch (Exception e) {
