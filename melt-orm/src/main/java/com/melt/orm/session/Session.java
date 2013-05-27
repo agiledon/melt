@@ -4,6 +4,7 @@ import com.melt.orm.command.QueryCommand;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.Criteria;
 import com.melt.orm.criteria.EqCriteria;
+import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.SelectStatement;
 import com.melt.orm.statement.UpdateStatement;
 
@@ -30,7 +31,11 @@ public class Session {
 
     public <T> T findById(Class targetEntity, int id) {
         Criteria criteria = new EqCriteria("ID", id);
-        return executeQueryCommand(targetEntity, criteria);
+        List<T> objects = executeQueryCommand(targetEntity, criteria);
+        if (objects.size() > 0) {
+            return objects.get(0);
+        }
+        throw new MeltOrmException(String.format("Entity not found by id: %d", id));
     }
 
     public <T> int update(T targetEntity, Criteria criteria) {
@@ -39,7 +44,7 @@ public class Session {
         return statement.createNonQueryCommand().execute();
     }
 
-    private <T> T executeQueryCommand(Class targetEntity, Criteria criteria) {
+    private <T> List<T> executeQueryCommand(Class targetEntity, Criteria criteria) {
         SelectStatement statement = new SelectStatement(this);
         statement.assemble(targetEntity, criteria);
         QueryCommand sqlCommand = statement.createQueryCommand();

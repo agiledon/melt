@@ -20,13 +20,13 @@ public class QueryCommand {
         this.mapper = new Mapper(selectStatement.getSession());
     }
 
-    public <T> T execute() {
+    public <T> List<T> execute() {
         try {
             Statement statement = connection.createStatement();
             String sql = selectStatement.getSql();
             System.out.println(sql.toUpperCase());
             ResultSet resultSet = statement.executeQuery(sql);
-//            return mapper.mapResult()
+            return mapper.mapResult(selectStatement.getTargetEntity(), resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }

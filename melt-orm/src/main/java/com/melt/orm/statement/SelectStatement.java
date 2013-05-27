@@ -12,12 +12,14 @@ import static com.google.common.collect.FluentIterable.from;
 
 public class SelectStatement extends SqlStatement {
     private final static Joiner fieldsJoiner = Joiner.on(", ");
+    private Class targetEntity;
 
     public SelectStatement(Session session) {
         super(session);
     }
 
     public SqlStatement assemble(Class targetEntity, Criteria criteria) {
+        this.targetEntity = targetEntity;
         assembleSelectClause(getModelConfig(targetEntity));
         assembleConditionClause(criteria);
         return this;
@@ -44,5 +46,9 @@ public class SelectStatement extends SqlStatement {
 
     public QueryCommand createQueryCommand() {
         return new QueryCommand(session.getConnection(), this);
+    }
+
+    public Class getTargetEntity() {
+        return targetEntity;
     }
 }

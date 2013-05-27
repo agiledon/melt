@@ -35,7 +35,7 @@ public class MapperTest {
     public void should_return_list_of_result() throws SQLException {
         Mapper mapper = new Mapper(session);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
-        when(resultSet.getObject("ID")).thenReturn(1);
+        when(resultSet.getInt("ID")).thenReturn(1);
         List<OnlyOneField> list = mapper.mapResult(OnlyOneField.class, resultSet);
         assertThat(list.get(0).getId(), is(1));
     }

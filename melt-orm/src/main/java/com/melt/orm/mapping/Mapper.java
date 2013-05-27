@@ -46,7 +46,31 @@ public class Mapper {
         List<FieldConfig> fields = modelConfig.getFields();
         for (FieldConfig field : fields) {
             if (!field.isNeedBeProxy()) {
-                field.getWriter().invoke(modelObject, resultSet.getObject(field.getColumnName()));
+                if (field.getFieldType().getName().equals(Integer.class.getName()) || field.getFieldType().getName().equals(Integer.TYPE.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getInt(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(Double.class.getName()) || field.getFieldType().getName().equals(Double.TYPE.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getDouble(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(String.class.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getString(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(Long.class.getName()) || field.getFieldType().getName().equals(Long.TYPE.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getLong(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(Boolean.class.getName()) || field.getFieldType().getName().equals(Boolean.TYPE.getName())) {
+                    int value = resultSet.getInt(field.getColumnName());
+                    if (value == 0) {
+                        field.getWriter().invoke(modelObject, false);
+                    }else {
+                        field.getWriter().invoke(modelObject, true);
+                    }
+                }
+
             }
         }
         return modelObject;

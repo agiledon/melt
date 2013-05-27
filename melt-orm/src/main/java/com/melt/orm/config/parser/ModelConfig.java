@@ -34,7 +34,7 @@ public class ModelConfig {
         this.modelClass = modelClass;
         initFieldNameAndFiledConfigMap();
         initMethodAndFieldConfigMap();
-        this.referenceColumnName = getMappedName(modelClass.getSimpleName()) + "_ID";
+        this.referenceColumnName = getModelClass().getSimpleName() + "Id";
     }
 
     private void initFieldNameAndFiledConfigMap() {

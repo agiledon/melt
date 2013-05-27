@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static com.melt.orm.config.MeltOrmConfigure.registerModels;
@@ -51,7 +52,9 @@ public class DataSourceSessionFactoryTest {
                 .withDialect(new MySQLDialect())
                 .build();
 //        Session session = sessionFactory.createSession();
-//        session.find(Order.class, By.id(1));
+//        List<Order> orders = session.find(Order.class, By.id(1));
+//        Order order = orders.get(0);
+//        order.getItems();
 
 //        sessionFactory.createTables();
     }
