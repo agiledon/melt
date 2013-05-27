@@ -25,11 +25,11 @@ public class SelectStatement extends SqlStatement {
     }
 
     private void assembleSelectClause(ModelConfig modelConfig) {
-        sqlBuilder.append("select ");
+        sqlBuilder.append("SELECT ");
 
         assembleFieldsClause(modelConfig);
 
-        sqlBuilder.append(" from ");
+        sqlBuilder.append(" FROM ");
         sqlBuilder.append(modelConfig.getTableName());
     }
 

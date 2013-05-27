@@ -7,7 +7,7 @@ public class AndCriteria extends BinaryCriteria {
 
     @Override
     protected String getOperator() {
-        return " and ";
+        return " AND ";
     }
 
 }

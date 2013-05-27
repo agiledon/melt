@@ -2,7 +2,9 @@ package com.melt.orm.mapping;
 
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
+import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.session.Session;
+import com.melt.orm.session.SessionFactory;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 

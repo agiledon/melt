@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class FieldConfigTest {
@@ -31,5 +31,11 @@ public class FieldConfigTest {
         FieldConfig config = new FieldConfig("orders", List.class);
         config.setManyToOne(true);
         assertThat(config.isNeedBeProxy(), is(true));
+    }
+
+    @Test
+    public void should_return_column_name_with_underline_for_field_name() {
+        FieldConfig config = new FieldConfig("orderName", String.class);
+        assertThat(config.getColumnName(), is("ORDER_NAME"));
     }
 }

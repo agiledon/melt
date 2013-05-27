@@ -35,17 +35,13 @@ public class SelectStatementTest {
     @Test
     public void should_parse_to_select_statement() {
         SqlStatement sqlStatement = statementParser.assemble(Customer.class, new NullCriteria());
-        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers"));
+        assertThat(sqlStatement.getSql(), is("SELECT ID, NAME FROM CUSTOMERS"));
     }
 
     @Test
     public void should_parse_to_select_statement_with_condition_clause_by_id() {
         SqlStatement sqlStatement = statementParser.assemble(Customer.class, createEqCriteria("id", 1));
-        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers where id = 1"));
-    }
-
-    private <T> EqCriteria createEqCriteria(String fieldName, T fieldValue) {
-        return new EqCriteria(fieldName, fieldValue);
+        assertThat(sqlStatement.getSql(), is("SELECT ID, NAME FROM CUSTOMERS WHERE id = 1"));
     }
 
     @Test
@@ -53,8 +49,13 @@ public class SelectStatementTest {
         SqlStatement sqlStatement = statementParser.assemble(
                 Customer.class,
                 new AndCriteria(createEqCriteria("id", 1), createEqCriteria("name", "ZhangYi")));
-        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers where id = 1 and name = 'ZhangYi'".toLowerCase()));
+        assertThat(sqlStatement.getSql(), is("SELECT ID, NAME FROM CUSTOMERS WHERE id = 1 AND name = 'ZhangYi'"));
     }
+
+    private <T> EqCriteria createEqCriteria(String fieldName, T fieldValue) {
+        return new EqCriteria(fieldName, fieldValue);
+    }
+
 
     private Session prepareSession() {
         Session session = mock(Session.class);

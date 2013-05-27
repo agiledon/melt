@@ -11,6 +11,6 @@ public class OrCriteriaTest {
     @Test
     public void should_generate_or_clause() {
         OrCriteria criteria = new OrCriteria(new EqCriteria("id", 1), new EqCriteria("name", "ZhangYi"));
-        assertThat(criteria.toExpression(), is("id = 1 or name = 'ZhangYi'"));
+        assertThat(criteria.toExpression(), is("id = 1 OR name = 'ZhangYi'"));
     }
 }

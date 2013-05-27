@@ -2,9 +2,9 @@ package com.melt.orm.config.parser;
 
 import com.google.common.base.*;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableMap;
 import com.melt.orm.dialect.DatabaseDialect;
 import com.melt.orm.exceptions.MeltOrmException;
+import com.melt.orm.utils.StringHelper;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -92,7 +92,7 @@ public class ModelConfig {
 
     public String getTableName() {
         String simpleName = modelClass.getSimpleName();
-        return splitWordsByUpperCaseChar(simpleName) + "S";
+        return StringHelper.splitWordsByUpperCaseChar(simpleName) + "S";
     }
 
     public List<FieldConfig> getFields() {
@@ -123,7 +123,7 @@ public class ModelConfig {
                 StringBuilder fieldSb = new StringBuilder();
                 fieldSb.append("    ");
                 if (dialect.isBasicType(field.getFieldType())) {
-                    fieldSb.append(splitWordsByUpperCaseChar(field.getFieldName()));
+                    fieldSb.append(StringHelper.splitWordsByUpperCaseChar(field.getFieldName()));
                     fieldSb.append(" ");
                     fieldSb.append(dialect.mappingFieldType(field.getFieldType()));
                     fieldSb.append(" ");
@@ -131,8 +131,6 @@ public class ModelConfig {
                         fieldSb.append(dialect.getAutoIncreaseColumn());
                     }
                 } else if (field.isManyToOneField() || field.isOneToOneField()) {
-//                    fieldSb.append(splitWordsByUpperCaseChar(field.getFieldName()));
-//                    fieldSb.append("_ID");
                     fieldSb.append(field.getReferenceColumnName());
                     fieldSb.append(" ");
                     ModelConfig referenceModelConfig = modelConfigs.get(field.getFieldType().getName());
@@ -168,10 +166,6 @@ public class ModelConfig {
                 return fieldConfig.isSetType() && fieldConfig.getGenericType().getName().equals(modelClass.getName());
             }
         });
-    }
-
-    private String splitWordsByUpperCaseChar(String words) {
-        return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, words);
     }
 
     public String getReferenceColumnName() {
