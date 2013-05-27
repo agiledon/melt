@@ -19,7 +19,9 @@ public class QueryCommand {
     public <T> T execute() {
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectStatement.getSql());
+            String sql = selectStatement.getSql();
+            System.out.println(sql.toUpperCase());
+            ResultSet resultSet = statement.executeQuery(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }

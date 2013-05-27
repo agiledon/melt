@@ -9,13 +9,13 @@ public class DeleteStatement extends NonQueryStatement {
     }
 
     @Override
-    public <T> SqlStatement assemble(T targetBean, Criteria criteria) {
+    public SqlStatement assemble(Class targetBean, Criteria criteria) {
         assembleDeleteClause(targetBean);
         assembleConditionClause(criteria);
         return this;
     }
 
-    private <T> void assembleDeleteClause(T targetBean) {
+    private  void assembleDeleteClause(Class targetBean) {
         sqlBuilder.append("delete from ");
         sqlBuilder.append(getModelConfig(targetBean).getTableName());
     }

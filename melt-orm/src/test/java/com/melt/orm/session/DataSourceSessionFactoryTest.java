@@ -1,10 +1,12 @@
 package com.melt.orm.session;
 
 import com.melt.orm.config.parser.ModelConfig;
+import com.melt.orm.criteria.By;
 import com.melt.orm.dialect.DatabaseDialect;
 import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.exceptions.MeltOrmException;
 import org.junit.Test;
+import sample.model.Order;
 
 import javax.sql.DataSource;
 
@@ -48,6 +50,9 @@ public class DataSourceSessionFactoryTest {
                 .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
                 .withDialect(new MySQLDialect())
                 .build();
+        Session session = sessionFactory.createSession();
+        session.find(Order.class, By.id(1));
+
 //        sessionFactory.createTables();
     }
 
@@ -57,6 +62,7 @@ public class DataSourceSessionFactoryTest {
                 .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
                 .withDialect(new MySQLDialect())
                 .build();
+
         sessionFactory.showCreateTablesSQL();
     }
 }

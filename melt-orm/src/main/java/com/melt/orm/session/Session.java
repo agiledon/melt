@@ -6,6 +6,7 @@ import com.melt.orm.criteria.Criteria;
 import com.melt.orm.statement.SelectStatement;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 
 public class Session {
@@ -21,8 +22,9 @@ public class Session {
         return connection;
     }
 
-    public <T> T find(Class targetEntity, Criteria criteria) {
+    public <T> List<T> find(Class targetEntity, Criteria criteria) {
         SelectStatement statement = new SelectStatement(this);
+        statement.assemble(targetEntity, criteria);
         QueryCommand sqlCommand = statement.createQueryCommand();
         return sqlCommand.execute();
     }

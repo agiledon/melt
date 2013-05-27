@@ -19,11 +19,11 @@ public abstract class SqlStatement {
         return sqlBuilder.toString();
     }
 
-    public abstract <T> SqlStatement assemble(T targetBean, Criteria criteria);
+    public abstract SqlStatement assemble(Class targetBean, Criteria criteria);
 
-    protected <T> ModelConfig getModelConfig(T targetBean) {
+    protected ModelConfig getModelConfig(Class targetBean) {
         Map<String, ModelConfig> modelConfigs = session.getModelConfigs();
-        ModelConfig modelConfig = modelConfigs.get(targetBean.getClass().getName());
+        ModelConfig modelConfig = modelConfigs.get(targetBean.getName());
         if (modelConfig == null) {
             throw new MeltOrmException("can not find model mapping.");
         }

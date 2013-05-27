@@ -9,7 +9,7 @@ public class UpdateStatement extends NonQueryStatement {
     }
 
     @Override
-    public <T> SqlStatement assemble(T targetBean, Criteria criteria) {
+    public SqlStatement assemble(Class targetBean, Criteria criteria) {
         sqlBuilder.append("update ");
         sqlBuilder.append(getModelConfig(targetBean).getTableName());
         sqlBuilder.append(" set ");

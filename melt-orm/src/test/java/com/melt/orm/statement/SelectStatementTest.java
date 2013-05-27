@@ -34,14 +34,14 @@ public class SelectStatementTest {
 
     @Test
     public void should_parse_to_select_statement() {
-        SqlStatement sqlStatement = statementParser.assemble(new Customer(), new NullCriteria());
+        SqlStatement sqlStatement = statementParser.assemble(Customer.class, new NullCriteria());
         assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers"));
     }
 
     @Test
     public void should_parse_to_select_statement_with_condition_clause_by_id() {
-        SqlStatement sqlStatement = statementParser.assemble(new Customer(), createEqCriteria("id", 1));
-        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers where id == 1"));
+        SqlStatement sqlStatement = statementParser.assemble(Customer.class, createEqCriteria("id", 1));
+        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers where id = 1"));
     }
 
     private <T> EqCriteria createEqCriteria(String fieldName, T fieldValue) {
@@ -51,9 +51,9 @@ public class SelectStatementTest {
     @Test
     public void should_parse_to_select_statement_with_condition_clause_by_id_and_name() {
         SqlStatement sqlStatement = statementParser.assemble(
-                new Customer(),
+                Customer.class,
                 new AndCriteria(createEqCriteria("id", 1), createEqCriteria("name", "ZhangYi")));
-        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers where id == 1 and name == 'ZhangYi'".toLowerCase()));
+        assertThat(sqlStatement.getSql().toLowerCase(), is("select id, name from customers where id = 1 and name = 'ZhangYi'".toLowerCase()));
     }
 
     private Session prepareSession() {

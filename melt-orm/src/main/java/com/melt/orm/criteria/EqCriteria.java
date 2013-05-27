@@ -12,9 +12,9 @@ public class EqCriteria<T> implements Criteria{
     @Override
     public String toExpression() {
         if (fieldValue instanceof String) {
-            return fieldName + " == " + "'" + fieldValue + "'";
+            return fieldName + " = " + "'" + fieldValue + "'";
         }
-        return fieldName + " == " + fieldValue.toString();
+        return fieldName + " = " + fieldValue.toString();
     }
 
     @Override

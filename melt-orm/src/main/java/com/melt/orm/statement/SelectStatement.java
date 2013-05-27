@@ -18,7 +18,7 @@ public class SelectStatement extends SqlStatement {
     }
 
     @Override
-    public <T> SqlStatement assemble(T targetBean, Criteria criteria) {
+    public SqlStatement assemble(Class targetBean, Criteria criteria) {
         assembleSelectClause(getModelConfig(targetBean));
         assembleConditionClause(criteria);
         return this;
