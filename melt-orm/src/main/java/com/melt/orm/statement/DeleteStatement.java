@@ -16,7 +16,7 @@ public class DeleteStatement extends NonQueryStatement {
     }
 
     private  void assembleDeleteClause(Class targetBean) {
-        sqlBuilder.append("delete from ");
+        sqlBuilder.append("DELETE FROM ");
         sqlBuilder.append(getModelConfig(targetBean).getTableName());
     }
 

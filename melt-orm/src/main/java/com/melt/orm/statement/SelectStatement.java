@@ -26,9 +26,7 @@ public class SelectStatement extends SqlStatement {
 
     private void assembleSelectClause(ModelConfig modelConfig) {
         sqlBuilder.append("SELECT ");
-
         assembleFieldsClause(modelConfig);
-
         sqlBuilder.append(" FROM ");
         sqlBuilder.append(modelConfig.getTableName());
     }
