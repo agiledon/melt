@@ -18,6 +18,7 @@ public class SessionFixture {
         List<FieldConfig> fieldConfigs = Lists.newArrayList();
         fieldConfigs.add(new FieldConfig("id", Integer.class));
         fieldConfigs.add(new FieldConfig("name", String.class));
+        fieldConfigs.add(new FieldConfig("age", int.class));
         FieldConfig orders = new FieldConfig("orders", List.class);
         orders.setOneToMany(true);
         fieldConfigs.add(orders);

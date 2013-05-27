@@ -1,10 +1,13 @@
 package com.melt.orm.util;
 
 public class FieldValueWrapper {
-    public static <T> String wrap(T fieldValue1) {
-        if (fieldValue1 instanceof String) {
-            return "'" + fieldValue1 + "'";
+    public static <T> String wrap(T fieldValue) {
+        if (fieldValue == null) {
+            return "null";
         }
-        return fieldValue1.toString();
+        if (fieldValue instanceof String) {
+            return "'" + fieldValue + "'";
+        }
+        return fieldValue.toString();
     }
 }

@@ -4,6 +4,7 @@ import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.Criteria;
 import com.melt.orm.session.Session;
+import com.melt.orm.util.FieldValueWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -17,19 +18,39 @@ public class UpdateStatement extends NonQueryStatement {
 
         sqlBuilder.append("UPDATE ");
         sqlBuilder.append(modelConfig.getTableName());
-        sqlBuilder.append(" SET ");
-        for (FieldConfig field : modelConfig.getFields()) {
-            if (field.isPrimaryKeyField() || field.isNeedBeProxy()) {
-                break;
-            }
-            Object fieldValue = getFieldValue(targetEntity, field);
-            sqlBuilder.append(field.getColumnName());
-            sqlBuilder.append(" = ");
-        }
-
+        assembleSettingClause(targetEntity, modelConfig);
         assembleConditionClause(criteria);
 
         return this;
+    }
+
+    private <T> void assembleSettingClause(T targetEntity, ModelConfig modelConfig) {
+        sqlBuilder.append(buildSettingClause(targetEntity, modelConfig));
+    }
+
+    private <T> StringBuilder buildSettingClause(T targetEntity, ModelConfig modelConfig) {
+        StringBuilder settingClauseBuilder = new StringBuilder();
+        settingClauseBuilder.append(" SET ");
+        for (FieldConfig field : modelConfig.getFields()) {
+            if (field.isPrimaryKeyField() || field.isNeedBeProxy()) {
+                continue;
+            }
+            if (isNotFirstField(settingClauseBuilder)) {
+                settingClauseBuilder.append(", ");
+            }
+            buildSettingFieldValue(targetEntity, settingClauseBuilder, field);
+        }
+        return settingClauseBuilder;
+    }
+
+    private <T> void buildSettingFieldValue(T targetEntity, StringBuilder settingClauseBuilder, FieldConfig field) {
+        settingClauseBuilder.append(field.getColumnName());
+        settingClauseBuilder.append(" = ");
+        settingClauseBuilder.append(FieldValueWrapper.wrap(getFieldValue(targetEntity, field)));
+    }
+
+    private boolean isNotFirstField(StringBuilder settingClauseBuilder) {
+        return !settingClauseBuilder.toString().equals(" SET ");
     }
 
     private <T> Object getFieldValue(T targetEntity, FieldConfig field) {

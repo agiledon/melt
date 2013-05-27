@@ -5,6 +5,7 @@ import java.util.Set;
 public class Customer {
     private int id;
     private String name;
+    private int age;
     private Set<Order> orders;
 
     public int getId() {
@@ -29,5 +30,13 @@ public class Customer {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
