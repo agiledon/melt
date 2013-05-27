@@ -50,7 +50,7 @@ public class DataSourceSessionFactoryTest {
                 .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
                 .withDialect(new MySQLDialect())
                 .build();
-        Session session = sessionFactory.createSession();
+//        Session session = sessionFactory.createSession();
 //        session.find(Order.class, By.id(1));
 
 //        sessionFactory.createTables();
