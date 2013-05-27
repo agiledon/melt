@@ -11,6 +11,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import static com.melt.orm.criteria.By.eq;
@@ -36,13 +37,23 @@ public class ProxyCallback implements MethodInterceptor {
             if (fieldConfig.isOneToManyField()) {
                 String fieldClassName = fieldConfig.getGenericType().getName();
                 ModelConfig fieldModelConfig = modelConfigs.get(fieldClassName);
+                FieldConfig referenceFieldConfig = fieldModelConfig.getFieldConfigByFieldName(getReferenceFieldName(modelClass.getSimpleName()));
+                List<Object> entities = session.find(fieldModelConfig.getModelClass(), eq(modelConfig.getReferenceColumnName(), primaryKeyValue));
+                for (Object entity : entities) {
+                    referenceFieldConfig.getWriter().invoke(entity, obj);
+                }
+                return entities;
+            }  else if (fieldConfig.isOneToOneField()) {
 
-                return session.find(fieldModelConfig.getModelClass(), eq(modelConfig.getReferenceColumnName(), primaryKeyValue));
             }
             return session.find(null, null);
         } else {
             return proxy.invokeSuper(obj, args);
         }
+    }
+
+    private String getReferenceFieldName(String simpleName) {
+        return simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1, simpleName.length());
     }
 
     private Integer getPrimaryKeyValue(Object obj, ModelConfig modelConfig) throws IllegalAccessException, InvocationTargetException {

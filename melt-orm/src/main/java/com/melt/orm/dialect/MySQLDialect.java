@@ -18,8 +18,6 @@ public class MySQLDialect implements DatabaseDialect {
         TYPE_MAPPINGS.put(Integer.class.getName(), "INTEGER UNSIGNED");
         TYPE_MAPPINGS.put(Long.TYPE.getName(), "INTEGER UNSIGNED");
         TYPE_MAPPINGS.put(Long.class.getName(), "INTEGER UNSIGNED");
-        TYPE_MAPPINGS.put(Long.TYPE.getName(), "INTEGER UNSIGNED");
-        TYPE_MAPPINGS.put(Long.class.getName(), "INTEGER UNSIGNED");
         TYPE_MAPPINGS.put(Boolean.TYPE.getName(), "TINYINT UNSIGNED");
         TYPE_MAPPINGS.put(Boolean.class.getName(), "TINYINT UNSIGNED");
         TYPE_MAPPINGS.put(Float.TYPE.getName(), "FLOAT");

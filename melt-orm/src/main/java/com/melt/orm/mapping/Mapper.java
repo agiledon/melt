@@ -6,8 +6,11 @@ import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.session.Session;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +57,24 @@ public class Mapper {
                     field.getWriter().invoke(modelObject, resultSet.getDouble(field.getColumnName()));
                 }
 
+                if (field.getFieldType().getName().equals(Float.class.getName()) || field.getFieldType().getName().equals(Float.TYPE.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getFloat(field.getColumnName()));
+                }
+
                 if (field.getFieldType().getName().equals(String.class.getName())) {
                     field.getWriter().invoke(modelObject, resultSet.getString(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(BigDecimal.class.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getBigDecimal(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(Date.class.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getDate(field.getColumnName()));
+                }
+
+                if (field.getFieldType().getName().equals(Timestamp.class.getName())) {
+                    field.getWriter().invoke(modelObject, resultSet.getTimestamp(field.getColumnName()));
                 }
 
                 if (field.getFieldType().getName().equals(Long.class.getName()) || field.getFieldType().getName().equals(Long.TYPE.getName())) {
