@@ -11,7 +11,10 @@ public abstract class BinaryCriteria implements Criteria {
 
     @Override
     public String toExpression() {
-        return leftCriteria.toExpression() + getOperator() + rightCriteria.toExpression();
+        return String.format("(%s %s %s)",
+                leftCriteria.toExpression(),
+                getOperator(),
+                rightCriteria.toExpression());
     }
 
     @Override

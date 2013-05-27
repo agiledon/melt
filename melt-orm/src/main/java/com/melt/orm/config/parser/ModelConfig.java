@@ -1,10 +1,13 @@
 package com.melt.orm.config.parser;
 
-import com.google.common.base.*;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.melt.orm.dialect.DatabaseDialect;
 import com.melt.orm.exceptions.MeltOrmException;
-import com.melt.orm.utils.StringHelper;
+import com.melt.orm.util.NameMapping;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -92,7 +95,7 @@ public class ModelConfig {
 
     public String getTableName() {
         String simpleName = modelClass.getSimpleName();
-        return StringHelper.splitWordsByUpperCaseChar(simpleName) + "S";
+        return NameMapping.getMappedName(simpleName) + "S";
     }
 
     public List<FieldConfig> getFields() {
@@ -123,7 +126,7 @@ public class ModelConfig {
                 StringBuilder fieldSb = new StringBuilder();
                 fieldSb.append("    ");
                 if (dialect.isBasicType(field.getFieldType())) {
-                    fieldSb.append(StringHelper.splitWordsByUpperCaseChar(field.getFieldName()));
+                    fieldSb.append(NameMapping.getMappedName(field.getFieldName()));
                     fieldSb.append(" ");
                     fieldSb.append(dialect.mappingFieldType(field.getFieldType()));
                     fieldSb.append(" ");

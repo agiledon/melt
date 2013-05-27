@@ -3,6 +3,7 @@ package com.melt.orm.session;
 import com.melt.orm.command.QueryCommand;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.Criteria;
+import com.melt.orm.criteria.EqCriteria;
 import com.melt.orm.statement.SelectStatement;
 
 import java.sql.Connection;
@@ -23,6 +24,15 @@ public class Session {
     }
 
     public <T> List<T> find(Class targetEntity, Criteria criteria) {
+        return executeQueryCommand(targetEntity, criteria);
+    }
+
+    public <T> T findById(Class targetEntity, int id) {
+        Criteria criteria = new EqCriteria("ID", id);
+        return executeQueryCommand(targetEntity, criteria);
+    }
+
+    private <T> T executeQueryCommand(Class targetEntity, Criteria criteria) {
         SelectStatement statement = new SelectStatement(this);
         statement.assemble(targetEntity, criteria);
         QueryCommand sqlCommand = statement.createQueryCommand();

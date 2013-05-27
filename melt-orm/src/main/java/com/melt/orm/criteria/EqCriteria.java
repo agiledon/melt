@@ -1,20 +1,25 @@
 package com.melt.orm.criteria;
 
-public class EqCriteria<T> implements Criteria{
-    private String fieldName;
-    private T fieldValue;
+import com.melt.orm.util.NameMapping;
+
+public class EqCriteria<T> extends SingleCriteria{
 
     public EqCriteria(String fieldName, T fieldValue) {
-        this.fieldName = fieldName;
-        this.fieldValue = fieldValue;
+        super(fieldName, fieldValue);
     }
 
     @Override
     public String toExpression() {
+        String targetValue = fieldValue.toString();
         if (fieldValue instanceof String) {
-            return fieldName + " = " + "'" + fieldValue + "'";
+            targetValue = "'" + fieldValue + "'";
         }
-        return fieldName + " = " + fieldValue.toString();
+        return fieldName + getOperator() + targetValue;
+    }
+
+    @Override
+    protected String getOperator() {
+        return " = ";
     }
 
     @Override

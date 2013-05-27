@@ -7,6 +7,6 @@ public class OrCriteria extends BinaryCriteria {
 
     @Override
     protected String getOperator() {
-        return " OR ";
+        return "OR";
     }
 }
