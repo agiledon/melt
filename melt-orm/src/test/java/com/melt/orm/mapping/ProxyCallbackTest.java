@@ -1,6 +1,5 @@
 package com.melt.orm.mapping;
 
-import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.config.parser.ModelMappingHandler;
 import com.melt.orm.session.Session;
@@ -11,7 +10,6 @@ import sample.model.Item;
 import sample.model.Order;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +17,6 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.melt.orm.criteria.By.eq;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

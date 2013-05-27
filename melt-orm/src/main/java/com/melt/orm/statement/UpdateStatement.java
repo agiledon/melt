@@ -8,6 +8,8 @@ import com.melt.orm.util.FieldValueWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 
+import static com.google.common.collect.ObjectArrays.newArray;
+
 public class UpdateStatement extends NonQueryStatement {
     public UpdateStatement(Session session) {
         super(session);
@@ -56,7 +58,7 @@ public class UpdateStatement extends NonQueryStatement {
     private <T> Object getFieldValue(T targetEntity, FieldConfig field) {
         Object fieldValue;
         try {
-            fieldValue = field.getReader().invoke(targetEntity, null);
+            fieldValue = field.getReader().invoke(targetEntity, newArray(Object.class, 0));
         } catch (IllegalAccessException e) {
             fieldValue = null;
         } catch (InvocationTargetException e) {
