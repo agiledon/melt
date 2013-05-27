@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Maps.newHashMap;
+import static com.melt.orm.util.NameMapping.getMappedName;
 import static java.beans.Introspector.getBeanInfo;
 
 public class ModelConfig {
@@ -23,12 +24,14 @@ public class ModelConfig {
     private Class modelClass;
     private Map<String, FieldConfig> fieldNameAndFieldConfigMap;
     private Map<String, FieldConfig> methodAndFieldConfigMap;
+    private String referenceColumnName;
 
     public ModelConfig(List<FieldConfig> fields, Class modelClass) {
         this.fields = fields;
         this.modelClass = modelClass;
         initFieldNameAndFiledConfigMap();
         initMethodAndFieldConfigMap();
+        this.referenceColumnName = getMappedName(modelClass.getSimpleName()) + "_ID";
     }
 
     private void initFieldNameAndFiledConfigMap() {
@@ -169,5 +172,9 @@ public class ModelConfig {
 
     private String splitWordsByUpperCaseChar(String words) {
         return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, words);
+    }
+
+    public String getReferenceColumnName() {
+        return referenceColumnName;
     }
 }

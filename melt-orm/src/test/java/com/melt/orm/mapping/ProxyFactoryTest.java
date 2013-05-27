@@ -31,19 +31,22 @@ public class ProxyFactoryTest {
         modelConfigs = handler.mappingModelConfigs("sample.model");
         orderModelConfig = modelConfigs.get(Order.class.getName());
         session = mock(Session.class);
+        when(session.getModelConfigs()).thenReturn(modelConfigs);
     }
 
     @Test
     public void should_return_proxy_object(){
-//        Order order = ProxyFactory.getProxy(orderModelConfig, session);
-//        order.setCount(1);
-//        order.setId(1);
-//        assertThat(order.getCount(), is(1));
+        Order order = ProxyFactory.getProxy(Order.class, session);
+        order.setCount(1);
+        order.setId(1);
+        assertThat(order.getCount(), is(1));
+
+        order.getItems();
+
 //
 //        List<Object> items = newArrayList();
 //        Item item = new Item();
 //        items.add(item);
-//        when(session.find()).thenReturn(items);
 //        assertThat(order.getItems().get(0), is(item));
     }
 }

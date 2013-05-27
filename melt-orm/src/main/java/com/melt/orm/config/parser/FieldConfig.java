@@ -87,7 +87,6 @@ public class FieldConfig {
 
     public void setManyToOne(boolean manyToOne) {
         this.manyToOne = manyToOne;
-        this.referenceColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
     }
 
     public boolean isManyToOneField() {
@@ -103,6 +102,7 @@ public class FieldConfig {
     }
 
     public String getReferenceColumnName() {
+        this.referenceColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
         return referenceColumnName;
     }
 }

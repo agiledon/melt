@@ -8,10 +8,10 @@ import net.sf.cglib.proxy.Enhancer;
 import java.util.Map;
 
 public class ProxyFactory {
-    public static  <T> T getProxy(Class modelClass, Map<String, ModelConfig> modelConfigs, Session session) {
+    public static  <T> T getProxy(Class modelClass, Session session) {
         Enhancer en = new Enhancer();
         en.setSuperclass(modelClass);
-        Callback authProxy = new ProxyCallback(session);
+        Callback authProxy = new ProxyCallback(session, modelClass);
         en.setCallback(authProxy);
         return (T)en.create();
     }

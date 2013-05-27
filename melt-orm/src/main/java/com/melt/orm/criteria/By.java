@@ -9,6 +9,10 @@ public class By {
         return new EqCriteria(fieldName, targetValue);
     }
 
+    public static Criteria eq(String fieldName, int targetValue) {
+        return new EqCriteria(fieldName, targetValue);
+    }
+
     public static Criteria and(Criteria leftCriteria, Criteria rightCriteria) {
         return new AndCriteria(leftCriteria, rightCriteria);
     }
