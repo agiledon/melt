@@ -11,7 +11,7 @@ public class ProxyFactory {
     public static  <T> T getProxy(Class modelClass, Map<String, ModelConfig> modelConfigs, Session session) {
         Enhancer en = new Enhancer();
         en.setSuperclass(modelClass);
-        Callback authProxy = new ProxyCallback(modelConfigs, session);
+        Callback authProxy = new ProxyCallback(session);
         en.setCallback(authProxy);
         return (T)en.create();
     }

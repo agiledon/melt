@@ -1,10 +1,13 @@
 package com.melt.orm.config.parser;
 
+import com.google.common.base.CaseFormat;
+
 import java.lang.reflect.Method;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FieldConfig {
+    private final String columnName;
     private String fieldName;
     private Class fieldType;
     private boolean setType;
@@ -12,6 +15,7 @@ public class FieldConfig {
     private boolean oneToOne;
     private boolean manyToOne;
     private boolean oneToMany;
+    private String referenceColumnName;
 
     public Method getReader() {
         return reader;
@@ -43,6 +47,7 @@ public class FieldConfig {
         this.fieldType = fieldType;
         this.setType = setType;
         this.genericType = genericType;
+        this.columnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
     }
 
     public boolean isPrimaryKeyField() {
@@ -82,6 +87,7 @@ public class FieldConfig {
 
     public void setManyToOne(boolean manyToOne) {
         this.manyToOne = manyToOne;
+        this.referenceColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
     }
 
     public boolean isManyToOneField() {
@@ -94,5 +100,9 @@ public class FieldConfig {
 
     public void setOneToMany(boolean oneTOMany) {
         this.oneToMany = oneTOMany;
+    }
+
+    public String getReferenceColumnName() {
+        return referenceColumnName;
     }
 }

@@ -9,12 +9,14 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import static com.melt.orm.criteria.By.eq;
+
 public class ProxyCallback implements MethodInterceptor {
     private Map<String, ModelConfig> modelConfigs;
     private Session session;
 
-    public ProxyCallback(Map<String, ModelConfig> modelConfigs, Session session) {
-        this.modelConfigs = modelConfigs;
+    public ProxyCallback(Session session) {
+        this.modelConfigs = session.getModelConfigs();
         this.session = session;
     }
 
@@ -25,10 +27,10 @@ public class ProxyCallback implements MethodInterceptor {
         FieldConfig fieldConfig = modelConfig.getFieldConfigByMethodName(methodName);
         if (fieldConfig.isNeedBeProxy() && methodName.startsWith("get")) {
             if (fieldConfig.isOneToManyField()) {
-                //Do one to many
                 String fieldClassName = fieldConfig.getGenericType().getName();
                 ModelConfig fieldModelConfig = modelConfigs.get(fieldClassName);
 
+//                session.find(fieldModelConfig.getModelClass(), eq("", ));
             }
             return session.find(null, null);
         } else {

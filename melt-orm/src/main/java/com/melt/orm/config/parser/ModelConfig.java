@@ -128,8 +128,9 @@ public class ModelConfig {
                         fieldSb.append(dialect.getAutoIncreaseColumn());
                     }
                 } else if (field.isManyToOneField() || field.isOneToOneField()) {
-                    fieldSb.append(splitWordsByUpperCaseChar(field.getFieldName()));
-                    fieldSb.append("_ID");
+//                    fieldSb.append(splitWordsByUpperCaseChar(field.getFieldName()));
+//                    fieldSb.append("_ID");
+                    fieldSb.append(field.getReferenceColumnName());
                     fieldSb.append(" ");
                     ModelConfig referenceModelConfig = modelConfigs.get(field.getFieldType().getName());
                     Optional<FieldConfig> primaryKey = referenceModelConfig.getPrimaryKey();
