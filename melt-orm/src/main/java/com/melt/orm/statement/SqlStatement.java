@@ -36,4 +36,8 @@ public abstract class SqlStatement {
             sqlBuilder.append(criteria.toExpression());
         }
     }
+
+    public Session getSession() {
+        return session;
+    }
 }
