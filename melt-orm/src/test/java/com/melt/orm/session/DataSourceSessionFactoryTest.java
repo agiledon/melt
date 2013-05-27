@@ -51,7 +51,7 @@ public class DataSourceSessionFactoryTest {
                 .withDialect(new MySQLDialect())
                 .build();
         Session session = sessionFactory.createSession();
-        session.find(Order.class, By.id(1));
+//        session.find(Order.class, By.id(1));
 
 //        sessionFactory.createTables();
     }
