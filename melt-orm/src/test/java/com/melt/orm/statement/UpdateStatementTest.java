@@ -33,7 +33,7 @@ public class UpdateStatementTest {
         customer.setAge(37);
         Set<Order> orders = newSet();
         customer.setOrders(orders);
-        statement.assemble(customer, nil());
+        statement.assemble(customer);
         assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 37"));
     }
 
@@ -44,7 +44,7 @@ public class UpdateStatementTest {
         customer.setName("ZhangYi");
         Set<Order> orders = newSet();
         customer.setOrders(orders);
-        statement.assemble(customer, nil());
+        statement.assemble(customer);
         assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 0"));
     }
 
@@ -54,7 +54,7 @@ public class UpdateStatementTest {
         customer.setId(1);
         Set<Order> orders = newSet();
         customer.setOrders(orders);
-        statement.assemble(customer, nil());
+        statement.assemble(customer);
         assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = null, AGE = 0"));
     }
 

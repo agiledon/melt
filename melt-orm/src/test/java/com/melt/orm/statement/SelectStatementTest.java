@@ -22,7 +22,7 @@ public class SelectStatementTest {
 
     @Test
     public void should_parse_to_select_statement() {
-        statement.assemble(Customer.class, nil());
+        statement.assemble(Customer.class);
         assertThat(statement.getSql(), is("SELECT ID, NAME, AGE FROM CUSTOMERS"));
     }
 

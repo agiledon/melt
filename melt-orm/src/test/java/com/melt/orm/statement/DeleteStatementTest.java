@@ -18,9 +18,10 @@ public class DeleteStatementTest {
         session = SessionFixture.prepareSession();
         statement = new DeleteStatement(session);
     }
+
     @Test
     public void should_parse_to_delete_statement() {
-        statement.assemble(Customer.class, nil());
+        statement.assemble(Customer.class);
         assertThat(statement.getSql(), is("DELETE FROM CUSTOMERS"));
     }
 

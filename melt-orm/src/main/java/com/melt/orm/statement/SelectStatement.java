@@ -9,6 +9,7 @@ import com.melt.orm.session.Session;
 import com.melt.orm.criteria.Criteria;
 
 import static com.google.common.collect.FluentIterable.from;
+import static com.melt.orm.criteria.By.nil;
 
 public class SelectStatement extends SqlStatement {
     private final static Joiner fieldsJoiner = Joiner.on(", ");
@@ -23,6 +24,10 @@ public class SelectStatement extends SqlStatement {
         assembleSelectClause(getModelConfig(targetEntity));
         assembleConditionClause(criteria);
         return this;
+    }
+
+    public SqlStatement assemble(Class targetEntity) {
+        return assemble(targetEntity, nil());
     }
 
     private void assembleSelectClause(ModelConfig modelConfig) {
