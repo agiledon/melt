@@ -20,7 +20,7 @@ public class QueryCommand {
         this.mapper = new Mapper(selectStatement.getSession());
     }
 
-    public <T> List<T> execute() {
+    public <T> T execute() {
         try {
             Statement statement = connection.createStatement();
             String sql = selectStatement.getSql();

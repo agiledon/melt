@@ -8,9 +8,8 @@ public class DeleteStatement extends NonQueryStatement {
         super(session);
     }
 
-    @Override
-    public SqlStatement assemble(Class targetBean, Criteria criteria) {
-        assembleDeleteClause(targetBean);
+    public SqlStatement assemble(Class targetEntity, Criteria criteria) {
+        assembleDeleteClause(targetEntity);
         assembleConditionClause(criteria);
         return this;
     }

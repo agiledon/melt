@@ -19,8 +19,6 @@ public abstract class SqlStatement {
         return sqlBuilder.toString();
     }
 
-    public abstract SqlStatement assemble(Class targetBean, Criteria criteria);
-
     protected ModelConfig getModelConfig(Class targetBean) {
         Map<String, ModelConfig> modelConfigs = session.getModelConfigs();
         ModelConfig modelConfig = modelConfigs.get(targetBean.getName());

@@ -17,9 +17,8 @@ public class SelectStatement extends SqlStatement {
         super(session);
     }
 
-    @Override
-    public SqlStatement assemble(Class targetBean, Criteria criteria) {
-        assembleSelectClause(getModelConfig(targetBean));
+    public SqlStatement assemble(Class targetEntity, Criteria criteria) {
+        assembleSelectClause(getModelConfig(targetEntity));
         assembleConditionClause(criteria);
         return this;
     }
