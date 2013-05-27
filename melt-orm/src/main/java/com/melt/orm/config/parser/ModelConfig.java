@@ -174,4 +174,8 @@ public class ModelConfig {
     public String getReferenceColumnName() {
         return referenceColumnName;
     }
+
+    public FieldConfig getFieldConfigByFieldName(String fieldName) {
+        return fieldNameAndFieldConfigMap.get(fieldName);
+    }
 }

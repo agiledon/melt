@@ -51,7 +51,7 @@ public class FieldConfig {
     }
 
     public boolean isPrimaryKeyField() {
-        if (fieldName.endsWith("id") || fieldName.endsWith("Id")) {
+        if (fieldName.equals("id")) {
             return true;
         }
         return false;
