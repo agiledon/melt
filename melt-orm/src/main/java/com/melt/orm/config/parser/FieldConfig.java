@@ -47,7 +47,7 @@ public class FieldConfig {
         this.fieldType = fieldType;
         this.setType = setType;
         this.genericType = genericType;
-        this.columnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
+        this.columnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName);
     }
 
     public boolean isPrimaryKeyField() {
@@ -104,5 +104,9 @@ public class FieldConfig {
     public String getReferenceColumnName() {
         this.referenceColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
         return referenceColumnName;
+    }
+
+    public String getColumnName() {
+        return columnName;
     }
 }

@@ -38,7 +38,7 @@ public class SelectStatement extends SqlStatement {
             @Override
             public String apply(FieldConfig input) {
                 if (!input.isNeedBeProxy()) {
-                    return input.getFieldName();
+                    return input.getColumnName();
                 }
                 return null;
             }
