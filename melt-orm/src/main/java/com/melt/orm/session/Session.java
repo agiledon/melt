@@ -5,6 +5,7 @@ import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.Criteria;
 import com.melt.orm.criteria.EqCriteria;
 import com.melt.orm.statement.SelectStatement;
+import com.melt.orm.statement.UpdateStatement;
 
 import java.sql.Connection;
 import java.util.List;
@@ -30,6 +31,12 @@ public class Session {
     public <T> T findById(Class targetEntity, int id) {
         Criteria criteria = new EqCriteria("ID", id);
         return executeQueryCommand(targetEntity, criteria);
+    }
+
+    public <T> int update(T targetEntity, Criteria criteria) {
+        UpdateStatement statement = new UpdateStatement(this);
+        statement.assemble(targetEntity, criteria);
+        return statement.createNonQueryCommand().execute();
     }
 
     private <T> T executeQueryCommand(Class targetEntity, Criteria criteria) {

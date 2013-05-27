@@ -1,6 +1,8 @@
 package com.melt.orm.criteria;
 
-import com.melt.orm.util.NameMapping;
+import com.melt.orm.util.FieldValueWrapper;
+
+import static com.melt.orm.util.FieldValueWrapper.wrap;
 
 public class EqCriteria<T> extends SingleCriteria{
 
@@ -10,11 +12,7 @@ public class EqCriteria<T> extends SingleCriteria{
 
     @Override
     public String toExpression() {
-        String targetValue = fieldValue.toString();
-        if (fieldValue instanceof String) {
-            targetValue = "'" + fieldValue + "'";
-        }
-        return fieldName + getOperator() + targetValue;
+        return fieldName + getOperator() + wrap(fieldValue);
     }
 
     @Override
