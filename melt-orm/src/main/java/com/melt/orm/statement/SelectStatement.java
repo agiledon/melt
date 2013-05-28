@@ -44,6 +44,9 @@ public class SelectStatement extends SqlStatement {
                 if (!input.isNeedBeProxy()) {
                     return input.getColumnName();
                 }
+                if (input.isManyToOneField() || input.isOneToOneField()) {
+                    return input.getReferenceColumnName();
+                }
                 return null;
             }
         }));

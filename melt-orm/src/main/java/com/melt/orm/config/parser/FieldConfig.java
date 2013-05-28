@@ -5,6 +5,7 @@ import com.google.common.base.CaseFormat;
 import java.lang.reflect.Method;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.melt.orm.util.NameMapping.getMappedName;
 
 public class FieldConfig {
     private final String columnName;
@@ -78,6 +79,7 @@ public class FieldConfig {
     }
 
     public void setOneToOne(boolean oneToOne) {
+        this.referenceColumnName = getMappedName(getFieldType().getSimpleName() + "Id");
         this.oneToOne = oneToOne;
     }
 
@@ -86,6 +88,7 @@ public class FieldConfig {
     }
 
     public void setManyToOne(boolean manyToOne) {
+        this.referenceColumnName = getMappedName(getFieldType().getSimpleName() + "Id");
         this.manyToOne = manyToOne;
     }
 
@@ -98,11 +101,11 @@ public class FieldConfig {
     }
 
     public void setOneToMany(boolean oneTOMany) {
+        this.referenceColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
         this.oneToMany = oneTOMany;
     }
 
     public String getReferenceColumnName() {
-        this.referenceColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName) + "_ID";
         return referenceColumnName;
     }
 

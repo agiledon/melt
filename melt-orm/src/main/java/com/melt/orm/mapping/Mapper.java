@@ -1,11 +1,13 @@
 package com.melt.orm.mapping;
 
+import com.google.common.base.Optional;
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.session.Session;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -89,10 +91,25 @@ public class Mapper {
                         field.getWriter().invoke(modelObject, true);
                     }
                 }
-
+            }
+            if (field.isManyToOneField() || field.isOneToOneField()) {
+                ModelConfig referenceModelConfig = modelConfigs.get(field.getFieldType().getName());
+                Object fieldEntity = getModelObject(field.getFieldType(), referenceModelConfig);
+                Method referenceEntityPrimaryKeyWriter = getReferenceEntityPrimaryKeyWriter(referenceModelConfig);
+                referenceEntityPrimaryKeyWriter.invoke(fieldEntity, resultSet.getInt(field.getReferenceColumnName()));
+                field.getWriter().invoke(modelObject, fieldEntity);
             }
         }
         return modelObject;
+    }
+
+    private Method getReferenceEntityPrimaryKeyWriter(ModelConfig referenceModelConfig) {
+        Optional<FieldConfig> primaryKey = referenceModelConfig.getPrimaryKey();
+        if (primaryKey.isPresent()) {
+            FieldConfig primaryKeyFieldConfig = primaryKey.get();
+            return primaryKeyFieldConfig.getWriter();
+        }
+        return referenceModelConfig.getFieldConfigByFieldName("id").getWriter();
     }
 
     private <T> T getModelObject(Class modelClass, ModelConfig modelConfig)  {

@@ -6,6 +6,7 @@ import com.melt.orm.dialect.DatabaseDialect;
 import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.exceptions.MeltOrmException;
 import org.junit.Test;
+import sample.model.Item;
 import sample.model.Order;
 
 import javax.sql.DataSource;
@@ -55,6 +56,10 @@ public class DataSourceSessionFactoryTest {
 //        List<Order> orders = session.find(Order.class, By.id(1));
 //        Order order = orders.get(0);
 //        order.getItems();
+//
+//        List<Item> items = session.find(Item.class, By.id(1));
+//
+//        Item item = items.get(0);
 
 //        sessionFactory.createTables();
     }

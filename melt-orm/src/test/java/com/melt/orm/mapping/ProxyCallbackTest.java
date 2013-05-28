@@ -47,7 +47,7 @@ public class ProxyCallbackTest {
         when(session.find(Item.class, eq("OrderId", 1))).thenReturn(items);
         Order order = new Order();
         order.setId(1);
-        Method getItemsMethod = Order.class.getMethod("getItems", null);
+        Method getItemsMethod = Order.class.getMethod("getItems", new Class[]{});
         List<Object> intercept = (List<Object>) callback.intercept(order, getItemsMethod, null, proxy);
         assertThat(intercept, is(items));
     }
