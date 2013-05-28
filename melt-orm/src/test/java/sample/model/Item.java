@@ -1,5 +1,7 @@
 package sample.model;
 
+import com.google.common.base.Objects;
+
 public class Item {
     private int id;
     private float price;
@@ -27,5 +29,14 @@ public class Item {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("price", price)
+                .add("order", getOrder().toString())
+                .toString();
     }
 }

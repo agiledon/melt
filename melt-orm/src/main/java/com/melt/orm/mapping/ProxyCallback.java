@@ -32,7 +32,7 @@ public class ProxyCallback implements MethodInterceptor {
         String methodName = method.getName();
         ModelConfig modelConfig = modelConfigs.get(modelClass.getName());
         FieldConfig fieldConfig = modelConfig.getFieldConfigByMethodName(methodName);
-        if (fieldConfig.isNeedBeProxy() && methodName.startsWith("get")) {
+        if (fieldConfig != null && fieldConfig.isNeedBeProxy() && methodName.startsWith("get")) {
             Integer primaryKeyValue = getPrimaryKeyValue(obj, modelConfig);
             if (fieldConfig.isOneToManyField()) {
                 String fieldClassName = fieldConfig.getGenericType().getName();
@@ -43,13 +43,12 @@ public class ProxyCallback implements MethodInterceptor {
                     referenceFieldConfig.getWriter().invoke(entity, obj);
                 }
                 return entities;
-            }  else if (fieldConfig.isOneToOneField() || fieldConfig.isManyToOneField()) {
+            }  else {
                 Object referenceEntity = proxy.invokeSuper(obj, args);
                 ModelConfig referenceEntityModelConfig = modelConfigs.get(fieldConfig.getFieldType().getName());
                 Integer referenceKeyValue = getPrimaryKeyValue(referenceEntity, referenceEntityModelConfig);
                 return session.findById(fieldConfig.getFieldType(), referenceKeyValue);
             }
-            return session.find(null, null);
         } else {
             return proxy.invokeSuper(obj, args);
         }

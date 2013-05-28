@@ -52,15 +52,19 @@ public class DataSourceSessionFactoryTest {
                 .withDatabaseConfig("jdbc:mysql://localhost:3306/melt", "com.mysql.jdbc.Driver", "root", "")
                 .withDialect(new MySQLDialect())
                 .build();
-        Session session = sessionFactory.createSession();
-        List<Order> orders = session.find(Order.class, By.id(1));
-        Order order = orders.get(0);
-        order.getItems();
-
-        List<Item> items = session.find(Item.class, By.nil());
-
-        Item item = items.get(0);
-        item.getOrder();
+//        Session session = sessionFactory.createSession();
+//        List<Order> orders = session.find(Order.class, By.id(1));
+//        Order order = orders.get(0);
+//        System.out.println(order.toString());
+//        assertThat(order.getItems().size(), is(3));
+//
+//        List<Item> items = session.find(Item.class, By.nil());
+//
+//        for (Item item : items) {
+//            System.out.println(item.toString());
+//        }
+//        Item item = items.get(0);
+//        assertThat(item.getOrder().getId(), is(1));
 //        sessionFactory.createTables();
     }
 

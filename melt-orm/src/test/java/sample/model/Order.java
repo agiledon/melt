@@ -1,5 +1,7 @@
 package sample.model;
 
+import com.google.common.base.Objects;
+
 import java.util.List;
 
 public class Order {
@@ -74,5 +76,16 @@ public class Order {
 
     public void setBill(Bill bill) {
         this.bill = bill;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", getId())
+                .add("count", getCount())
+                .add("discount", getDiscount())
+                .add("hasSent", isHasSent())
+                .add("orderAddress", getOrderAddress())
+                .toString();
     }
 }
