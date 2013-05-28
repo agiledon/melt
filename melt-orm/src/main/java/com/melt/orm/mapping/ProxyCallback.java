@@ -44,18 +44,15 @@ public class ProxyCallback implements MethodInterceptor {
                 }
                 return entities;
             }  else if (fieldConfig.isOneToOneField() || fieldConfig.isManyToOneField()) {
-
-                Integer referenceKeyValue = getReferenceKeyValue(modelConfig, primaryKeyValue);
+                Object referenceEntity = proxy.invokeSuper(obj, args);
+                ModelConfig referenceEntityModelConfig = modelConfigs.get(fieldConfig.getFieldType().getName());
+                Integer referenceKeyValue = getPrimaryKeyValue(referenceEntity, referenceEntityModelConfig);
+                return session.findById(fieldConfig.getFieldType(), referenceKeyValue);
             }
             return session.find(null, null);
         } else {
             return proxy.invokeSuper(obj, args);
         }
-    }
-
-    private Integer getReferenceKeyValue(ModelConfig modelConfig, Integer primaryKeyValue) {
-        String sql = "select * from " + modelConfig.getTableName() + "where id = " + primaryKeyValue;
-        return null;
     }
 
     private String getReferenceFieldName(String simpleName) {

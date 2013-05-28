@@ -30,7 +30,7 @@ public class Session {
     }
 
     public <T> T findById(Class targetEntity, int id) {
-        Criteria criteria = new EqCriteria("ID", id);
+        Criteria criteria = new EqCriteria("id", id);
         List<T> objects = executeQueryCommand(targetEntity, criteria);
         if (objects.size() > 0) {
             return objects.get(0);
