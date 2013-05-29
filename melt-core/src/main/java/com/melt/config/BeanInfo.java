@@ -4,6 +4,7 @@ import com.melt.config.autowired.AutoWiredBy;
 import com.melt.config.constructor.Constructor;
 import com.melt.config.constructor.ConstructorParameter;
 import com.melt.config.property.BeanProperty;
+import com.melt.core.InitializedBeans;
 import com.melt.core.InjectionContext;
 import com.melt.exceptions.InitBeanException;
 import org.slf4j.Logger;
@@ -76,30 +77,29 @@ public class BeanInfo {
     public Object initialize() {
         if (constructor.isDefaultConstructor()) {
             Class clazz = getClazz();
-            if (factoryMethod == null) {
-                return createBean(clazz);
-            }
-            return createBeanByFactory(clazz);
+            return createBean(clazz);
         }
         return null;
     }
 
-    private Object createBeanByFactory(Class clazz) {
-        try {
-            Method factory = clazz.getDeclaredMethod(factoryMethod);
-            Object bean = null;
+    public Object createBeanByFactory(InitializedBeans initializedBeans) {
+        if (factoryMethod != null) {
             try {
-                bean = createBean(clazz);
-            } catch (InitBeanException e) {
+                Method factory = clazz.getDeclaredMethod(factoryMethod);
+                Object bean = null;
+                try {
+                    bean = initializedBeans.getBean(clazz);
+                } catch (InitBeanException e) {
 
+                }
+                return factory.invoke(bean);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
-            return factory.invoke(bean);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
         return null;
     }

@@ -1,0 +1,25 @@
+project.ext {
+    dropwizardVersion = '0.6.2'
+    dropwizardAssetsVersion = '0.1.9'
+}
+
+dependencies {
+
+    compile(
+            "com.yammer.dropwizard:dropwizard-core:$dropwizardVersion",
+            "com.yammer.dropwizard:dropwizard-views:$dropwizardVersion",
+            "com.yammer.dropwizard:dropwizard-db:$dropwizardVersion",
+            "com.yammer.dropwizard:dropwizard-hibernate:$dropwizardVersion",
+            "com.bazaarvoice.dropwizard:dropwizard-configurable-assets-bundle:$dropwizardAssetsVersion",
+            'mysql:mysql-connector-java:5.1.25',
+            'cglib:cglib:3.0',
+            'org.ow2.asm:asm-util:4.0',
+            project(':melt-core'),
+            project(':melt-orm')
+    )
+
+}
+
+configurations {
+    all*.exclude(group: 'asm', model: 'asm', version: '3.1')
+}

@@ -14,8 +14,19 @@ public class BeansInitializer {
         defaultConstructorInitializing(beanInfos);
         parameterConstructorInitializing(parentContainer, beanInfos);
         propertyInitializing(parentContainer, beanInfos);
-
+        factoryInitialize(beanInfos);
+        propertyInitializing(parentContainer, beanInfos);
         return initializedBeans;
+    }
+
+    private void factoryInitialize(List<BeanInfo> beanInfos) {
+        for (BeanInfo beanInfo : beanInfos) {
+            Object bean = beanInfo.createBeanByFactory(initializedBeans);
+            if (bean != null) {
+                Class<?> beanClass = bean.getClass();
+                initializedBeans.addBean(beanClass.getSimpleName(), beanClass, bean);
+            }
+        }
     }
 
     private void defaultConstructorInitializing(List<BeanInfo> beanInfos) {

@@ -14,7 +14,23 @@ public abstract class AbstractAutoWired implements AutoWired {
     private Logger logger = LoggerFactory.getLogger(AbstractAutoWired.class);
     @Override
     public void autoWired(InjectionContext injectionContext, BeanInfo beanInfo) {
-        Field[] fields = beanInfo.getClazz().getDeclaredFields();
+        Class clazz = beanInfo.getClazz();
+        Field[] fields = clazz.getDeclaredFields();
+        setFieldValues(injectionContext, beanInfo, fields);
+        setSuperFiledValues(clazz, injectionContext, beanInfo);
+    }
+
+    private void setSuperFiledValues(Class clazz, InjectionContext injectionContext, BeanInfo beanInfo) {
+        Class superclass = clazz.getSuperclass();
+        if (superclass.getName().equals(Object.class.getName())) {
+            return;
+        }
+        Field[] declaredFields = superclass.getDeclaredFields();
+        setFieldValues(injectionContext, beanInfo, declaredFields);
+        setSuperFiledValues(superclass, injectionContext, beanInfo);
+    }
+
+    private void setFieldValues(InjectionContext injectionContext, BeanInfo beanInfo, Field[] fields) {
         Object bean = injectionContext.getInitializedBeans().getBean(beanInfo.getName());
         for (Field field : fields) {
             field.setAccessible(true);
@@ -39,7 +55,7 @@ public abstract class AbstractAutoWired implements AutoWired {
     }
 
     private boolean isNotPrimitive(Field field) {
-        return !field.getType().isPrimitive();
+        return !field.getType().isPrimitive() && !field.getType().getName().equals(String.class.getName());
     }
 
     protected abstract Object resolveBean(Container parentContainer, Field field);

@@ -21,10 +21,12 @@ public abstract class BeanProperty {
 
     public void injectPropertyValue(InjectionContext injectionContext) {
         String beanName = beanInfo.getName();
-        Object targetBean = injectionContext.getInitializedBeans().getBean(beanName);
+        Object targetBean = injectionContext.getInitializedBeans().getBean(beanInfo.getClazz());
         String message = String.format("Can't initialize bean: %s", beanName);
         try {
-            getSetMethod().invoke(targetBean, getInputParameters(injectionContext));
+            if (targetBean != null) {
+                getSetMethod().invoke(targetBean, getInputParameters(injectionContext));
+            }
         } catch (IllegalAccessException e) {
             logger.error(message);
             throw new InitBeanException(message, e);

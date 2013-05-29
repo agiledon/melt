@@ -29,6 +29,9 @@ public class InitializedBeans {
     }
 
     public void addBean(String beanName, Class clazz, Object bean) {
+        if (clazz == Object.class) {
+            return;
+        }
         Map<String, Object> beans = null;
         beans = beansWithClass.get(clazz);
         if (beans == null) {
@@ -37,6 +40,7 @@ public class InitializedBeans {
         }
         beans.put(beanName, bean);
         addBean(beanName, newArrayList(clazz.getInterfaces()), bean);
+        addBean(beanName, clazz.getSuperclass(), bean);
     }
 
     public void addBean(BeanInfo beanInfo, Object bean) {

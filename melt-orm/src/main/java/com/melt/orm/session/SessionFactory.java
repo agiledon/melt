@@ -63,13 +63,5 @@ public abstract class SessionFactory {
         return statement.execute(sql);
     }
 
-    public DatabaseDialect getDialect() {
-        return dialect;
-    }
-
-    public Map<String, ModelConfig> getModelConfigs() {
-        return modelConfigs;
-    }
-
     protected abstract Connection getConnection() throws SQLException;
 }
