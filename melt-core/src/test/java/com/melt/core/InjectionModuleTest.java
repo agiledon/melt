@@ -3,10 +3,7 @@ package com.melt.core;
 import com.melt.config.autowired.AutoWiredBy;
 import com.melt.exceptions.BeanConfigurationException;
 import com.melt.exceptions.MoreThanOneClassRegisteredException;
-import com.melt.sample.bank.beans.BankDao;
-import com.melt.sample.bank.beans.BankService;
-import com.melt.sample.bank.beans.DefaultBankDao;
-import com.melt.sample.bank.beans.DefaultBankService;
+import com.melt.sample.bank.beans.*;
 import com.melt.sample.customer.dao.*;
 import com.melt.sample.customer.domain.Customer;
 import com.melt.sample.customer.service.CustomerFiller;
@@ -392,13 +389,13 @@ public class InjectionModuleTest {
         container = Melt.createContainer(new InjectionModule() {
             @Override
             public void configure() {
-                register(DefaultBankService.class)
+                register(Factory.class)
                         .factory("init");
             }
         });
 
-        DefaultBankService bankService = container.resolve(DefaultBankService.class);
-        assertThat(bankService, instanceOf(DefaultBankService.class));
+        FactoryService factoryService = container.resolve(FactoryService.class);
+        assertThat(factoryService, instanceOf(FactoryService.class));
     }
 
     @Test(expected = MoreThanOneClassRegisteredException.class)

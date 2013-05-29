@@ -11,13 +11,6 @@ public class DefaultBankService extends AbstractBankService implements BankServi
     private String account;
     private List<String> accounts;
 
-    public DefaultBankService init(){
-        return new DefaultBankService();
-    }
-
-    public static DefaultBankService classInit(){
-        return new DefaultBankService();
-    }
 
     @Override
     public void deposit(String account, double money) {

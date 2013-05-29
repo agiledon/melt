@@ -22,6 +22,9 @@ public abstract class BeanProperty {
     public void injectPropertyValue(InjectionContext injectionContext) {
         String beanName = beanInfo.getName();
         Object targetBean = injectionContext.getInitializedBeans().getBean(beanInfo.getClazz());
+        if (targetBean == null) {
+            targetBean = injectionContext.getInitializedBeans().getBean(beanName);
+        }
         String message = String.format("Can't initialize bean: %s", beanName);
         try {
             if (targetBean != null) {

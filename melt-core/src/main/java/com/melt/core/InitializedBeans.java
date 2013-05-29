@@ -29,7 +29,7 @@ public class InitializedBeans {
     }
 
     public void addBean(String beanName, Class clazz, Object bean) {
-        if (clazz == Object.class) {
+        if (clazz == null || clazz == Object.class) {
             return;
         }
         Map<String, Object> beans = null;
