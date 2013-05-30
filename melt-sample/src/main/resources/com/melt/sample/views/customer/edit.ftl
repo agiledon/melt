@@ -43,8 +43,8 @@
             <br/>
             <label for="customerType">Type:</label>
             <select name="customerType" id="customerType">
-                <option value="COMMON" <#if customer.customerType == "COMMON" > selected</#if>>Common</option>
-                <option value="VIP" <#if customer.customerType == "VIP" > selected</#if>>VIP</option>
+                <option value="COMMON" <#if customer.customerType?? ><#if customer.customerType == "COMMON" > selected</#if></#if>>Common</option>
+                <option value="VIP"<#if customer.customerType?? > <#if customer.customerType == "VIP" > selected</#if></#if>>VIP</option>
             </select>
             <br/>
             <input type="submit" value="Update"/>

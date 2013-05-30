@@ -33,7 +33,7 @@
              <tr>
                 <td>${customer.name}</td>
                 <td>${customer.age}</td>
-                <td>${customer.customerType}</td>
+                <td><#if customer.customerType??> ${customer.customerType} </#if></td>
                 <td><a href="/customer/${customer.id}">Edit</a></td>
                 <td><a href="/customer/delete/${customer.id}">Delete</a></td>
                 <td><a href="/customer/orders/${customer.id}">Orders</a></td>

@@ -4,10 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.melt.sample.dao.CustomerDao;
 import com.melt.sample.dao.OrderDao;
-import com.melt.sample.model.Customer;
-import com.melt.sample.model.CustomerType;
-import com.melt.sample.model.Item;
-import com.melt.sample.model.Order;
+import com.melt.sample.model.*;
 import com.melt.sample.views.IndexView;
 import com.melt.sample.views.customer.AddCustomerView;
 import com.melt.sample.views.order.AddOrderView;
@@ -46,14 +43,21 @@ public class AddOrderResource {
         Customer customer = customerDao.findById(customerId);
         final Order order = new Order();
         order.setCount(count);
-        order.setCustomer(customer);
         order.setDiscount(discount);
         order.setHasSent(sent);
         order.setOrderAddress(orderAddress);
-
+        order.setBill(createBill());
+        order.setCustomer(customer);
         order.setItems(from(ITEM_SPLITTER.split(itemPrices)).transform(createItem(order)).toList());
         orderDao.insert(order);
         return new OrdersView(customer);
+    }
+
+    private Bill createBill() {
+        Bill bill = new Bill();
+        bill.setCount(1000);
+        bill.setTitle("ThoughtWorks");
+        return bill;
     }
 
     private Function<String, Item> createItem(final Order order) {

@@ -34,7 +34,7 @@
              <tr>
                 <td>${order.count}</td>
                 <td>${order.discount}</td>
-                <td>${order.hasSent}</td>
+                <td><#if order.hasSent >Yes<#else>No</#if></td>
                 <td>${order.orderAddress}</td>
                 <td><a href="/order/${order.id}">Edit</a></td>
                 <td><a href="/order/delete/${order.id}">Delete</a></td>
