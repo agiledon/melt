@@ -19,6 +19,12 @@ public class FieldConfig {
     private boolean manyToOne;
     private boolean oneToMany;
     private String referenceColumnName;
+    private boolean anEnum;
+
+    public FieldConfig(String fieldName, Class fieldType, boolean isEnum) {
+        this(fieldName, fieldType, false, null);
+        anEnum = isEnum;
+    }
 
     public Method getReader() {
         return reader;
@@ -130,5 +136,9 @@ public class FieldConfig {
             fieldValue = null;
         }
         return fieldValue;
+    }
+
+    public boolean isEnum() {
+        return anEnum;
     }
 }

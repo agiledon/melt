@@ -121,6 +121,9 @@ public class ModelMappingHandler {
                 if (fieldType.isArray() && !fieldType.getComponentType().isArray()) {
                     return new FieldConfig(field.getName(), fieldType, true, fieldType.getComponentType());
                 }
+                if (fieldType.isEnum()) {
+                    return new FieldConfig(field.getName(), fieldType, true);
+                }
                 return new FieldConfig(field.getName(), fieldType);
             }
         }).toList();
