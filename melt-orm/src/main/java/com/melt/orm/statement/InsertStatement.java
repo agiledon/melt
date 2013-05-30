@@ -3,6 +3,8 @@ package com.melt.orm.statement;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
+import com.melt.orm.command.InsertCommand;
+import com.melt.orm.command.NonQueryCommand;
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.session.Session;
@@ -18,7 +20,7 @@ public class InsertStatement extends NonQueryStatement {
     }
 
     public <T> SqlStatement assemble(T targetEntity) {
-        ModelConfig modelConfig = getModelConfig(targetEntity.getClass());
+        ModelConfig modelConfig = session.getModelConfig(targetEntity.getClass());
 
         sqlBuilder.append("INSERT INTO ");
         sqlBuilder.append(modelConfig.getTableName());
@@ -26,6 +28,11 @@ public class InsertStatement extends NonQueryStatement {
         assembleValuesClause(targetEntity, modelConfig);
 
         return this;
+    }
+
+    @Override
+    public NonQueryCommand createNonQueryCommand() {
+        return new InsertCommand(session.getConnection(), this);
     }
 
     private <T> void assembleValuesClause(final T targetEntity, ModelConfig modelConfig) {
@@ -39,8 +46,11 @@ public class InsertStatement extends NonQueryStatement {
                 from(modelConfig.getFields()).transform(new Function<FieldConfig, Object>() {
                     @Override
                     public Object apply(FieldConfig fieldConfig) {
-                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isNeedBeProxy()) {
+                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isOneToManyField()) {
                             return null;
+                        }
+                        if (fieldConfig.isManyToOneField() || fieldConfig.isOneToOneField()) {
+                            return fieldConfig.getReferenceColumnName();
                         }
                         return fieldConfig.getColumnName();
                     }
@@ -52,10 +62,13 @@ public class InsertStatement extends NonQueryStatement {
                 from(modelConfig.getFields()).transform(new Function<FieldConfig, Object>() {
                     @Override
                     public Object apply(FieldConfig fieldConfig) {
-                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isNeedBeProxy()) {
+                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isOneToManyField()) {
                             return null;
                         }
-                        return FieldValueWrapper.wrap(getFieldValue(targetEntity, fieldConfig));
+                        if (fieldConfig.isManyToOneField() || fieldConfig.isOneToOneField()) {
+                            return String.format("${%s}", fieldConfig.getReferenceColumnName());
+                        }
+                        return FieldValueWrapper.wrap(fieldConfig.getFieldValue(targetEntity));
                     }
                 }));
     }
@@ -68,7 +81,4 @@ public class InsertStatement extends NonQueryStatement {
         return fieldClauseBuilder;
     }
 
-    private boolean isNotFirstValidField(StringBuilder fieldNameClauseBuilder) {
-        return !fieldNameClauseBuilder.toString().equals("(");
-    }
 }

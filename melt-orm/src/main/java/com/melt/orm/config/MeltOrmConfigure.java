@@ -36,6 +36,11 @@ public class MeltOrmConfigure {
         return configure;
     }
 
+    public static MeltOrmConfigure register() {
+        configure = new MeltOrmConfigure();
+        return configure;
+    }
+
     public MeltOrmConfigure withDialect(DatabaseDialect dialect) {
         checkArgument(dialect != null);
         this.dialect = dialect;
@@ -71,6 +76,15 @@ public class MeltOrmConfigure {
     public SessionFactory build() {
         ModelMappingHandler modelMappingHandler = new ModelMappingHandler();
         Map<String, ModelConfig> modelConfigs = modelMappingHandler.mappingModelConfigs(modelsPackageName);
+        if (isRegisteredConnection) {
+            return createConnectionSessionFactory(modelConfigs);
+        } else if (isRegisteredDataSource) {
+            return createDataSourceSessionFactory(modelConfigs);
+        }
+        throw new MeltOrmException("Please register database information.");
+    }
+
+    public SessionFactory build(Map<String, ModelConfig> modelConfigs) {
         if (isRegisteredConnection) {
             return createConnectionSessionFactory(modelConfigs);
         } else if (isRegisteredDataSource) {

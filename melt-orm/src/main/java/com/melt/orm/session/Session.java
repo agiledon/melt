@@ -12,7 +12,10 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Maps.newHashMap;
+
 public class Session {
+    private final InsertExecutor insertExecutor = new InsertExecutor(this);
     private Connection connection;
     private Map<String, ModelConfig> modelConfigs;
 
@@ -44,6 +47,10 @@ public class Session {
         return statement.createNonQueryCommand().execute();
     }
 
+    public <T> int insert(T targetEntity) {
+        return insertExecutor.execute(targetEntity);
+    }
+
     private <T> List<T> executeQueryCommand(Class targetEntity, Criteria criteria) {
         SelectStatement statement = new SelectStatement(this);
         statement.assemble(targetEntity, criteria);
@@ -51,11 +58,16 @@ public class Session {
         return sqlCommand.execute();
     }
 
-    public void setModelConfigs(Map<String, ModelConfig> modelConfigs) {
-        this.modelConfigs = modelConfigs;
-    }
-
     public Map<String, ModelConfig> getModelConfigs() {
         return modelConfigs;
+    }
+
+    public ModelConfig getModelConfig(Class targetBean) {
+        Map<String, ModelConfig> modelConfigs = getModelConfigs();
+        ModelConfig modelConfig = modelConfigs.get(targetBean.getName());
+        if (modelConfig == null) {
+            throw new MeltOrmException("can not find model mapping.");
+        }
+        return modelConfig;
     }
 }

@@ -2,7 +2,6 @@ package com.melt.orm.statement;
 
 import com.melt.orm.session.Session;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import sample.model.Customer;
 import sample.model.Order;
@@ -21,7 +20,7 @@ public class UpdateStatementTest {
 
     @Before
     public void setUp() throws Exception {
-        session = SessionFixture.prepareSession();
+        session = TestFixture.prepareSession();
         statement = new UpdateStatement(session);
     }
 

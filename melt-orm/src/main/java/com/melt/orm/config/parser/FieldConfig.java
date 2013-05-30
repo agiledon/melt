@@ -2,9 +2,11 @@ package com.melt.orm.config.parser;
 
 import com.google.common.base.CaseFormat;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ObjectArrays.newArray;
 import static com.melt.orm.util.NameMapping.getMappedName;
 
 public class FieldConfig {
@@ -109,7 +111,24 @@ public class FieldConfig {
         return referenceColumnName;
     }
 
+    public String getOriginReferenceColumnName() {
+        return fieldName + "Id";
+
+    }
+
     public String getColumnName() {
         return columnName;
+    }
+
+    public <T> Object getFieldValue(T targetEntity) {
+        Object fieldValue;
+        try {
+            fieldValue = getReader().invoke(targetEntity, newArray(Object.class, 0));
+        } catch (IllegalAccessException e) {
+            fieldValue = null;
+        } catch (InvocationTargetException e) {
+            fieldValue = null;
+        }
+        return fieldValue;
     }
 }
