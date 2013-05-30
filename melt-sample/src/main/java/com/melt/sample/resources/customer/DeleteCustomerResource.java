@@ -9,6 +9,7 @@ import com.yammer.dropwizard.views.View;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import static com.melt.orm.criteria.By.id;
 import static com.melt.orm.criteria.By.nil;
 
 @Path("/customer/delete/{customerId}")
@@ -18,7 +19,7 @@ public class DeleteCustomerResource {
 
     @GET
     public View submit(@PathParam("customerId") int customerId) {
-        customerDao.delete(By.id(customerId));
+        customerDao.delete(id(customerId));
         System.out.println(customerId);
         return new IndexView(customerDao.find(nil()));
     }

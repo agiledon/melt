@@ -22,7 +22,7 @@ public abstract class GenericDao<T> {
     }
 
     public void delete(Criteria criteria) {
-        //TODO
+        getSession().delete(getModelClass(), criteria);
     }
 
 

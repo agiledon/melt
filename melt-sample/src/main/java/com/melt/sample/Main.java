@@ -64,6 +64,5 @@ public class Main extends Service<MeltConfiguration> {
         environment.addResource(container.resolve(EditCustomerResource.class));
         environment.addResource(container.resolve(AddCustomerResource.class));
         environment.addResource(container.resolve(DeleteCustomerResource.class));
-
     }
 }
