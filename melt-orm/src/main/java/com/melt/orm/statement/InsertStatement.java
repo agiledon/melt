@@ -7,6 +7,7 @@ import com.melt.orm.command.InsertCommand;
 import com.melt.orm.command.NonQueryCommand;
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
+import com.melt.orm.session.InsertExecutor;
 import com.melt.orm.session.Session;
 import com.melt.orm.util.FieldValueWrapper;
 
@@ -21,12 +22,10 @@ public class InsertStatement extends NonQueryStatement {
 
     public <T> SqlStatement assemble(T targetEntity) {
         ModelConfig modelConfig = session.getModelConfig(targetEntity.getClass());
-
         sqlBuilder.append("INSERT INTO ");
         sqlBuilder.append(modelConfig.getTableName());
         sqlBuilder.append(" ");
         assembleValuesClause(targetEntity, modelConfig);
-
         return this;
     }
 
@@ -81,4 +80,21 @@ public class InsertStatement extends NonQueryStatement {
         return fieldClauseBuilder;
     }
 
+    public void assembleManyToOne(int primaryKey, Class genericType) {
+        ModelConfig childModelConfig = session.getModelConfig(genericType);
+        for (FieldConfig childFieldConfig : childModelConfig.getFields()) {
+            if (childFieldConfig.isManyToOneField()) {
+                setForeignKey(childFieldConfig.getReferenceColumnName(), primaryKey);
+            }
+        }
+    }
+
+    public <T> void assembleOneToOne(T fieldValue) {
+        ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
+        for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
+            if (subFieldConfig.isOneToOneField()) {
+                setForeignKey(subFieldConfig.getReferenceColumnName(), -1);
+            }
+        }
+    }
 }

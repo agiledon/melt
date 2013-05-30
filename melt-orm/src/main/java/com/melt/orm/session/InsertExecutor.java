@@ -23,7 +23,9 @@ public class InsertExecutor {
 
         insertParentEntity(targetEntity, modelConfig);
         insertAllChildEntities(targetEntity, modelConfig);
+
         int primaryKey = insertCurrentEntity(targetEntity);
+
         insertAllChildrenEntities(targetEntity, modelConfig, primaryKey);
         updateAllChildEntity(targetEntity, modelConfig, primaryKey);
 
@@ -74,23 +76,18 @@ public class InsertExecutor {
     private void insertEachChildEntity(int primaryKey, Class genericType, Object child) {
         InsertStatement statement = new InsertStatement(session);
         statement.assemble(child);
-        ModelConfig childModelConfig = session.getModelConfig(genericType);
-        for (FieldConfig childFieldConfig : childModelConfig.getFields()) {
-            if (childFieldConfig.isManyToOneField()) {
-                statement.setForeignKey(childFieldConfig.getReferenceColumnName(), primaryKey);
-            }
-        }
+        statement.assembleManyToOne(primaryKey, genericType);
         statement.createNonQueryCommand().execute();
     }
 
     private <T> int insertCurrentEntity(T targetEntity) {
-        InsertStatement statement1 = new InsertStatement(session);
-        statement1.assemble(targetEntity);
+        InsertStatement statement = new InsertStatement(session);
+        statement.assemble(targetEntity);
         for (Map.Entry<String, Integer> foreignKey : foreignKeys.entrySet()) {
-            statement1.setForeignKey(foreignKey.getKey(), foreignKey.getValue());
+            statement.setForeignKey(foreignKey.getKey(), foreignKey.getValue());
         }
 
-        return statement1.createNonQueryCommand().execute();
+        return statement.createNonQueryCommand().execute();
     }
 
     private <T> void insertAllChildEntities(T targetEntity, ModelConfig modelConfig) {
@@ -106,18 +103,9 @@ public class InsertExecutor {
         if (fieldValue != null) {
             InsertStatement statement = new InsertStatement(session);
             statement.assemble(fieldValue);
-            setDefaultForeignKey(fieldValue, statement);
+            statement.assembleOneToOne(fieldValue);
             int foreignKey = statement.createNonQueryCommand().execute();
             foreignKeys.put(fieldConfig.getReferenceColumnName(), foreignKey);
-        }
-    }
-
-    private void setDefaultForeignKey(Object fieldValue, InsertStatement statement) {
-        ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
-        for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
-            if (subFieldConfig.isOneToOneField()) {
-                statement.setForeignKey(subFieldConfig.getReferenceColumnName(), -1);
-            }
         }
     }
 
