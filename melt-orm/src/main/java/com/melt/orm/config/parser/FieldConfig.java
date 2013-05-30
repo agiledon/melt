@@ -89,10 +89,6 @@ public class FieldConfig {
         return oneToOne;
     }
 
-    public boolean isForeignKeyField() {
-        return isOneToOneField() || isManyToOneField();
-    }
-
     public void setManyToOne(boolean manyToOne) {
         this.referenceColumnName = getMappedName(getFieldType().getSimpleName() + "Id");
         this.manyToOne = manyToOne;
@@ -113,6 +109,11 @@ public class FieldConfig {
 
     public String getReferenceColumnName() {
         return referenceColumnName;
+    }
+
+    public String getOriginReferenceColumnName() {
+        return fieldName + "Id";
+
     }
 
     public String getColumnName() {

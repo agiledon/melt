@@ -46,8 +46,12 @@ public class UpdateStatement extends NonQueryStatement {
                 from(modelConfig.getFields()).transform(new Function<FieldConfig, Object>() {
             @Override
             public Object apply(FieldConfig fieldConfig) {
-                if (fieldConfig.isPrimaryKeyField() || fieldConfig.isNeedBeProxy()) {
+                if (fieldConfig.isPrimaryKeyField() || fieldConfig.isManyToOneField() || fieldConfig.isOneToManyField()) {
                     return null;
+                }
+                if (fieldConfig.isOneToOneField()) {
+                    String referenceColumnName = fieldConfig.getReferenceColumnName();
+                    return referenceColumnName + " = " + String.format("${%s}", referenceColumnName);
                 }
                 return concatSettingValues(fieldConfig, targetEntity);
             }

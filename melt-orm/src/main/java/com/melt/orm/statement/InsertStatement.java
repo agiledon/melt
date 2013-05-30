@@ -35,22 +35,6 @@ public class InsertStatement extends NonQueryStatement {
         return new InsertCommand(session.getConnection(), this);
     }
 
-    public void setForeignKey(String referenceColumnName, int foreignKey) {
-        String variableName = String.format("${%s}", referenceColumnName);
-        replaceAll(sqlBuilder, variableName, String.valueOf(foreignKey));
-    }
-
-    private void replaceAll(StringBuilder builder, String from, String to)
-    {
-        int index = builder.indexOf(from);
-        while (index != -1)
-        {
-            builder.replace(index, index + from.length(), to);
-            index += to.length();
-            index = builder.indexOf(from, index);
-        }
-    }
-
     private <T> void assembleValuesClause(final T targetEntity, ModelConfig modelConfig) {
         sqlBuilder.append(buildFieldNameClause(modelConfig));
         sqlBuilder.append(" VALUES ");
@@ -62,10 +46,10 @@ public class InsertStatement extends NonQueryStatement {
                 from(modelConfig.getFields()).transform(new Function<FieldConfig, Object>() {
                     @Override
                     public Object apply(FieldConfig fieldConfig) {
-                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isOneToManyField() || fieldConfig.isOneToOneField()) {
+                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isOneToManyField()) {
                             return null;
                         }
-                        if (fieldConfig.isManyToOneField()) {
+                        if (fieldConfig.isManyToOneField() || fieldConfig.isOneToOneField()) {
                             return fieldConfig.getReferenceColumnName();
                         }
                         return fieldConfig.getColumnName();
@@ -78,10 +62,10 @@ public class InsertStatement extends NonQueryStatement {
                 from(modelConfig.getFields()).transform(new Function<FieldConfig, Object>() {
                     @Override
                     public Object apply(FieldConfig fieldConfig) {
-                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isOneToManyField() || fieldConfig.isOneToOneField()) {
+                        if (fieldConfig.isPrimaryKeyField() || fieldConfig.isOneToManyField()) {
                             return null;
                         }
-                        if (fieldConfig.isManyToOneField()) {
+                        if (fieldConfig.isManyToOneField() || fieldConfig.isOneToOneField()) {
                             return String.format("${%s}", fieldConfig.getReferenceColumnName());
                         }
                         return FieldValueWrapper.wrap(fieldConfig.getFieldValue(targetEntity));

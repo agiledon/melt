@@ -14,4 +14,19 @@ public abstract class NonQueryStatement extends SqlStatement {
         return new NonQueryCommand(session.getConnection(), this);
     }
 
+    protected void replaceAll(StringBuilder builder, String from, String to)
+    {
+        int index = builder.indexOf(from);
+        while (index != -1)
+        {
+            builder.replace(index, index + from.length(), to);
+            index += to.length();
+            index = builder.indexOf(from, index);
+        }
+    }
+
+    public void setForeignKey(String referenceColumnName, int foreignKey) {
+        String variableName = String.format("${%s}", referenceColumnName);
+        replaceAll(sqlBuilder, variableName, String.valueOf(foreignKey));
+    }
 }

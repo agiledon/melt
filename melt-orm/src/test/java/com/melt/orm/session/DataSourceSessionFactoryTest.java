@@ -86,7 +86,7 @@ public class DataSourceSessionFactoryTest {
     }
 
     @Test
-    public void should_insert_an_order() {
+    public void should_insert_an_order_with_items() {
         SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
         Session session = sessionFactory.createSession();
 
@@ -112,11 +112,13 @@ public class DataSourceSessionFactoryTest {
         Item item1 = new Item();
         item1.setPrice(20.0f);
         item1.setOrder(order);
+        items.add(item1);
 
 
         Item item2 = new Item();
         item2.setPrice(30.5f);
         item2.setOrder(order);
+        items.add(item2);
 
         order.setItems(items);
         bill.setOrder(order);
@@ -124,6 +126,30 @@ public class DataSourceSessionFactoryTest {
         orders.add(order);
 
         customer.setOrders(orders);
+
+        session.insert(order);
+    }
+
+    @Test
+    public void should_insert_an_order_without_item() {
+        SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
+        Session session = sessionFactory.createSession();
+
+        Customer customer = new Customer();
+        customer.setName("ZhangYi");
+        customer.setAge(37);
+
+        Bill bill = new Bill();
+        bill.setCount(200.5);
+        bill.setTitle("bill title");
+
+        Order order = new Order();
+        order.setCount(1);
+        order.setDiscount(0.7);
+        order.setOrderAddress("address");
+        order.setHasSent(false);
+        order.setCustomer(customer);
+        order.setBill(bill);
 
         session.insert(order);
     }

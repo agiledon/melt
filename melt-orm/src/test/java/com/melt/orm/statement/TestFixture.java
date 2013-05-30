@@ -43,7 +43,7 @@ public class TestFixture {
         fieldConfigs.add(new FieldConfig("id", Integer.class));
         fieldConfigs.add(new FieldConfig("name", String.class));
         fieldConfigs.add(new FieldConfig("age", int.class));
-        FieldConfig orders = new FieldConfig("orders", List.class);
+        FieldConfig orders = new FieldConfig("orders", List.class, true, Order.class);
         orders.setOneToMany(true);
         fieldConfigs.add(orders);
         return new ModelConfig(fieldConfigs, Customer.class);
@@ -77,7 +77,7 @@ public class TestFixture {
         fieldConfigs.add(new FieldConfig("discount", Double.class));
         fieldConfigs.add(new FieldConfig("hasSent", short.class));
         fieldConfigs.add(new FieldConfig("orderAddress", String.class));
-        FieldConfig items = new FieldConfig("items", List.class);
+        FieldConfig items = new FieldConfig("items", List.class, true, Item.class);
         items.setOneToMany(true);
         fieldConfigs.add(items);
         FieldConfig customer = new FieldConfig("customer", Customer.class);

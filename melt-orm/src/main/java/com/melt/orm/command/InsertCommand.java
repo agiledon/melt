@@ -19,7 +19,6 @@ public class InsertCommand extends NonQueryCommand {
         return executeInsertCommand(statement);
     }
 
-
     private int executeInsertCommand(Statement statement) throws SQLException {
         statement.executeUpdate(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS);
         ResultSet generatedKeys = statement.getGeneratedKeys();
