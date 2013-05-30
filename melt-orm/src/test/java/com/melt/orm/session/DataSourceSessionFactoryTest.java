@@ -8,10 +8,7 @@ import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.TestFixture;
 import org.junit.Before;
 import org.junit.Test;
-import sample.model.Bill;
-import sample.model.Customer;
-import sample.model.Item;
-import sample.model.Order;
+import sample.model.*;
 
 import javax.sql.DataSource;
 
@@ -72,7 +69,7 @@ public class DataSourceSessionFactoryTest {
 
     @Test
     public void should_create_tables() {
-        sessionFactory = buildSessionFactory();
+//        sessionFactory = buildSessionFactory();
         //        Session session = sessionFactory.createSession();
 //        List<Order> orders = session.find(Order.class, By.id(1));
 //        Order order = orders.get(0);
@@ -86,7 +83,7 @@ public class DataSourceSessionFactoryTest {
 //        }
 //        Item item = items.get(0);
 //        assertThat(item.getOrder().getId(), is(1));
-//        sessionFactory.createTables();
+        sessionFactory.createTables();
     }
 
     @Test
@@ -120,11 +117,13 @@ public class DataSourceSessionFactoryTest {
         session.insert(customer);
 
         customer.setName("He Haiyang");
+        customer.setCustomerType(CustomerType.COMMONS);
         session.update(customer);
 
         List<Customer> customers = session.find(Customer.class, By.eq("name", "He Haiyang"));
         assertThat(customers.size(), is(1));
         assertThat(customers.get(0).getName(), is("He Haiyang"));
+        assertThat(customers.get(0).getCustomerType(), is(CustomerType.COMMONS));
     }
 
     @Test
@@ -146,7 +145,6 @@ public class DataSourceSessionFactoryTest {
 
     @Test
     public void should_display_create_tables() {
-        sessionFactory = buildSessionFactory();
         sessionFactory.showCreateTablesSQL();
     }
 

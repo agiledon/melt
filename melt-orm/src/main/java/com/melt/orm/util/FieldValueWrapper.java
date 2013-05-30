@@ -5,8 +5,12 @@ public class FieldValueWrapper {
         if (fieldValue == null) {
             return "null";
         }
-        if (fieldValue instanceof String) {
+        if (fieldValue instanceof String || fieldValue instanceof Enum) {
             return "'" + fieldValue + "'";
+        }
+        if (fieldValue instanceof Boolean) {
+            Boolean booleanValue = (Boolean) fieldValue;
+            return booleanValue ? "1" : "0";
         }
         return fieldValue.toString();
     }

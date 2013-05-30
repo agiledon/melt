@@ -1,15 +1,18 @@
 package com.melt.orm.config.parser;
 
 import com.google.common.base.CaseFormat;
+import com.melt.orm.util.GlobalConsent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ObjectArrays.newArray;
+import static com.melt.orm.util.GlobalConsent.ERROR_CODE;
 import static com.melt.orm.util.NameMapping.getMappedName;
 
 public class FieldConfig {
+    public static final int ERROR_CODE = -1;
     private final String columnName;
     private String fieldName;
     private Class fieldType;
@@ -140,19 +143,5 @@ public class FieldConfig {
 
     public boolean isEnum() {
         return anEnum;
-    }
-
-    public <T> int getIdOfFieldValue(T targetEntity) {
-        Object fieldValue = getFieldValue(targetEntity);
-        if (fieldValue != null) {
-            try {
-                return fieldValue.getClass().getField("id").getInt(fieldValue);
-            } catch (IllegalAccessException e) {
-                return -1;
-            } catch (NoSuchFieldException e) {
-                return -1;
-            }
-        }
-        return -1;
     }
 }

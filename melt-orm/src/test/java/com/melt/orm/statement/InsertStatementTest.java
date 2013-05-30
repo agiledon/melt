@@ -4,6 +4,7 @@ import com.melt.orm.session.Session;
 import org.junit.Before;
 import org.junit.Test;
 import sample.model.Customer;
+import sample.model.CustomerType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -24,8 +25,9 @@ public class InsertStatementTest {
         customer.setId(2);
         customer.setName("ZhangYi");
         customer.setAge(37);
+        customer.setCustomerType(CustomerType.COMMONS);
         statement.assemble(customer);
         System.out.println(statement.getSql());
-        assertThat(statement.getSql(), is("INSERT INTO CUSTOMERS (NAME, AGE) VALUES ('ZhangYi', 37)"));
+        assertThat(statement.getSql(), is("INSERT INTO CUSTOMERS (NAME, AGE, CUSTOMER_TYPE) VALUES ('ZhangYi', 37, 'COMMONS')"));
     }
 }

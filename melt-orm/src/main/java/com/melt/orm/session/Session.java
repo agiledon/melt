@@ -10,6 +10,7 @@ import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.DeleteStatement;
 import com.melt.orm.statement.SelectStatement;
 import com.melt.orm.statement.UpdateStatement;
+import com.melt.orm.util.GlobalConsent;
 
 import java.sql.Connection;
 import java.util.List;
@@ -61,12 +62,25 @@ public class Session {
         ModelConfig modelConfig = getModelConfig(targetEntity.getClass());
         for (FieldConfig fieldConfig : modelConfig.getFields()) {
             if (fieldConfig.isOneToOneField()) {
-                int foreignKey = fieldConfig.getIdOfFieldValue(targetEntity);
+                Object fieldValue = fieldConfig.getFieldValue(targetEntity);
+                int foreignKey = getIdOfFieldValue(fieldValue);
                 statement.setForeignKey(fieldConfig.getReferenceColumnName(), foreignKey);
             }
         }
 
         return statement.createNonQueryCommand().execute();
+    }
+
+    private Integer getIdOfFieldValue(Object fieldValue) {
+        ModelConfig subModelConfig = getModelConfig(fieldValue.getClass());
+        if (subModelConfig != null) {
+            for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
+                if ("id".equalsIgnoreCase(subFieldConfig.getFieldName())) {
+                    return (Integer)subFieldConfig.getFieldValue(fieldValue);
+                }
+            }
+        }
+        return GlobalConsent.ERROR_CODE;
     }
 
     public <T> int insert(T targetEntity) {
