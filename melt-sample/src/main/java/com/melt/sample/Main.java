@@ -9,6 +9,7 @@ import com.melt.orm.config.MeltOrmManager;
 import com.melt.sample.config.MeltConfiguration;
 import com.melt.sample.dao.OrderDao;
 import com.melt.sample.model.Order;
+import com.melt.sample.resources.IndexResource;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
@@ -47,5 +48,7 @@ public class Main extends Service<MeltConfiguration> {
         OrderDao orderDao = container.resolve(OrderDao.class);
         Order order = orderDao.findById(1);
         System.out.println(order.getCount());
+        environment.addResource(new IndexResource());
+
     }
 }

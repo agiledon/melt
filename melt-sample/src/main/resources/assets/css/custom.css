@@ -1,0 +1,79 @@
+body {
+	background: #efefef;
+}
+
+#search_customers {
+    margin-top: 10px;
+	margin-left: 10px;
+    background: #444;
+    border: 0 none;
+    font: bold 14px Arial,Helvetica,Sans-serif;
+    color: #fff;
+    width: 150px;
+    height: 20px;
+    padding: 6px 25px 6px 25px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.7s ease 0s;
+}
+
+#search_customers:focus {
+    width: 200px;
+    border: 0 none;
+}
+
+#accordion h3 .custom-name {
+    width: 240px;
+    display: inline-block;
+}
+
+.brands {
+    margin-left: 100px;
+}
+
+.header-wrapper {
+    background: white;
+    margin: 20px auto 30px;
+}
+
+.description {
+    color: rgb(79, 187, 92);
+    margin-left: 20px;
+    line-height: 87px;
+    font-weight: bold;
+    font-size: 28px;
+}
+
+.logo {
+    background: url(images/melt.png) no-repeat;
+    background-size: 150px;
+    text-indent: 10000px;
+    overflow: hidden;
+    width: 150px;
+    height: 87px;
+    margin: 0;
+    float: left;
+}
+
+.ui-state-active {
+    background: #6DC4EA;
+}
+
+.brand-img {
+    height: 75px;
+}
+
+.brands-title {
+    font-weight: bold;
+    color: #7c756c;
+    font-size: 19px;
+}
+
