@@ -1,6 +1,7 @@
 package com.melt.orm.mapping;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.exceptions.MeltOrmException;
@@ -64,7 +65,11 @@ public class Mapper {
                 }
 
                 if (field.getFieldType().getName().equals(String.class.getName())) {
-                    field.getWriter().invoke(modelObject, resultSet.getString(field.getColumnName()));
+                    String value = resultSet.getString(field.getColumnName());
+                    if (Strings.isNullOrEmpty(value)) {
+                        continue;
+                    }
+                    field.getWriter().invoke(modelObject, value);
                 }
 
                 if (field.getFieldType().getName().equals(BigDecimal.class.getName())) {
@@ -94,6 +99,9 @@ public class Mapper {
 
                 if (field.isEnum()) {
                     String value = resultSet.getString(field.getColumnName());
+                    if (Strings.isNullOrEmpty(value)) {
+                        continue;
+                    }
                     field.getWriter().invoke(modelObject, Enum.valueOf(field.getFieldType(), value));
                 }
             }

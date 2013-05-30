@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public abstract class AbstractAutoWired implements AutoWired {
     private Logger logger = LoggerFactory.getLogger(AbstractAutoWired.class);
@@ -33,6 +34,10 @@ public abstract class AbstractAutoWired implements AutoWired {
     private void setFieldValues(InjectionContext injectionContext, BeanInfo beanInfo, Field[] fields) {
         Object bean = injectionContext.getInitializedBeans().getBean(beanInfo.getName());
         for (Field field : fields) {
+            String modifiers = Modifier.toString(field.getModifiers());
+            if (modifiers.contains("static") || modifiers.contains("final")) {
+                continue;
+            }
             field.setAccessible(true);
             try {
                 if (isNotPrimitive(field)) {

@@ -19,25 +19,30 @@
         </header>
 	</div>
 	<section class="container">
-	    <h2>Add Customer</h2>
-        <form id="form" action="/customer/add" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name"/>
-            <br/>
-            <label for="age">Age:</label>
-            <input type="text" name="age" id="age"/>
-            <br/>
-            <label for="customerType">Type:</label>
-
-            <select name="customerType" id="customerType">
-                <option value="COMMON">Common</option>
-                <option value="VIP">VIP</option>
-            </select>
-            <br/>
-            <input type="submit" value="Add"/>
-        </form>
-        <br/>
-        <a href="/index.html">Back</a>
+	    <h2>${customer.name}'s Orders</h2>
+	    <table>
+	        <tr>
+                <th>Count</th>
+                <th>Discount</th>
+                <th>Sent</th>
+                <th>Order Address</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Items</th>
+	        </tr>
+        <#list orders as order>
+             <tr>
+                <td>${order.count}</td>
+                <td>${order.discount}</td>
+                <td>${order.hasSent}</td>
+                <td>${order.orderAddress}</td>
+                <td><a href="/order/${order.id}">Edit</a></td>
+                <td><a href="/order/delete/${order.id}">Delete</a></td>
+                <td><a href="/order/items/${customer.id}">Items</a></td>
+             </tr>
+        </#list>
+        </table>
+        <a href="/customer/${customer.id}/order/add">Add New Order</a>
 	</section>
 	<footer class="container">
 	</footer>

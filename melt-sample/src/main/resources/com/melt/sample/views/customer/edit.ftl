@@ -34,14 +34,21 @@
 	</div>
 	<section class="container">
 	    <h2>Edit Customer</h2>
-        <form id="form" action="/customer/${customer.id}" method="POST">
+        <form id="form" action="/customer/edit/${customer.id}" method="POST">
             <label for="name">Name:</label>
             <input type="text" name="name" id="name" value="${customer.name}"/>
             <br/>
             <label for="age">Age:</label>
             <input type="text" name="age" id="age" value="${customer.age}"/>
+            <br/>
+            <label for="customerType">Type:</label>
+            <select name="customerType" id="customerType">
+                <option value="COMMON" <#if customer.customerType == "COMMON" > selected</#if>>Common</option>
+                <option value="VIP" <#if customer.customerType == "VIP" > selected</#if>>VIP</option>
+            </select>
+            <br/>
+            <input type="submit" value="Update"/>
         </form>
-        <button id="submit">Update</button>
         <br/>
         <a href="/index.html">Back</a>
 	</section>

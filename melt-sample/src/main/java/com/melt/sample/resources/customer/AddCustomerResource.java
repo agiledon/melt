@@ -3,6 +3,7 @@ package com.melt.sample.resources.customer;
 import com.melt.orm.criteria.By;
 import com.melt.sample.dao.CustomerDao;
 import com.melt.sample.model.Customer;
+import com.melt.sample.model.CustomerType;
 import com.melt.sample.views.IndexView;
 import com.melt.sample.views.customer.AddCustomerView;
 import com.yammer.dropwizard.views.View;
@@ -25,10 +26,12 @@ public class AddCustomerResource {
 
     @POST
     public View submit(@FormParam("name") String name,
-                       @FormParam("age") int age) {
+                       @FormParam("age") int age,
+                       @FormParam("customerType") String customerType) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setAge(age);
+        customer.setCustomerType(CustomerType.valueOf(customerType));
         customerDao.insert(customer);
         return new IndexView(customerDao.find(nil()));
     }

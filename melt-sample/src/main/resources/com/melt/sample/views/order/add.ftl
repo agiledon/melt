@@ -19,25 +19,28 @@
         </header>
 	</div>
 	<section class="container">
-	    <h2>Add Customer</h2>
-        <form id="form" action="/customer/add" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name"/>
+	    <h2>Add Order</h2>
+        <form id="form" action="/customer/${customerId}/order/add" method="POST">
+            <label for="count">Count:</label>
+            <input type="text" name="count" id="count"/>
             <br/>
-            <label for="age">Age:</label>
-            <input type="text" name="age" id="age"/>
+            <label for="discount">Discount:</label>
+            <input type="text" name="discount" id="discount"/>
             <br/>
-            <label for="customerType">Type:</label>
-
-            <select name="customerType" id="customerType">
-                <option value="COMMON">Common</option>
-                <option value="VIP">VIP</option>
-            </select>
+            <label for="sent">Sent:</label>
+            <input type="radio" name="sent" value="true"/>Yes
+            <input type="radio" name="sent" value="false"/>No
+            <br/>
+            <label for="orderAddress">Order Address:</label>
+            <input type="text" name="orderAddress" id="orderAddress"/>
+            <br/>
+            <label for="itemPrices">Item Prices:</label>
+            <input type="text" name="itemPrices" id="itemPrices"/>
             <br/>
             <input type="submit" value="Add"/>
         </form>
         <br/>
-        <a href="/index.html">Back</a>
+        <a href="/customer/orders/${customerId}">Back</a>
 	</section>
 	<footer class="container">
 	</footer>

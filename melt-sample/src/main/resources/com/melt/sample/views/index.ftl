@@ -36,7 +36,7 @@
                 <td>${customer.customerType}</td>
                 <td><a href="/customer/${customer.id}">Edit</a></td>
                 <td><a href="/customer/delete/${customer.id}">Delete</a></td>
-                <td><a href="/order/${customer.id}">Orders</a></td>
+                <td><a href="/customer/orders/${customer.id}">Orders</a></td>
              </tr>
         </#list>
         </table>

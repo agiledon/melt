@@ -13,7 +13,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static com.melt.orm.criteria.By.eq;
 
 public class ProxyCallback implements MethodInterceptor {
@@ -41,6 +43,13 @@ public class ProxyCallback implements MethodInterceptor {
                 List<Object> entities = session.find(fieldModelConfig.getModelClass(), eq(modelConfig.getReferenceColumnName(), primaryKeyValue));
                 for (Object entity : entities) {
                     referenceFieldConfig.getWriter().invoke(entity, obj);
+                }
+                if (fieldConfig.getFieldType().getName().equals(Set.class.getName())) {
+                    return newHashSet(entities);
+                }
+
+                if (fieldConfig.getFieldType().isArray()) {
+                    return entities.toArray();
                 }
                 return entities;
             }  else {

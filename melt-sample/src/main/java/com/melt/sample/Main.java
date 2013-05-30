@@ -10,15 +10,15 @@ import com.melt.sample.config.MeltConfiguration;
 import com.melt.sample.dao.CustomerDao;
 import com.melt.sample.dao.OrderDao;
 import com.melt.sample.model.Order;
-import com.melt.sample.resources.customer.AddCustomerResource;
-import com.melt.sample.resources.customer.CustomerResource;
-import com.melt.sample.resources.customer.DeleteCustomerResource;
-import com.melt.sample.resources.customer.EditCustomerResource;
+import com.melt.sample.resources.customer.*;
 import com.melt.sample.resources.IndexResource;
+import com.melt.sample.resources.order.AddOrderResource;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.views.ViewBundle;
+
+import java.util.List;
 
 public class Main extends Service<MeltConfiguration> {
     public static void main(String[] args) throws Exception {
@@ -53,6 +53,8 @@ public class Main extends Service<MeltConfiguration> {
                 register(EditCustomerResource.class);
                 register(AddCustomerResource.class);
                 register(DeleteCustomerResource.class);
+                register(CustomerOrdersResource.class);
+                register(AddOrderResource.class);
             }
         });
         environment.addResource(container.resolve(IndexResource.class));
@@ -60,5 +62,7 @@ public class Main extends Service<MeltConfiguration> {
         environment.addResource(container.resolve(EditCustomerResource.class));
         environment.addResource(container.resolve(AddCustomerResource.class));
         environment.addResource(container.resolve(DeleteCustomerResource.class));
+        environment.addResource(container.resolve(CustomerOrdersResource.class));
+        environment.addResource(container.resolve(AddOrderResource.class));
     }
 }
