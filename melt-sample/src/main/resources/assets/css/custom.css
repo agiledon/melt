@@ -77,3 +77,10 @@ body {
     font-size: 19px;
 }
 
+form {
+    width: 240px;
+}
+form label {
+    padding-right: 75px;
+}
+

@@ -10,6 +10,20 @@
     <script src="/assets/js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="/assets/js/jquery-ui.js" type="text/javascript"></script>
     <script src="/assets/js/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#submit").click(function(){
+                $.get(
+                            '/customer/edit/${customer.id}',
+                            $("#form").serialize(),
+                            function(){
+                                window.location = '/index.html';
+                            }
+                        );
+            });
+        });
+
+    </script>
   </head>
   <body>
     <div class="header-wrapper">
@@ -19,26 +33,17 @@
         </header>
 	</div>
 	<section class="container">
-	    <h2>Customers</h2>
-	    <table>
-	        <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Orders</th>
-	        </tr>
-        <#list customers as customer>
-             <tr>
-                <td>${customer.name}</td>
-                <td>${customer.age}</td>
-                <td><a href="/customer/${customer.id}">Edit</a></td>
-                <td><a href="/customer/delete/${customer.id}">Delete</a></td>
-                <td><a href="/order/${customer.id}">Orders</a></td>
-             </tr>
-        </#list>
-        </table>
-        <a href="/customer/add">Add New Customer</a>
+	    <h2>Edit Customer</h2>
+        <form id="form" action="/customer/${customer.id}" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" value="${customer.name}"/>
+            <br/>
+            <label for="age">Age:</label>
+            <input type="text" name="age" id="age" value="${customer.age}"/>
+        </form>
+        <button id="submit">Update</button>
+        <br/>
+        <a href="/index.html">Back</a>
 	</section>
 	<footer class="container">
 	</footer>

@@ -10,8 +10,7 @@ public abstract class GenericDao<T> {
     private SessionFactory sessionFactory;
 
     public int insert(T t) {
-        //TODO
-        return 0;
+        return getSession().insert(t);
     }
 
     public List<T> find(Criteria criteria) {
