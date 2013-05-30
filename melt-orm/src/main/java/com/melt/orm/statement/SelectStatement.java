@@ -21,7 +21,7 @@ public class SelectStatement extends SqlStatement {
 
     public SqlStatement assemble(Class targetEntity, Criteria criteria) {
         this.targetEntity = targetEntity;
-        assembleSelectClause(getModelConfig(targetEntity));
+        assembleSelectClause(session.getModelConfig(targetEntity));
         assembleConditionClause(criteria);
         return this;
     }

@@ -6,9 +6,6 @@ import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.Criteria;
 import com.melt.orm.session.Session;
-import com.melt.orm.util.FieldValueWrapper;
-
-import java.lang.reflect.InvocationTargetException;
 
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.ObjectArrays.newArray;
@@ -23,7 +20,7 @@ public class UpdateStatement extends NonQueryStatement {
     }
 
     public <T> SqlStatement assemble(T targetEntity, Criteria criteria) {
-        ModelConfig modelConfig = getModelConfig(targetEntity.getClass());
+        ModelConfig modelConfig = session.getModelConfig(targetEntity.getClass());
 
         sqlBuilder.append("UPDATE ");
         sqlBuilder.append(modelConfig.getTableName());
@@ -59,7 +56,7 @@ public class UpdateStatement extends NonQueryStatement {
     }
 
     private <T> String concatSettingValues(FieldConfig fieldConfig, T targetEntity) {
-        return fieldConfig.getColumnName() + " = " + wrap(getFieldValue(targetEntity, fieldConfig));
+        return fieldConfig.getColumnName() + " = " + wrap(fieldConfig.getFieldValue(targetEntity));
     }
 
 }

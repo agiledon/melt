@@ -14,7 +14,7 @@ public class InsertStatementTest {
 
     @Before
     public void setUp() throws Exception {
-        session = SessionFixture.prepareSession();
+        session = TestFixture.prepareSession();
         statement = new InsertStatement(session);
     }
 

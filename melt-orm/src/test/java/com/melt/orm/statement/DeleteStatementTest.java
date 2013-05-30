@@ -15,7 +15,7 @@ public class DeleteStatementTest {
 
     @Before
     public void setUp() throws Exception {
-        session = SessionFixture.prepareSession();
+        session = TestFixture.prepareSession();
         statement = new DeleteStatement(session);
     }
 
