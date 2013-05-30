@@ -144,7 +144,6 @@ public class ModelConfig {
                         fieldSb.append(dialect.mappingFieldType(Integer.TYPE));
                     }
                     fieldSb.append(" ");
-                    fieldSb.append("NOT NULL");
                 } else if (field.isEnum()) {
                     fieldSb.append(NameMapping.getMappedName(field.getFieldName()));
                     fieldSb.append(" ");
