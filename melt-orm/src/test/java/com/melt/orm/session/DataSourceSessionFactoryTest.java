@@ -128,6 +128,23 @@ public class DataSourceSessionFactoryTest {
     }
 
     @Test
+    public void should_update_order() {
+        Order order = createOrder();
+        session.insert(order);
+
+        List<Order> orders = session.find(Order.class, By.eq("orderAddress", "address"));
+        order = orders.get(0);
+
+        order.setOrderAddress("new address");
+        List<Item> items = order.getItems();
+        items.get(0).setPrice(9999.9f);
+        session.update(order);
+
+        List<Order> newOrders = session.find(Order.class, By.eq("orderAddress", "new address"));
+        assertThat(newOrders.size(), is(1));
+    }
+
+    @Test
     public void should_display_create_tables() {
         sessionFactory = buildSessionFactory();
         sessionFactory.showCreateTablesSQL();

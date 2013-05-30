@@ -1,6 +1,7 @@
 package com.melt.orm.session;
 
 import com.melt.orm.command.QueryCommand;
+import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.By;
 import com.melt.orm.criteria.Criteria;
@@ -56,6 +57,15 @@ public class Session {
     public <T> int update(T targetEntity, Criteria criteria) {
         UpdateStatement statement = new UpdateStatement(this);
         statement.assemble(targetEntity, criteria);
+
+        ModelConfig modelConfig = getModelConfig(targetEntity.getClass());
+        for (FieldConfig fieldConfig : modelConfig.getFields()) {
+            if (fieldConfig.isOneToOneField()) {
+                int foreignKey = fieldConfig.getIdOfFieldValue(targetEntity);
+                statement.setForeignKey(fieldConfig.getReferenceColumnName(), foreignKey);
+            }
+        }
+
         return statement.createNonQueryCommand().execute();
     }
 
@@ -94,10 +104,19 @@ public class Session {
 
     public ModelConfig getModelConfig(Class targetBean) {
         Map<String, ModelConfig> modelConfigs = getModelConfigs();
-        ModelConfig modelConfig = modelConfigs.get(targetBean.getName());
+        ModelConfig modelConfig = modelConfigs.get(getBeanClassName(targetBean));
         if (modelConfig == null) {
             throw new MeltOrmException("can not find model mapping.");
         }
         return modelConfig;
+    }
+
+    private String getBeanClassName(Class targetBean) {
+        String className = targetBean.getName();
+        if (className.contains("$$")){
+            int end = className.indexOf("$$");
+            return className.substring(0, end);
+        }
+        return className;
     }
 }

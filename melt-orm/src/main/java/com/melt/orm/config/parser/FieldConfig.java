@@ -141,4 +141,18 @@ public class FieldConfig {
     public boolean isEnum() {
         return anEnum;
     }
+
+    public <T> int getIdOfFieldValue(T targetEntity) {
+        Object fieldValue = getFieldValue(targetEntity);
+        if (fieldValue != null) {
+            try {
+                return fieldValue.getClass().getField("id").getInt(fieldValue);
+            } catch (IllegalAccessException e) {
+                return -1;
+            } catch (NoSuchFieldException e) {
+                return -1;
+            }
+        }
+        return -1;
+    }
 }
