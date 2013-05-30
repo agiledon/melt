@@ -25,12 +25,9 @@ public abstract class GenericDao<T> {
         getSession().delete(getModelClass(), criteria);
     }
 
-
     public void update(T t, Criteria criteria) {
-        //TODO
+        getSession().update(t, criteria);
     }
-
-
 
     protected Session getSession() {
         return sessionFactory.createSession();
