@@ -83,7 +83,7 @@ public class DataSourceSessionFactoryTest {
 //        }
 //        Item item = items.get(0);
 //        assertThat(item.getOrder().getId(), is(1));
-        sessionFactory.createTables();
+//        sessionFactory.createTables();
     }
 
     @Test
