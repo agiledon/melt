@@ -91,6 +91,11 @@ public class Mapper {
                         field.getWriter().invoke(modelObject, true);
                     }
                 }
+
+                if (field.isEnum()) {
+                    String value = resultSet.getString(field.getColumnName());
+                    field.getWriter().invoke(modelObject, Enum.valueOf(field.getFieldType(), value));
+                }
             }
             if (field.isManyToOneField() || field.isOneToOneField()) {
                 ModelConfig referenceModelConfig = modelConfigs.get(field.getFieldType().getName());

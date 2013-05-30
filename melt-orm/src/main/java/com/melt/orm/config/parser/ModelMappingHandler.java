@@ -31,7 +31,9 @@ public class ModelMappingHandler {
         List<Class> classesUnderPackage = getClassesUnderPackage(packageName);
         Map<String, ModelConfig> modelConfigMaps = newHashMap();
         for (Class modelClass : classesUnderPackage) {
-            modelConfigMaps.put(modelClass.getName(), mappingClass2Model(modelClass));
+            if (!modelClass.isEnum()) {
+                modelConfigMaps.put(modelClass.getName(), mappingClass2Model(modelClass));
+            }
         }
         handleOneToOneMapping(modelConfigMaps);
         handleOneToManyMapping(modelConfigMaps);
@@ -91,7 +93,8 @@ public class ModelMappingHandler {
             public Class apply(File file) {
                 String className = Files.getNameWithoutExtension(file.getName());
                 try {
-                    return Class.forName(packageName + "." + className);
+                    Class<?> clazz = Class.forName(packageName + "." + className);
+                    return clazz;
                 } catch (Exception e) {
                     logger.error(String.format("init model %s has error", className));
                     throw new MeltOrmException(e);

@@ -55,10 +55,6 @@ public class Main extends Service<MeltConfiguration> {
                 register(DeleteCustomerResource.class);
             }
         });
-
-        OrderDao orderDao = container.resolve(OrderDao.class);
-        Order order = orderDao.findById(1);
-        System.out.println(order.getCount());
         environment.addResource(container.resolve(IndexResource.class));
         environment.addResource(container.resolve(CustomerResource.class));
         environment.addResource(container.resolve(EditCustomerResource.class));

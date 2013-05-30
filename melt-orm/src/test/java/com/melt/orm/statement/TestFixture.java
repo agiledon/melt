@@ -6,10 +6,7 @@ import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.session.Session;
 import org.mockito.Mockito;
-import sample.model.Bill;
-import sample.model.Customer;
-import sample.model.Item;
-import sample.model.Order;
+import sample.model.*;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +40,7 @@ public class TestFixture {
         fieldConfigs.add(new FieldConfig("id", Integer.class));
         fieldConfigs.add(new FieldConfig("name", String.class));
         fieldConfigs.add(new FieldConfig("age", int.class));
+        fieldConfigs.add(new FieldConfig("customerType", CustomerType.class, true));
         FieldConfig orders = new FieldConfig("orders", List.class, true, Order.class);
         orders.setOneToMany(true);
         fieldConfigs.add(orders);

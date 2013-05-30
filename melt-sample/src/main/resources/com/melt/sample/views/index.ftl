@@ -24,6 +24,7 @@
 	        <tr>
                 <th>Name</th>
                 <th>Age</th>
+                <th>Type</th>
                 <th>Edit</th>
                 <th>Delete</th>
                 <th>Orders</th>
@@ -32,6 +33,7 @@
              <tr>
                 <td>${customer.name}</td>
                 <td>${customer.age}</td>
+                <td>${customer.customerType}</td>
                 <td><a href="/customer/${customer.id}">Edit</a></td>
                 <td><a href="/customer/delete/${customer.id}">Delete</a></td>
                 <td><a href="/order/${customer.id}">Orders</a></td>

@@ -6,6 +6,7 @@ public class Customer {
     private int id;
     private String name;
     private int age;
+    private CustomerType customerType;
     private Set<Order> orders;
 
     public int getId() {
@@ -38,5 +39,13 @@ public class Customer {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 }

@@ -145,6 +145,11 @@ public class ModelConfig {
                     }
                     fieldSb.append(" ");
                     fieldSb.append("NOT NULL");
+                } else if (field.isEnum()) {
+                    fieldSb.append(NameMapping.getMappedName(field.getFieldName()));
+                    fieldSb.append(" ");
+                    fieldSb.append(dialect.mappingFieldType(String.class));
+                    fieldSb.append(" ");
                 } else {
                     return null;
                 }
