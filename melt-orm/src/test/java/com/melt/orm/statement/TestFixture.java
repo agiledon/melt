@@ -73,7 +73,7 @@ public class TestFixture {
         fieldConfigs.add(new FieldConfig("id", Integer.class));
         fieldConfigs.add(new FieldConfig("count", Integer.class));
         fieldConfigs.add(new FieldConfig("discount", Double.class));
-        fieldConfigs.add(new FieldConfig("hasSent", short.class));
+        fieldConfigs.add(new FieldConfig("hasSent", boolean.class));
         fieldConfigs.add(new FieldConfig("orderAddress", String.class));
         FieldConfig items = new FieldConfig("items", List.class, true, Item.class);
         items.setOneToMany(true);

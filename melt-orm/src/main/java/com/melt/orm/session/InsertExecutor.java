@@ -6,9 +6,12 @@ import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.By;
 import com.melt.orm.statement.InsertStatement;
 import com.melt.orm.statement.UpdateStatement;
+import com.melt.orm.util.GlobalConsent;
 
 import java.util.Collection;
 import java.util.Map;
+
+import static com.melt.orm.util.GlobalConsent.ERROR_CODE;
 
 public class InsertExecutor {
     private final Map<String,Integer> foreignKeys = Maps.newHashMap();
@@ -47,7 +50,7 @@ public class InsertExecutor {
             for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
                 if (subFieldConfig.isOneToOneField()) {
                     UpdateStatement updateStatement = new UpdateStatement(session);
-                    updateStatement.assemble(fieldValue, By.eq(subFieldConfig.getOriginReferenceColumnName(), -1));
+                    updateStatement.assemble(fieldValue, By.eq(subFieldConfig.getOriginReferenceColumnName(), ERROR_CODE));
                     updateStatement.setForeignKey(subFieldConfig.getReferenceColumnName(), primaryKey);
                     updateStatement.createNonQueryCommand().execute();
                 }

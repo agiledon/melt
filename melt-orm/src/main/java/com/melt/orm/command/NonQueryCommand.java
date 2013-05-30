@@ -3,6 +3,7 @@ package com.melt.orm.command;
 import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.InsertStatement;
 import com.melt.orm.statement.NonQueryStatement;
+import com.melt.orm.util.GlobalConsent;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,7 +26,7 @@ public class NonQueryCommand {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1;
+        return GlobalConsent.ERROR_CODE;
     }
 
     protected int executeCommand(Statement statement) throws SQLException {

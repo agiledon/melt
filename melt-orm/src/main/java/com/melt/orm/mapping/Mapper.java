@@ -92,7 +92,7 @@ public class Mapper {
                     int value = resultSet.getInt(field.getColumnName());
                     if (value == 0) {
                         field.getWriter().invoke(modelObject, false);
-                    }else {
+                    } else {
                         field.getWriter().invoke(modelObject, true);
                     }
                 }
@@ -125,11 +125,11 @@ public class Mapper {
         return referenceModelConfig.getFieldConfigByFieldName("id").getWriter();
     }
 
-    private <T> T getModelObject(Class modelClass, ModelConfig modelConfig)  {
+    private <T> T getModelObject(Class modelClass, ModelConfig modelConfig) {
         T obj = null;
         if (modelConfig.isNeedBeProxy()) {
             obj = ProxyFactory.getProxy(modelClass, session);
-        }else {
+        } else {
             try {
                 obj = (T) modelClass.newInstance();
             } catch (InstantiationException e) {

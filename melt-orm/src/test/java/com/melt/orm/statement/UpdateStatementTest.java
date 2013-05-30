@@ -4,6 +4,7 @@ import com.melt.orm.session.Session;
 import org.junit.Before;
 import org.junit.Test;
 import sample.model.Customer;
+import sample.model.CustomerType;
 import sample.model.Order;
 
 import java.util.Set;
@@ -30,10 +31,11 @@ public class UpdateStatementTest {
         customer.setId(1);
         customer.setName("ZhangYi");
         customer.setAge(37);
+        customer.setCustomerType(CustomerType.VIP);
         Set<Order> orders = newSet();
         customer.setOrders(orders);
         statement.assemble(customer);
-        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 37"));
+        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 37, CUSTOMER_TYPE = 'VIP'"));
     }
 
     @Test
@@ -44,7 +46,7 @@ public class UpdateStatementTest {
         Set<Order> orders = newSet();
         customer.setOrders(orders);
         statement.assemble(customer);
-        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 0"));
+        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 0, CUSTOMER_TYPE = null"));
     }
 
     @Test
@@ -54,7 +56,7 @@ public class UpdateStatementTest {
         Set<Order> orders = newSet();
         customer.setOrders(orders);
         statement.assemble(customer);
-        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = null, AGE = 0"));
+        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = null, AGE = 0, CUSTOMER_TYPE = null"));
     }
 
     @Test
@@ -65,6 +67,6 @@ public class UpdateStatementTest {
         Set<Order> orders = newSet();
         customer.setOrders(orders);
         statement.assemble(customer, and(id(1), gt("age", 40)));
-        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 0 WHERE (ID = 1 AND AGE > 40)"));
+        assertThat(statement.getSql(), is("UPDATE CUSTOMERS SET NAME = 'ZhangYi', AGE = 0, CUSTOMER_TYPE = null WHERE (ID = 1 AND AGE > 40)"));
     }
 }

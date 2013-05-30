@@ -23,13 +23,13 @@ public class SelectStatementTest {
     @Test
     public void should_parse_to_select_statement() {
         statement.assemble(Customer.class);
-        assertThat(statement.getSql(), is("SELECT ID, NAME, AGE FROM CUSTOMERS"));
+        assertThat(statement.getSql(), is("SELECT ID, NAME, AGE, CUSTOMER_TYPE FROM CUSTOMERS"));
     }
 
     @Test
     public void should_parse_to_select_statement_with_condition_clause_by_id() {
         statement.assemble(Customer.class, id(1));
-        assertThat(statement.getSql(), is("SELECT ID, NAME, AGE FROM CUSTOMERS WHERE ID = 1"));
+        assertThat(statement.getSql(), is("SELECT ID, NAME, AGE, CUSTOMER_TYPE FROM CUSTOMERS WHERE ID = 1"));
     }
 
     @Test
@@ -37,6 +37,6 @@ public class SelectStatementTest {
         statement.assemble(
                 Customer.class,
                 and(eq("id", 1), eq("name", "ZhangYi")));
-        assertThat(statement.getSql(), is("SELECT ID, NAME, AGE FROM CUSTOMERS WHERE (ID = 1 AND NAME = 'ZhangYi')"));
+        assertThat(statement.getSql(), is("SELECT ID, NAME, AGE, CUSTOMER_TYPE FROM CUSTOMERS WHERE (ID = 1 AND NAME = 'ZhangYi')"));
     }
 }

@@ -1,6 +1,7 @@
 package com.melt.orm.session;
 
 import com.melt.orm.command.QueryCommand;
+import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
 import com.melt.orm.criteria.By;
 import com.melt.orm.criteria.Criteria;
@@ -9,6 +10,7 @@ import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.DeleteStatement;
 import com.melt.orm.statement.SelectStatement;
 import com.melt.orm.statement.UpdateStatement;
+import com.melt.orm.util.GlobalConsent;
 
 import java.sql.Connection;
 import java.util.List;
@@ -56,7 +58,29 @@ public class Session {
     public <T> int update(T targetEntity, Criteria criteria) {
         UpdateStatement statement = new UpdateStatement(this);
         statement.assemble(targetEntity, criteria);
+
+        ModelConfig modelConfig = getModelConfig(targetEntity.getClass());
+        for (FieldConfig fieldConfig : modelConfig.getFields()) {
+            if (fieldConfig.isOneToOneField()) {
+                Object fieldValue = fieldConfig.getFieldValue(targetEntity);
+                int foreignKey = getIdOfFieldValue(fieldValue);
+                statement.setForeignKey(fieldConfig.getReferenceColumnName(), foreignKey);
+            }
+        }
+
         return statement.createNonQueryCommand().execute();
+    }
+
+    private Integer getIdOfFieldValue(Object fieldValue) {
+        ModelConfig subModelConfig = getModelConfig(fieldValue.getClass());
+        if (subModelConfig != null) {
+            for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
+                if ("id".equalsIgnoreCase(subFieldConfig.getFieldName())) {
+                    return (Integer)subFieldConfig.getFieldValue(fieldValue);
+                }
+            }
+        }
+        return GlobalConsent.ERROR_CODE;
     }
 
     public <T> int insert(T targetEntity) {
@@ -94,10 +118,19 @@ public class Session {
 
     public ModelConfig getModelConfig(Class targetBean) {
         Map<String, ModelConfig> modelConfigs = getModelConfigs();
-        ModelConfig modelConfig = modelConfigs.get(targetBean.getName());
+        ModelConfig modelConfig = modelConfigs.get(getBeanClassName(targetBean));
         if (modelConfig == null) {
             throw new MeltOrmException("can not find model mapping.");
         }
         return modelConfig;
+    }
+
+    private String getBeanClassName(Class targetBean) {
+        String className = targetBean.getName();
+        if (className.contains("$$")){
+            int end = className.indexOf("$$");
+            return className.substring(0, end);
+        }
+        return className;
     }
 }
