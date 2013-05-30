@@ -5,6 +5,7 @@ import com.melt.orm.dialect.DatabaseDialect;
 import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.TestFixture;
+import org.junit.Before;
 import org.junit.Test;
 import sample.model.Bill;
 import sample.model.Customer;
@@ -15,10 +16,10 @@ import javax.sql.DataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
@@ -28,11 +29,20 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.collections.Sets.newSet;
 
 public class DataSourceSessionFactoryTest {
 
     private SessionFactory sessionFactory;
+
+    @Before
+    public void setUp() throws SQLException {
+        sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
+        Session session = sessionFactory.createSession();
+        session.deleteAll(Customer.class);
+        session.deleteAll(Order.class);
+        session.deleteAll(Item.class);
+        session.deleteAll(Bill.class);
+    }
 
     @Test
     public void should_return_session_from_data_source() throws SQLException {
@@ -90,10 +100,30 @@ public class DataSourceSessionFactoryTest {
         SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
         Session session = sessionFactory.createSession();
 
+        Order order = createOrder();
+        session.insert(order);
+    }
+
+    @Test
+    public void should_insert_an_order_without_item() {
+        SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
+        Session session = sessionFactory.createSession();
+
+        Order order = createOrderWithoutItem();
+
+        session.insert(order);
+    }
+
+    @Test
+    public void should_display_create_tables() {
+        sessionFactory = buildSessionFactory();
+        sessionFactory.showCreateTablesSQL();
+    }
+
+    private Order createOrder() {
         Customer customer = new Customer();
         customer.setName("ZhangYi");
         customer.setAge(37);
-        Set<Order> orders = newSet();
 
         Bill bill = new Bill();
         bill.setCount(200.5);
@@ -122,19 +152,10 @@ public class DataSourceSessionFactoryTest {
 
         order.setItems(items);
         bill.setOrder(order);
-
-        orders.add(order);
-
-        customer.setOrders(orders);
-
-        session.insert(order);
+        return order;
     }
 
-    @Test
-    public void should_insert_an_order_without_item() {
-        SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
-        Session session = sessionFactory.createSession();
-
+    private Order createOrderWithoutItem() {
         Customer customer = new Customer();
         customer.setName("ZhangYi");
         customer.setAge(37);
@@ -150,14 +171,7 @@ public class DataSourceSessionFactoryTest {
         order.setHasSent(false);
         order.setCustomer(customer);
         order.setBill(bill);
-
-        session.insert(order);
-    }
-
-    @Test
-    public void should_display_create_tables() {
-        sessionFactory = buildSessionFactory();
-        sessionFactory.showCreateTablesSQL();
+        return order;
     }
 
     private SessionFactory buildSessionFactory() {
