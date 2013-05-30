@@ -7,6 +7,7 @@ import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.exceptions.MeltOrmException;
 import com.melt.orm.statement.TestFixture;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import sample.model.*;
 
@@ -87,32 +88,25 @@ public class DataSourceSessionFactoryTest {
     }
 
     @Test
-    public void should_insert_a_customer() {
+    public void should_insert_a_customer() throws SQLException {
         Customer entity = createCustomer();
         session.insert(entity);
     }
 
-    private Customer createCustomer() {
-        Customer entity = new Customer();
-        entity.setName("ZhangYi");
-        entity.setAge(37);
-        return entity;
-    }
-
     @Test
-    public void should_insert_an_order_with_items() {
+    public void should_insert_an_order_with_items() throws SQLException {
         Order order = createOrder();
         session.insert(order);
     }
 
     @Test
-    public void should_insert_an_order_without_item() {
+    public void should_insert_an_order_without_item() throws SQLException {
         Order order = createOrderWithoutItem();
         session.insert(order);
     }
 
     @Test
-    public void should_update_customer() {
+    public void should_update_customer() throws SQLException {
         Customer customer = createCustomer();
         session.insert(customer);
 
@@ -127,7 +121,7 @@ public class DataSourceSessionFactoryTest {
     }
 
     @Test
-    public void should_update_order() {
+    public void should_update_order() throws SQLException {
         Order order = createOrder();
         session.insert(order);
 
@@ -135,12 +129,17 @@ public class DataSourceSessionFactoryTest {
         order = orders.get(0);
 
         order.setOrderAddress("new address");
+        Bill bill = order.getBill();
+        bill.setTitle("new title");
         List<Item> items = order.getItems();
         items.get(0).setPrice(9999.9f);
         session.update(order);
 
         List<Order> newOrders = session.find(Order.class, By.eq("orderAddress", "new address"));
         assertThat(newOrders.size(), is(1));
+        assertThat(newOrders.get(0).getOrderAddress(), is("new address"));
+//        assertThat(newOrders.get(0).getBill().getTitle(), is("new title"));
+//        assertThat(newOrders.get(0).getItems().get(0).getPrice(), is(9999.9f));
     }
 
     @Test
@@ -179,6 +178,13 @@ public class DataSourceSessionFactoryTest {
         order.setItems(items);
         bill.setOrder(order);
         return order;
+    }
+
+    private Customer createCustomer() {
+        Customer entity = new Customer();
+        entity.setName("ZhangYi");
+        entity.setAge(37);
+        return entity;
     }
 
     private Order createOrderWithoutItem() {
