@@ -49,6 +49,10 @@ public class Session {
         throw new MeltOrmException(String.format("Entity not found by id: %d", id));
     }
 
+    public <T> int update(T targetEntity) {
+        return update(targetEntity, nil());
+    }
+
     public <T> int update(T targetEntity, Criteria criteria) {
         UpdateStatement statement = new UpdateStatement(this);
         statement.assemble(targetEntity, criteria);

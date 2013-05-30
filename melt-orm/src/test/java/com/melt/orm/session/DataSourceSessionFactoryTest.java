@@ -1,6 +1,7 @@
 package com.melt.orm.session;
 
 import com.melt.orm.config.parser.ModelConfig;
+import com.melt.orm.criteria.By;
 import com.melt.orm.dialect.DatabaseDialect;
 import com.melt.orm.dialect.MySQLDialect;
 import com.melt.orm.exceptions.MeltOrmException;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -27,17 +29,19 @@ import static com.melt.orm.config.MeltOrmConfigure.register;
 import static com.melt.orm.config.MeltOrmConfigure.registerModels;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class DataSourceSessionFactoryTest {
 
     private SessionFactory sessionFactory;
+    private Session session;
 
     @Before
     public void setUp() throws SQLException {
         sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
-        Session session = sessionFactory.createSession();
+        session = sessionFactory.createSession();
         session.deleteAll(Customer.class);
         session.deleteAll(Order.class);
         session.deleteAll(Item.class);
@@ -87,31 +91,40 @@ public class DataSourceSessionFactoryTest {
 
     @Test
     public void should_insert_a_customer() {
-        SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForCustomer());
-        Session session = sessionFactory.createSession();
+        Customer entity = createCustomer();
+        session.insert(entity);
+    }
+
+    private Customer createCustomer() {
         Customer entity = new Customer();
         entity.setName("ZhangYi");
         entity.setAge(37);
-        session.insert(entity);
+        return entity;
     }
 
     @Test
     public void should_insert_an_order_with_items() {
-        SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
-        Session session = sessionFactory.createSession();
-
         Order order = createOrder();
         session.insert(order);
     }
 
     @Test
     public void should_insert_an_order_without_item() {
-        SessionFactory sessionFactory = buildSessionFactory(TestFixture.prepareModelConfigsForOrders());
-        Session session = sessionFactory.createSession();
-
         Order order = createOrderWithoutItem();
-
         session.insert(order);
+    }
+
+    @Test
+    public void should_update_customer() {
+        Customer customer = createCustomer();
+        session.insert(customer);
+
+        customer.setName("He Haiyang");
+        session.update(customer);
+
+        List<Customer> customers = session.find(Customer.class, By.eq("name", "He Haiyang"));
+        assertThat(customers.size(), is(1));
+        assertThat(customers.get(0).getName(), is("He Haiyang"));
     }
 
     @Test
@@ -121,9 +134,7 @@ public class DataSourceSessionFactoryTest {
     }
 
     private Order createOrder() {
-        Customer customer = new Customer();
-        customer.setName("ZhangYi");
-        customer.setAge(37);
+        Customer customer = createCustomer();
 
         Bill bill = new Bill();
         bill.setCount(200.5);
@@ -156,9 +167,7 @@ public class DataSourceSessionFactoryTest {
     }
 
     private Order createOrderWithoutItem() {
-        Customer customer = new Customer();
-        customer.setName("ZhangYi");
-        customer.setAge(37);
+        Customer customer = createCustomer();
 
         Bill bill = new Bill();
         bill.setCount(200.5);
