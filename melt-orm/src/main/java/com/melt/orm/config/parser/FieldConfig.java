@@ -1,14 +1,12 @@
 package com.melt.orm.config.parser;
 
 import com.google.common.base.CaseFormat;
-import com.melt.orm.util.GlobalConsent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ObjectArrays.newArray;
-import static com.melt.orm.util.GlobalConsent.ERROR_CODE;
 import static com.melt.orm.util.NameMapping.getMappedName;
 
 public class FieldConfig {

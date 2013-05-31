@@ -30,17 +30,18 @@ public class UpdateExecutor extends CommandExecutor {
 
     private <T> void updateAllChildEntities(T targetEntity, UpdateStatement statement, int primaryKey, FieldConfig fieldConfig) {
         Object fieldValue = fieldConfig.getFieldValue(targetEntity);
-        if (fieldConfig != null) {
-            int foreignKey = getId(fieldValue);
-            statement.setForeignKey(fieldConfig.getReferenceColumnName(), foreignKey);
-        }
-
-        ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
-        for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
-            if (subFieldConfig.isOneToOneField()) {
-                updateChileEntity(primaryKey, fieldValue, subFieldConfig);
+        int foreignKey = GlobalConsent.DEFAULT_ID;
+        if (fieldValue != null) {
+            foreignKey = getId(fieldValue);
+            ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
+            for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
+                if (subFieldConfig.isOneToOneField()) {
+                    updateChileEntity(primaryKey, fieldValue, subFieldConfig);
+                }
             }
         }
+        statement.setForeignKey(fieldConfig.getReferenceColumnName(), foreignKey);
+
     }
 
     private void updateChileEntity(int primaryKey, Object fieldValue, FieldConfig subFieldConfig) {

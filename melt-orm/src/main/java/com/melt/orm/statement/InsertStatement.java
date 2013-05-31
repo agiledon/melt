@@ -7,7 +7,6 @@ import com.melt.orm.command.InsertCommand;
 import com.melt.orm.command.NonQueryCommand;
 import com.melt.orm.config.parser.FieldConfig;
 import com.melt.orm.config.parser.ModelConfig;
-import com.melt.orm.session.InsertExecutor;
 import com.melt.orm.session.Session;
 import com.melt.orm.util.FieldValueWrapper;
 import com.melt.orm.util.GlobalConsent;
@@ -94,7 +93,7 @@ public class InsertStatement extends NonQueryStatement {
         ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
         for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
             if (subFieldConfig.isOneToOneField()) {
-                setForeignKey(subFieldConfig.getReferenceColumnName(), GlobalConsent.ERROR_CODE);
+                setForeignKey(subFieldConfig.getReferenceColumnName(), GlobalConsent.DEFAULT_ID);
             }
         }
     }

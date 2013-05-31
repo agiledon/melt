@@ -1,5 +1,5 @@
 package com.melt.orm.util;
 
 public class GlobalConsent {
-    public static final int ERROR_CODE = 0;
+    public static final int DEFAULT_ID = 0;
 }

@@ -152,6 +152,24 @@ public class DataSourceSessionFactoryTest {
     }
 
     @Test
+    public void should_update_single_order() throws SQLException {
+        Order order = createSingleOrder();
+        session.insert(order);
+
+        List<Order> orders = session.find(Order.class, By.eq("orderAddress", "address"));
+        order = orders.get(0);
+
+        order.setOrderAddress("new address");
+        session.update(order);
+
+        List<Order> newOrders = session.find(Order.class, By.eq("orderAddress", "new address"));
+        assertThat(newOrders.size(), is(1));
+        assertThat(newOrders.get(0).getOrderAddress(), is("new address"));
+//        assertThat(newOrders.get(0).getBill().getTitle(), is("new title"));
+//        assertThat(newOrders.get(0).getItems().get(0).getPrice(), is(9999.9f));
+    }
+
+    @Test
     public void should_display_create_tables() {
         sessionFactory.showCreateTablesSQL();
     }
@@ -186,6 +204,15 @@ public class DataSourceSessionFactoryTest {
 
         order.setItems(items);
         bill.setOrder(order);
+        return order;
+    }
+
+    private Order createSingleOrder() {
+        Order order = new Order();
+        order.setCount(1);
+        order.setDiscount(0.7);
+        order.setOrderAddress("address");
+        order.setHasSent(false);
         return order;
     }
 
