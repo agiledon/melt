@@ -19,32 +19,25 @@
         </header>
 	</div>
 	<section class="container">
-	    <h2>${customer.name}'s Orders</h2>
-	    <table>
-	        <tr>
-                <th>Count</th>
-                <th>Discount</th>
-                <th>Sent</th>
-                <th>Order Address</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Items</th>
-	        </tr>
-        <#list orders as order>
-             <tr>
-                <td>${order.count}</td>
-                <td>${order.discount}</td>
-                <td><#if order.hasSent >Yes<#else>No</#if></td>
-                <td>${order.orderAddress}</td>
-                <td><a href="/customer/${customer.id}/order/edit/${order.id}">Edit</a></td>
-                <td><a href="/order/delete/${order.id}">Delete</a></td>
-                <td><a href="/order/items/${order.id}">Items</a></td>
-             </tr>
-        </#list>
-        </table>
-        <a href="/customer/${customer.id}/order/add">Add New Order</a>
-        <a href="/index.html">Back</a>
-
+	    <h2>Edit Order</h2>
+        <form id="form" action="/customer/${customerId}/order/edit/${order.id}" method="POST">
+            <label for="count">Count:</label>
+            <input type="text" name="count" id="count" value="${order.count}"/>
+            <br/>
+            <label for="discount">Discount:</label>
+            <input type="text" name="discount" id="discount" value="${order.discount}"/>
+            <br/>
+            <label for="sent">Sent:</label>
+            <input type="radio" name="sent" value="true" <#if order.hasSent> checked </#if>/>Yes
+            <input type="radio" name="sent" value="false" <#if !order.hasSent> checked </#if>/>No
+            <br/>
+            <label for="orderAddress">Order Address:</label>
+            <input type="text" name="orderAddress" id="orderAddress" value="${order.orderAddress}"/>
+            <br/>
+            <input type="submit" value="Update"/>
+        </form>
+        <br/>
+        <a href="/customer/orders/${customerId}">Back</a>
 	</section>
 	<footer class="container">
 	</footer>

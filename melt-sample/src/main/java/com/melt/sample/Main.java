@@ -13,6 +13,7 @@ import com.melt.sample.model.Order;
 import com.melt.sample.resources.customer.*;
 import com.melt.sample.resources.IndexResource;
 import com.melt.sample.resources.order.AddOrderResource;
+import com.melt.sample.resources.order.EditOrderResource;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
@@ -55,6 +56,7 @@ public class Main extends Service<MeltConfiguration> {
                 register(DeleteCustomerResource.class);
                 register(CustomerOrdersResource.class);
                 register(AddOrderResource.class);
+                register(EditOrderResource.class);
             }
         });
         environment.addResource(container.resolve(IndexResource.class));
@@ -63,6 +65,6 @@ public class Main extends Service<MeltConfiguration> {
         environment.addResource(container.resolve(AddCustomerResource.class));
         environment.addResource(container.resolve(DeleteCustomerResource.class));
         environment.addResource(container.resolve(CustomerOrdersResource.class));
-        environment.addResource(container.resolve(AddOrderResource.class));
+        environment.addResource(container.resolve(EditOrderResource.class));
     }
 }
