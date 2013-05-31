@@ -27,7 +27,6 @@
                 <th>Sent</th>
                 <th>Order Address</th>
                 <th>Edit</th>
-                <th>Delete</th>
                 <th>Items</th>
 	        </tr>
         <#list orders as order>
@@ -37,7 +36,6 @@
                 <td><#if order.hasSent >Yes<#else>No</#if></td>
                 <td>${order.orderAddress}</td>
                 <td><a href="/customer/${customer.id}/order/edit/${order.id}">Edit</a></td>
-                <td><a href="/order/delete/${order.id}">Delete</a></td>
                 <td><a href="/customer/${customer.id}/order/${order.id}/items">Items</a></td>
              </tr>
         </#list>

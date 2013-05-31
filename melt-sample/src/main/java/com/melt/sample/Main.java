@@ -37,7 +37,20 @@ public class Main extends Service<MeltConfiguration> {
 
     @Override
     public void run(MeltConfiguration configuration, Environment environment) throws Exception {
-        Container container = Melt.createContainer(new InjectionModule(AutoWiredBy.TYPE) {
+        Container container = initIocContainer();
+        environment.addResource(container.resolve(IndexResource.class));
+        environment.addResource(container.resolve(CustomerResource.class));
+        environment.addResource(container.resolve(EditCustomerResource.class));
+        environment.addResource(container.resolve(AddCustomerResource.class));
+        environment.addResource(container.resolve(DeleteCustomerResource.class));
+        environment.addResource(container.resolve(CustomerOrdersResource.class));
+        environment.addResource(container.resolve(EditOrderResource.class));
+        environment.addResource(container.resolve(OrderItemsResource.class));
+        environment.addResource(container.resolve(AddOrderResource.class));
+    }
+
+    private Container initIocContainer() {
+        return Melt.createContainer(new InjectionModule(AutoWiredBy.TYPE) {
             @Override
             public void configure() {
 
@@ -50,6 +63,7 @@ public class Main extends Service<MeltConfiguration> {
                         .factory("createSessionFactory");
                 register(OrderDao.class);
                 register(CustomerDao.class);
+
                 register(IndexResource.class);
                 register(CustomerResource.class);
                 register(EditCustomerResource.class);
@@ -61,14 +75,5 @@ public class Main extends Service<MeltConfiguration> {
                 register(OrderItemsResource.class);
             }
         });
-        environment.addResource(container.resolve(IndexResource.class));
-        environment.addResource(container.resolve(CustomerResource.class));
-        environment.addResource(container.resolve(EditCustomerResource.class));
-        environment.addResource(container.resolve(AddCustomerResource.class));
-        environment.addResource(container.resolve(DeleteCustomerResource.class));
-        environment.addResource(container.resolve(CustomerOrdersResource.class));
-        environment.addResource(container.resolve(EditOrderResource.class));
-        environment.addResource(container.resolve(OrderItemsResource.class));
-        environment.addResource(container.resolve(AddOrderResource.class));
     }
 }
