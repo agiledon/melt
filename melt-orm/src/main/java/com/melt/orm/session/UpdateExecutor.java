@@ -7,11 +7,10 @@ import com.melt.orm.criteria.Criteria;
 import com.melt.orm.statement.UpdateStatement;
 import com.melt.orm.util.GlobalConsent;
 
-public class UpdateExecutor {
-    private final Session session;
+public class UpdateExecutor extends CommandExecutor {
 
     public UpdateExecutor(Session session) {
-        this.session = session;
+        super(session);
     }
 
     public <T> int execute(T targetEntity, Criteria criteria) {
@@ -49,15 +48,4 @@ public class UpdateExecutor {
         innerStatement.createNonQueryCommand().execute();
     }
 
-    private Integer getId(Object fieldValue) {
-        ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
-        if (subModelConfig != null) {
-            for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
-                if ("id".equalsIgnoreCase(subFieldConfig.getFieldName())) {
-                    return (Integer) subFieldConfig.getFieldValue(fieldValue);
-                }
-            }
-        }
-        return GlobalConsent.ERROR_CODE;
-    }
 }

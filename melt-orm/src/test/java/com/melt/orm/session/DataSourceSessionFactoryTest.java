@@ -100,6 +100,15 @@ public class DataSourceSessionFactoryTest {
     }
 
     @Test
+    public void should_insert_an_order_with_items_when_customer_is_existed() throws SQLException {
+        Customer customer = createCustomer();
+        session.insert(customer);
+        List<Customer> customers = session.find(Customer.class, By.eq("name", "ZhangYi"));
+        Order order = createOrder(customers.get(0));
+        session.insert(order);
+    }
+
+    @Test
     public void should_insert_an_order_without_item() throws SQLException {
         Order order = createOrderWithoutItem();
         session.insert(order);
@@ -176,6 +185,39 @@ public class DataSourceSessionFactoryTest {
         items.add(item2);
 
         order.setItems(items);
+        bill.setOrder(order);
+        return order;
+    }
+
+    private Order createOrder(Customer customer) {
+
+        Bill bill = new Bill();
+        bill.setCount(200.5);
+        bill.setTitle("bill title");
+
+        Order order = new Order();
+        order.setCount(1);
+        order.setDiscount(0.7);
+        order.setOrderAddress("address");
+        order.setHasSent(false);
+        order.setCustomer(customer);
+        order.setBill(bill);
+
+        ArrayList<Item> items = newArrayList();
+
+        Item item1 = new Item();
+        item1.setPrice(20.0f);
+        item1.setOrder(order);
+        items.add(item1);
+
+
+        Item item2 = new Item();
+        item2.setPrice(30.5f);
+        item2.setOrder(order);
+        items.add(item2);
+
+        order.setItems(items);
+        order.setCustomer(customer);
         bill.setOrder(order);
         return order;
     }

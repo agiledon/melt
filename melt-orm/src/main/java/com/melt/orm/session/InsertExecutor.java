@@ -13,12 +13,11 @@ import java.util.Map;
 
 import static com.melt.orm.util.GlobalConsent.ERROR_CODE;
 
-public class InsertExecutor {
+public class InsertExecutor extends CommandExecutor {
     private final Map<String,Integer> foreignKeys = Maps.newHashMap();
-    private Session session;
 
     public InsertExecutor(Session session) {
-        this.session = session;
+        super(session);
     }
 
     public <T> int execute(T targetEntity) {
@@ -123,9 +122,12 @@ public class InsertExecutor {
     private <T> void insertFieldValue(T targetEntity, FieldConfig fieldConfig) {
         Object fieldValue = fieldConfig.getFieldValue(targetEntity);
         if (fieldValue != null) {
-            InsertStatement statement = new InsertStatement(session);
-            statement.assemble(fieldValue);
-            int foreignKey = statement.createNonQueryCommand().execute();
+            int foreignKey = getId(fieldValue);
+            if (foreignKey == GlobalConsent.ERROR_CODE) {
+                InsertStatement statement = new InsertStatement(session);
+                statement.assemble(fieldValue);
+                foreignKey = statement.createNonQueryCommand().execute();
+            }
             foreignKeys.put(fieldConfig.getReferenceColumnName(), foreignKey);
         }
     }
