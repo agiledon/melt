@@ -19,26 +19,19 @@
         </header>
 	</div>
 	<section class="container">
-	    <h2>${customer.name}'s Orders</h2>
+	    <h2>Items</h2>
 	    <table>
 	        <tr>
-                <th>Count</th>
-                <th>Discount</th>
-                <th>Sent</th>
-                <th>Order Address</th>
+                <th>Price</th>
                 <th>Edit</th>
                 <th>Delete</th>
-                <th>Items</th>
 	        </tr>
-        <#list orders as order>
+        <#list items as item>
              <tr>
-                <td>${order.count}</td>
-                <td>${order.discount}</td>
-                <td><#if order.hasSent >Yes<#else>No</#if></td>
-                <td>${order.orderAddress}</td>
-                <td><a href="/customer/${customer.id}/order/edit/${order.id}">Edit</a></td>
-                <td><a href="/order/delete/${order.id}">Delete</a></td>
-                <td><a href="/customer/${customer.id}/order/${order.id}/items">Items</a></td>
+                <td>${item.price}</td>
+                <td><a href="">Edit</a></td>
+                <td><a href="">Delete</a></td>
+                <td><a href="">Items</a></td>
              </tr>
         </#list>
         </table>
