@@ -20,6 +20,6 @@ public class CommandExecutor {
                 }
             }
         }
-        return GlobalConsent.ERROR_CODE;
+        return GlobalConsent.DEFAULT_ID;
     }
 }

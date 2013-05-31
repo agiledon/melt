@@ -11,7 +11,7 @@ import com.melt.orm.util.GlobalConsent;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.melt.orm.util.GlobalConsent.ERROR_CODE;
+import static com.melt.orm.util.GlobalConsent.DEFAULT_ID;
 
 public class InsertExecutor extends CommandExecutor {
     private final Map<String,Integer> foreignKeys = Maps.newHashMap();
@@ -49,7 +49,7 @@ public class InsertExecutor extends CommandExecutor {
             for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
                 if (subFieldConfig.isOneToOneField()) {
                     UpdateStatement updateStatement = new UpdateStatement(session);
-                    updateStatement.assemble(fieldValue, By.eq(subFieldConfig.getOriginReferenceColumnName(), ERROR_CODE));
+                    updateStatement.assemble(fieldValue, By.eq(subFieldConfig.getOriginReferenceColumnName(), DEFAULT_ID));
                     updateStatement.setForeignKey(subFieldConfig.getReferenceColumnName(), primaryKey);
                     updateStatement.createNonQueryCommand().execute();
                 }
@@ -108,6 +108,8 @@ public class InsertExecutor extends CommandExecutor {
             statement.assembleOneToOne(fieldValue);
             int foreignKey = statement.createNonQueryCommand().execute();
             foreignKeys.put(fieldConfig.getReferenceColumnName(), foreignKey);
+        } else {
+            foreignKeys.put(fieldConfig.getReferenceColumnName(), GlobalConsent.DEFAULT_ID);
         }
     }
 
@@ -123,12 +125,14 @@ public class InsertExecutor extends CommandExecutor {
         Object fieldValue = fieldConfig.getFieldValue(targetEntity);
         if (fieldValue != null) {
             int foreignKey = getId(fieldValue);
-            if (foreignKey == GlobalConsent.ERROR_CODE) {
+            if (foreignKey == GlobalConsent.DEFAULT_ID) {
                 InsertStatement statement = new InsertStatement(session);
                 statement.assemble(fieldValue);
                 foreignKey = statement.createNonQueryCommand().execute();
             }
             foreignKeys.put(fieldConfig.getReferenceColumnName(), foreignKey);
+        } else {
+            foreignKeys.put(fieldConfig.getReferenceColumnName(), GlobalConsent.DEFAULT_ID);
         }
     }
 }
