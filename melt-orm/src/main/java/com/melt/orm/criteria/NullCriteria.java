@@ -2,7 +2,7 @@ package com.melt.orm.criteria;
 
 public class NullCriteria implements Criteria {
     @Override
-    public String toExpression() {
+    public String evaluate() {
         return "";
     }
 

@@ -12,7 +12,7 @@ public abstract class SingleCriteria<T> implements Criteria {
     }
 
     @Override
-    public String toExpression() {
+    public String evaluate() {
         return fieldName + getOperator() + fieldValue.toString();
     }
 

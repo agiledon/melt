@@ -11,7 +11,7 @@ public class EqCriteria<T> extends SingleCriteria{
     }
 
     @Override
-    public String toExpression() {
+    public String evaluate() {
         return fieldName + getOperator() + wrap(fieldValue);
     }
 

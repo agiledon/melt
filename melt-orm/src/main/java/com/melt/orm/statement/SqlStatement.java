@@ -18,7 +18,7 @@ public abstract class SqlStatement {
     protected void assembleConditionClause(Criteria criteria) {
         if (!criteria.isNull()) {
             sqlBuilder.append(" WHERE ");
-            sqlBuilder.append(criteria.toExpression());
+            sqlBuilder.append(criteria.evaluate());
         }
     }
 
