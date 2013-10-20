@@ -12,14 +12,21 @@ subprojects {
         mavenCentral()
     }
 
+    project.ext {
+        guavaVersion = '15.0'
+        slf4jVersion = '1.7.5'
+        junitVersion = '4.11'
+        mockitoVersion = '1.9.5'
+    }
+
     dependencies {
         compile(
-                'com.google.guava:guava:14.0.1',
-                'org.slf4j:slf4j-api:1.7.5'
+                "com.google.guava:guava:$guavaVersion",
+                "org.slf4j:slf4j-api:$slf4jVersion"
         )
         testCompile(
-                'junit:junit:4.11',
-                'org.mockito:mockito-all:1.9.5'
+                "junit:junit:$junitVersion",
+                "org.mockito:mockito-all:$mockitoVersion"
         )
     }
 }
