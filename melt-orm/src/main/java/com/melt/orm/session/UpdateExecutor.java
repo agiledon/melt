@@ -36,7 +36,7 @@ public class UpdateExecutor extends CommandExecutor {
             ModelConfig subModelConfig = session.getModelConfig(fieldValue.getClass());
             for (FieldConfig subFieldConfig : subModelConfig.getFields()) {
                 if (subFieldConfig.isOneToOneField()) {
-                    updateChileEntity(primaryKey, fieldValue, subFieldConfig);
+                    updateChildEntity(primaryKey, fieldValue, subFieldConfig);
                 }
             }
         }
@@ -44,7 +44,7 @@ public class UpdateExecutor extends CommandExecutor {
 
     }
 
-    private void updateChileEntity(int primaryKey, Object fieldValue, FieldConfig subFieldConfig) {
+    private void updateChildEntity(int primaryKey, Object fieldValue, FieldConfig subFieldConfig) {
         UpdateStatement innerStatement = new UpdateStatement(session);
         innerStatement.assemble(fieldValue, By.eq(subFieldConfig.getOriginReferenceColumnName(), primaryKey));
         innerStatement.setForeignKey(subFieldConfig.getReferenceColumnName(), primaryKey);

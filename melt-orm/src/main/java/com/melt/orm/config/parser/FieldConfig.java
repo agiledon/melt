@@ -1,6 +1,7 @@
 package com.melt.orm.config.parser;
 
 import com.google.common.base.CaseFormat;
+import net.sf.cglib.proxy.Proxy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -67,7 +68,7 @@ public class FieldConfig {
         return false;
     }
 
-    public boolean isNeedBeProxy(){
+    public boolean isNeedBeProxy() {
         return manyToOne || oneToMany || oneToOne;
     }
 
@@ -130,10 +131,17 @@ public class FieldConfig {
     public <T> Object getFieldValue(T targetEntity) {
         Object fieldValue;
         try {
-            fieldValue = getReader().invoke(targetEntity, newArray(Object.class, 0));
+            if (Proxy.isProxyClass(targetEntity.getClass())) {
+                fieldValue = Proxy.getInvocationHandler(targetEntity).invoke(targetEntity, getReader(), newArray(Object.class, 0));
+            } else {
+                fieldValue = getReader().invoke(targetEntity, newArray(Object.class, 0));
+            }
+
         } catch (IllegalAccessException e) {
             fieldValue = null;
         } catch (InvocationTargetException e) {
+            fieldValue = null;
+        } catch (Throwable throwable) {
             fieldValue = null;
         }
         return fieldValue;
