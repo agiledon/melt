@@ -1,0 +1,12 @@
+project.ext {
+    nettyVersion = '3.6.6.Final'
+}
+
+dependencies {
+
+    compile(
+            "io.netty:netty:$nettyVersion",
+            project(':melt-core')
+    )
+
+}

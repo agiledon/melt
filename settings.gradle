@@ -1,1 +1,1 @@
-include 'melt-core', 'melt-orm', 'melt-sample'
+include 'melt-core', 'melt-orm', 'melt-sample', 'melt-mvc'
