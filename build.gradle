@@ -1,13 +1,16 @@
-group = 'melt'
-version = '0.1'
+group = 'com.github.agiledon'
+version = '0.1-SNAPSHOT'
 
 allprojects {
     apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'signing'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 }
 
 subprojects {
-    apply plugin: 'java'
-    sourceCompatibility = 1.6
     repositories {
         mavenCentral()
     }
@@ -29,4 +32,68 @@ subprojects {
                 "org.mockito:mockito-all:$mockitoVersion"
         )
     }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            pom.project {
+                name project.name
+                packaging 'jar'
+                description 'Lightweight DI Container'
+                url 'https://github.com/agiledon/melt'
+
+                scm {
+                    url 'https://github.com/agiledon/melt'
+                    connection 'https://github.com/agiledon/melt.git'
+                    developerConnection 'git@github.com:agiledon/melt.git'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT Licence'
+                        url 'https://raw.github.com/agiledon/melt/master/MIT-LICENSE.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'agiledon'
+                        name 'Zhang Yi; He Haiyang'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+tasks.withType(Compile) {
+    options.compilerArgs << "-Xlint:unchecked"
 }

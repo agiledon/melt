@@ -1,1 +1,2 @@
+rootProject.name = 'melt'
 include 'melt-core'
