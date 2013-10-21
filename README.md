@@ -15,6 +15,25 @@ Melt is lightweight IoC container and no intrusiveness based on Java platform. I
 ###How to use it
 In melt framework, Container and InjectionModule are the core classes. The basic operations are register() and resolve() method. 
 
+### Fetch Melt
+
+Current version of melt is 0.1-snapshot, you can config you build script to manage the dependency for melt:
+
+```groovy
+repositories {
+    maven{
+        url 'https://oss.sonatype.org/content/groups/public'
+    }
+    mavenCentral();
+}
+
+dependencies {
+    compile (
+            'com.github.agiledon:melt:0.1-SNAPSHOT'
+        )
+}
+```
+
 #### Step 1: Define Module
 Define the class derived from InjectionModule provided by Melt, then register the bean what you want to resolve. For example:
 ```java
